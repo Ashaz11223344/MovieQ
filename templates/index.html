@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap" rel="stylesheet">
+<!-- Site Header -->
+<div class="site-header glass-card">
+  <h1 class="site-title">MovieQ</h1>
+  <p>─────────────────────────</p>
+  <p class="site-subtitle">AI - Powered Movie Recommendations</p>
+</div>
+
+<!-- Search Form -->
+<form method="GET" class="search-form">
+  <label>Choose Genre:</label>
+  <input type="text" name="genre" placeholder="e.g. Action, Comedy">
+
+  <label>Language:</label>
+  <input type="text" name="language" placeholder="e.g. en, hi, fr">
+
+
+  <button type="submit">Find Movies</button>
+
+  <!-- Button Group -->
+    <a href="{{ url_for('surprise') }}" class="surprise-btn">🎲 Surprise Me!</a>
+    <a href="{{ url_for('aboutme') }}" class="about-button">About Me</a>
+</form>
+
+
+<hr>
+
+<!-- Dashboard Movies -->
+<h2 style="text-align: center;">Recommended Movies</h2>
+<div class="movies-container">
+  {% for movie in movies %}
+    <a href="{{ url_for('movie_detail', movie_id=movie.id, from_page=page) }}" class="movie-link">
+      <div class="movie-card">
+        <img src="{{ movie.poster_full }}" alt="{{ movie.title }}">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p><b>Rating:</b> {{ movie.vote_average }} ⭐</p>
+          <p><b>Release:</b> {{ movie.release_date }}</p>
+          <p>{{ (movie.overview or '')[:100] }}...</p>
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+<div class="pagination">
+  {% if page > 1 %}
+    <a href="{{ url_for('index', page=page-1, genre=genre, language=language) }}">&laquo; Previous</a>
+  {% endif %}
+
+  <span>Page {{ page }} of {{ total_pages }}</span>
+
+  {% if page < total_pages %}
+    <a href="{{ url_for('index', page=page+1, genre=genre, language=language) }}">Next &raquo;</a>
+  {% endif %}
+</div>
+
+<!--Offline Mode-->
+<!-- Offline Popup -->
+<div class="offline-popup" id="offlinePopup">
+  <div class="offline-content">
+    <div class="offline-icon">
+      <i class="fas fa-wifi-slash"></i>
+    </div>
+    <h2 class="offline-title">No Internet? Seriously?</h2>
+    <p class="offline-message">
+      Bro, you're trying to stream without Wi-Fi? That's not it.
+    </p>
+    <p class="slang-text" id="slangText">"The audacity!"</p>
+    <div class="offline-buttons">
+      <button class="offline-btn primary-btn" id="retryBtn">
+        <i class="fas fa-redo"></i> Try Again
+      </button>
+      <button class="offline-btn secondary-btn" id="offlineModeBtn">
+        <i class="fas fa-download"></i> Offline Mode
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Popup Overlay */
+.offline-popup {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup Content */
+.offline-content {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  color: #fff;
+  font-family: 'Tektur', sans-serif;
+  animation: popUp 0.4s ease;
+}
+
+@keyframes popUp {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.offline-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  color: #ff4444;
+}
+
+.offline-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.offline-message {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #ddd;
+}
+
+.slang-text {
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  color: #ffcc00;
+}
+
+/* Buttons */
+.offline-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.offline-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+.primary-btn {
+  background: #ffd700;
+  color: #000;
+}
+
+.primary-btn:hover {
+  background: #ffcc00;
+  transform: scale(1.05);
+}
+
+.secondary-btn {
+  background: #00e5ff;
+  color: #000;
+}
+
+.secondary-btn:hover {
+  background: #00c8e0;
+  transform: scale(1.05);
+}
+</style>
+
+<script>
+// Slang list
+const slangMessages = [
+  "You really thought you could watch movies offline? The audacity!",
+  "No Wi-Fi? That's a major L right there.",
+  "Trying to stream without internet? That's cap.",
+  "Bro, your connection is giving nothing. Zero. Zilch.",
+  "This is so not slay. Where's your Wi-Fi?",
+  "You can't stream with this connection, periodt.",
+  "Your internet connection is giving ghosted vibes.",
+  "This connection is bussin... bussin nonexistent!",
+  "No signal? That's a whole mood killer.",
+  "Your Wi-Fi dipped and left you on read.",
+  "Bro’s Wi-Fi said 'I’mma head out' 🏃💨",
+  "Your net speed is moving slower than grandma’s Bluetooth.",
+  "Disconnected? That’s a vibe check you failed.",
+  "Wi-Fi gone? Bro you're basically in the stone age rn.",
+  "Streaming offline? That ain't it, chief."
+];
+
+const offlinePopup = document.getElementById('offlinePopup');
+const slangText = document.getElementById('slangText');
+const retryBtn = document.getElementById('retryBtn');
+const offlineModeBtn = document.getElementById('offlineModeBtn');
+
+// Random slang
+function getRandomSlang() {
+  return slangMessages[Math.floor(Math.random() * slangMessages.length)];
+}
+
+// Check connection
+function checkConnection() {
+  if (navigator.onLine) {
+    offlinePopup.style.display = 'none';
+  } else {
+    slangText.textContent = getRandomSlang();
+    offlinePopup.style.display = 'flex';
+  }
+}
+
+// Events
+window.addEventListener('online', checkConnection);
+window.addEventListener('offline', checkConnection);
+
+retryBtn.addEventListener('click', checkConnection);
+
+offlineModeBtn.addEventListener('click', () => {
+  alert("Offline mode activated! (Imagine you had downloaded movies*)");
+  offlinePopup.style.display = 'none';
+});
+
+// Initial check
+checkConnection();
+</script>
+
+{% endblock %}

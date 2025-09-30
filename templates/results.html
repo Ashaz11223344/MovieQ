@@ -1,0 +1,18 @@
+<link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+{% extends "base.html" %}
+{% block content %}
+<h2>Suggested Movies</h2>
+<div class="movies-container">
+  {% for movie in movies %}
+    <div class="movie-card">
+      <img src="{{ movie.poster_full }}" alt="{{ movie.title }}">
+      <h3>{{ movie.title }}</h3>
+      <p><b>Rating:</b> {{ movie.vote_average }} <i data-lucide="star"></i></p>
+      <p><b>Release:</b> {{ movie.release_date }}</p>
+      <p>{{ movie.overview[:150] }}...</p>
+    </div>
+  {% endfor %}
+</div>
+<a href="/">🔙 Back</a>
+{% endblock %}
+

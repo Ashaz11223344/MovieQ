@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MovieQ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+  <style>
+    /* Loader full screen */
+    #loader-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    /* Hide content initially */
+    #main-content {
+      display: none;
+    }
+
+    .loader-row { display: flex; gap: 0.2rem; font-size: 3rem; font-weight: 700; }
+    .loader-row span { animation: pulse 1.6s infinite; display: inline-block; }
+    @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+    .subtitle { font-size: 1.2rem; font-weight: 500; color: #FFD700; text-align: center; }
+
+    .progress-container { width: 300px; height: 12px; background-color: #333; border-radius: 6px; overflow: hidden; margin-top:1rem; }
+    .progress-bar { height: 100%; width: 0%; background-color: #FFD700; border-radius: 6px; transition: width 2s cubic-bezier(0.1,0.3,0,0.8); }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader-container">
+    <div class="loader-row">
+      <span style="animation-delay:0s;">M</span>
+      <span style="animation-delay:0.1s;">o</span>
+      <span style="animation-delay:0.2s;">v</span>
+      <span style="animation-delay:0.3s;">i</span>
+      <span style="animation-delay:0.4s;">e</span>
+      <span style="animation-delay:0.5s;">Q</span>
+    </div>
+    <div class="subtitle">AI-Powered Movie Recommendations</div>
+    <div class="progress-container">
+      <div class="progress-bar" id="loader-bar"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content">
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <script>
+    // Check if loader already shown in this session
+    if (!sessionStorage.getItem('loaderShown')) {
+      const progress = document.getElementById('loader-bar');
+      setTimeout(() => { progress.style.width = '100%'; }, 100);
+
+      setTimeout(() => {
+        document.getElementById('loader-container').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        sessionStorage.setItem('loaderShown', 'true'); // mark as shown
+      }, 2500);
+    } else {
+      // Loader already shown, hide immediately
+      document.getElementById('loader-container').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>

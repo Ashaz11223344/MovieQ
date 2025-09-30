@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Back Button -->
+<a href="{{ url_for('index', page=from_page) }}" class="back-button">Back to Home</a>
+
+<div class="movie-detail-container">
+    <img src="{{ movie.poster_full }}" alt="{{ movie.title }}" class="movie-detail-poster">
+    <div class="movie-detail-info">
+        <h1>{{ movie.title }}</h1>
+        <p><b>Rating:</b> {{ movie.vote_average }} <i data-lucide="star"></i></p>
+        <p><b>Release Date:</b> {{ movie.release_date }}</p>
+        <p><b>Runtime:</b> {{ movie.runtime }} mins</p>
+        <p><b>Genres:</b> {{ movie.genres }}</p>
+        <p><b>Director:</b> {{ movie.director }}</p>
+        <p><b>Cast:</b> {{ movie.cast }}</p>
+        <p><b>Overview:</b> {{ movie.overview }}</p>
+
+        <!-- Google Search Button -->
+        <div class="button-container lower-button">
+          <a href="https://www.google.com/search?q={{ movie.title | urlencode }} Movie" 
+             target="_blank" 
+             class="ai-mode-button">
+            <span id="fade-container" style="display:flex; align-items:center;">
+              <img src="https://www.google.com/favicon.ico" 
+                   alt="Google" 
+                   style="width:16px; height:16px; margin-right:6px;" id="fade-logo">
+              <span id="fade-text">Searching…</span>
+            </span>
+          </a>
+        </div>
+    </div>
+</div>
+
+<!-- Fade Animation Script -->
+<script>
+const texts = [
+  "Search on Google"
+];
+
+let fadeText = document.getElementById("fade-text");
+let fadeLogo = document.getElementById("fade-logo");
+let index = 0;
+
+function showNextText() {
+  fadeText.style.opacity = 0;
+  fadeLogo.style.opacity = 0;
+
+  setTimeout(() => {
+    fadeText.textContent = texts[index];
+    fadeText.style.opacity = 1;
+    fadeLogo.style.opacity = 1;
+    index++;
+
+    if (index < texts.length) {
+      setTimeout(showNextText, 2000);
+    }
+  }, 500);
+}
+
+setTimeout(showNextText, 1000);
+</script>
+
+<style>
+#fade-text, #fade-logo {
+  transition: opacity 0.5s ease-in-out;
+}
+</style>
+
+{% endblock %}

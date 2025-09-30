@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>🎉 Surprise Movies!</h2>
+<p>Click on any movie to view details. Refresh this page for a new surprise!</p>
+<link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+<div class="movies-container">
+  {% for movie in movies %}
+    <a href="{{ url_for('movie_detail', movie_id=movie.id) }}" class="movie-link">
+      <div class="movie-card">
+        <img src="{{ movie.poster_full }}" alt="{{ movie.title }}">
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p><b>Rating:</b> {{ movie.vote_average }} ⭐</p>
+          <p><b>Release:</b> {{ movie.release_date }}</p>
+          <p>{{ (movie.overview or '')[:100] }}...</p>
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>
+
+<!-- Back button -->
+<a href="{{ url_for('index') }}" class="back-button">&larr; Back to Home</a>
+
+{% endblock %}
