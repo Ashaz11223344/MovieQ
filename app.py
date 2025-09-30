@@ -5,9 +5,10 @@ import math
 
 app = Flask(__name__)
 
-# Load dataset
-df = pd.read_csv("D:/VS-code/movie_suggestor/TMDB_all_movies.csv")
-df.fillna("", inplace=True)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSV_PATH = os.path.join(BASE_DIR, "TMDB_all_movies.csv")  # CSV in repo root
+
+df = pd.read_csv(CSV_PATH)
 
 POSTER_BASE = "https://image.tmdb.org/t/p/w780"
 DEFAULT_POSTER = "https://via.placeholder.com/300x450?text=No+Image"
@@ -92,3 +93,4 @@ def page_not_found(e):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
