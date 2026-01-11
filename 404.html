@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - MovieQ</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-icon {
+            font-size: 5rem;
+            color: var(--light-bronze);
+            margin-bottom: 2rem;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: var(--tea-green);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        
+        .error-details {
+            color: #666;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Mood Search</a></li>
+                    <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Language</a></li>
+                    <li><a href="aboutme.html"><i class="fas fa-user"></i> About Me</a></li>
+                </ul>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Error Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="error-container">
+                <div class="error-icon">
+                    <i class="fas fa-film"></i>
+                </div>
+                <div class="error-code">404</div>
+                <h1 class="error-message">Movie Not Found</h1>
+                <p class="error-details">
+                    Oops! It looks like the page or movie you're looking for doesn't exist. 
+                    The URL might be incorrect, or the content may have been moved.
+                </p>
+                <div class="error-actions">
+                    <a href="index.html" class="btn-primary">
+                        <i class="fas fa-home"></i> Go to Homepage
+                    </a>
+                    <button onclick="window.history.back()" class="btn-surprise">
+                        <i class="fas fa-arrow-left"></i> Go Back
+                    </button>
+                    <a href="index.html#mood-search" class="btn-primary">
+                        <i class="fas fa-smile"></i> Browse by Mood
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                    <p>Discover movies that match your mood and preferences</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#mood-search">Mood Search</a></li>
+                        <li><a href="index.html#language-search">Language Filter</a></li>
+                        <li><a href="aboutme.html">About Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer-cta">
+                    <h4>Get Surprised!</h4>
+                    <p>Let us pick a random movie for you</p>
+                    <button onclick="window.location.href='index.html'" class="btn-surprise">
+                        <i class="fas fa-gift"></i> Surprise Me
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MovieQ. All rights reserved. | AI-Powered Movie Recommendations</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    const navLinks = document.querySelector('.nav-links');
+                    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

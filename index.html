@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieQ - Discover Your Next Favorite Movie</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#mood-search"><i class="fas fa-smile"></i> Mood Search</a></li>
+                    <li><a href="#language-search"><i class="fas fa-globe"></i> Language</a></li>
+                    <li><a href="aboutme.html"><i class="fas fa-user"></i> About Me</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button id="surpriseBtn" class="btn-surprise"><i class="fas fa-gift"></i> Surprise Me</button>
+                </div>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Find Movies That Match Your <span class="highlight">Mood</span></h1>
+                <p class="hero-subtitle">AI-powered recommendations for romantic, happy, sad, or any mood you're in</p>
+                <div class="hero-search">
+                    <input type="text" id="searchInput" placeholder="Search for movies, genres, or keywords...">
+                    <button id="searchBtn" class="btn-primary"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Filters Section -->
+            <section class="filters-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-filter"></i> Filter Movies</h2>
+                </div>
+                <div class="filters-grid">
+                    <!-- Mood Filters -->
+                    <div class="filter-card" id="mood-search">
+                        <h3><i class="fas fa-smile"></i> Search by Mood</h3>
+                        <div class="mood-buttons">
+                            <button class="mood-btn" data-mood="romantic">
+                                <i class="fas fa-heart"></i> Romantic
+                            </button>
+                            <button class="mood-btn" data-mood="happy">
+                                <i class="fas fa-laugh"></i> Happy
+                            </button>
+                            <button class="mood-btn" data-mood="sad">
+                                <i class="fas fa-sad-tear"></i> Sad
+                            </button>
+                            <button class="mood-btn" data-mood="adventure">
+                                <i class="fas fa-mountain"></i> Adventure
+                            </button>
+                            <button class="mood-btn" data-mood="thriller">
+                                <i class="fas fa-exclamation-triangle"></i> Thriller
+                            </button>
+                            <button class="mood-btn" data-mood="comedy">
+                                <i class="fas fa-theater-masks"></i> Comedy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Language Filter -->
+                    <div class="filter-card" id="language-search">
+                        <h3><i class="fas fa-globe"></i> Filter by Language</h3>
+                        <div class="language-filter">
+                            <select id="languageSelect">
+                                <option value="">All Languages</option>
+                                <option value="en">English</option>
+                                <option value="hi">Hindi</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ko">Korean</option>
+                                <option value="cn">Chinese</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Genre Filter -->
+                    <div class="filter-card">
+                        <h3><i class="fas fa-tags"></i> Filter by Genre</h3>
+                        <div class="genre-filter">
+                            <select id="genreSelect">
+                                <option value="">All Genres</option>
+                                <option value="Action">Action</option>
+                                <option value="Adventure">Adventure</option>
+                                <option value="Animation">Animation</option>
+                                <option value="Comedy">Comedy</option>
+                                <option value="Crime">Crime</option>
+                                <option value="Documentary">Documentary</option>
+                                <option value="Drama">Drama</option>
+                                <option value="Family">Family</option>
+                                <option value="Fantasy">Fantasy</option>
+                                <option value="History">History</option>
+                                <option value="Horror">Horror</option>
+                                <option value="Music">Music</option>
+                                <option value="Mystery">Mystery</option>
+                                <option value="Romance">Romance</option>
+                                <option value="Science Fiction">Science Fiction</option>
+                                <option value="Thriller">Thriller</option>
+                                <option value="War">War</option>
+                                <option value="Western">Western</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="active-filters" id="activeFilters">
+                    <!-- Active filters will appear here -->
+                </div>
+            </section>
+
+            <!-- Movies Section -->
+            <section class="movies-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-film"></i> Popular Movies</h2>
+                    <div class="sort-options">
+                        <select id="sortSelect">
+                            <option value="popularity">Sort by Popularity</option>
+                            <option value="rating">Sort by Rating</option>
+                            <option value="date">Sort by Release Date</option>
+                            <option value="title">Sort by Title</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Loading movies...</p>
+                </div>
+
+                <!-- Movies Grid -->
+                <div class="movies-grid" id="moviesGrid">
+                    <!-- Movie cards will be dynamically inserted here -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <button class="pagination-btn" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <div class="page-numbers" id="pageNumbers"></div>
+                    <button class="pagination-btn" id="nextBtn">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                    <p>Discover movies that match your mood and preferences</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#mood-search">Mood Search</a></li>
+                        <li><a href="#language-search">Language Filter</a></li>
+                        <li><a href="aboutme.html">About Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer-cta">
+                    <h4>Get Surprised!</h4>
+                    <p>Let us pick a random movie for you</p>
+                    <button id="footerSurpriseBtn" class="btn-surprise">
+                        <i class="fas fa-gift"></i> Surprise Me
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MovieQ. All rights reserved. | AI-Powered Movie Recommendations</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="static/js/movieLoader.js"></script>
+    <script src="static/js/ui.js"></script>
+    <script src="static/js/main.js"></script>
+</body>
+</html>
