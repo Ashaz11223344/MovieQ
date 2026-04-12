@@ -9,6 +9,7 @@ const UIManager = (function() {
         cacheDOM();
         setupEventListeners();
         initializeFilters();
+        initAIAssistant();
     }
 
     // Cache DOM elements
@@ -145,7 +146,153 @@ function initializeFilters() {
     // Handle search
     function handleSearch() {
         const searchText = elements.searchInput.value.trim();
-        updateFilters({ searchText });
+        
+        // Check if it's a "Vibe" search
+        const interpreted = interpretVibe(searchText);
+        
+        if (interpreted.isVibe) {
+            showAssistantMessage(interpreted.response);
+            updateFilters(interpreted.filters);
+        } else {
+            updateFilters({ searchText });
+        }
+    }
+
+    // AI Assistant: Typing Feed (LLM Style)
+    let typingInterval;
+    function initAIAssistant() {
+        const placeholders = [
+            'I want to watch a fast-paced movie...',
+            'Can you suggest something horror and comedy?',
+            'I am in the mood for a feel-good movie...',
+            'I want something emotional but not too heavy...',
+            'Show me some classic sci-fi masterpieces',
+            'Looking for intense mystery thrillers...'
+        ];
+        
+        let pIndex = 0;
+        const input = elements.searchInput;
+        if (!input) return;
+
+        function typePlaceholder(text, i = 0) {
+            if (document.activeElement === input) return;
+            if (i <= text.length) {
+                input.placeholder = text.substring(0, i);
+                typingInterval = setTimeout(() => typePlaceholder(text, i + 1), 50);
+            } else {
+                setTimeout(cycle, 3000);
+            }
+        }
+
+        function cycle() {
+            if (document.activeElement === input) return;
+            pIndex = (pIndex + 1) % placeholders.length;
+            typePlaceholder(placeholders[pIndex]);
+        }
+
+        typePlaceholder(placeholders[0]);
+    }
+
+    function showAssistantMessage(msg) {
+        const bubble = document.getElementById('aiResponseBubble');
+        if (!bubble) return;
+        
+        bubble.textContent = msg;
+        bubble.classList.add('active');
+        
+        setTimeout(() => {
+            bubble.classList.remove('active');
+        }, 5000);
+    }
+
+    // AI Assistant: Vibe Interpretation
+    function interpretVibe(text) {
+        if (!text || text.length < 3) return { isVibe: false };
+        
+        const lowerText = text.toLowerCase();
+        const filters = { searchText: '', mood: null, genre: '', sortBy: 'popularity' };
+        let isVibe = false;
+        let response = "Resonating with your frequency... finding matches.";
+
+        // Conversational "Training" Data (Expanded Mappings)
+        const mappings = [
+            { 
+                keywords: ['emotional', 'sad', 'touching', 'cry', 'heartbreaking', 'tear', 'tender'], 
+                mood: 'sad', genre: 'Drama', 
+                responses: ["I feel you. Let's find some beautiful, touching stories.", "Ready for some emotional depth? Drama collection loading..."]
+            },
+            { 
+                keywords: ['feel-good', 'happy', 'uplifting', 'smile', 'joy', 'fun', 'cheerful'], 
+                mood: 'happy', genre: 'Comedy', 
+                responses: ["Coming right up! Let's brighten your day with these.", "Happiness detected. Here are some feel-good gems!"]
+            },
+            { 
+                keywords: ['fast-paced', 'action', 'intense', 'thrill', 'adventure', 'explosive'], 
+                mood: 'excited', genre: 'Action', 
+                responses: ["Hold on tight! These movies are a wild ride.", "Adrenaline rush incoming! Action collection ready."]
+            },
+            { 
+                keywords: ['scary', 'spooky', 'horror', 'creepy', 'nightmare', 'terrifying'], 
+                mood: 'scared', genre: 'Horror', 
+                responses: ["Turn off the lights. Here are some spine-chilling picks.", "Brave choice! Nightmare fuel coming your way."]
+            },
+            { 
+                keywords: ['relax', 'chill', 'calm', 'peaceful', 'soothing'], 
+                mood: 'relaxed', genre: 'Animation', 
+                responses: ["Time to unwind. These movies have the perfect chill factor.", "Relaxation mode active. Enjoy these peaceful vibes."]
+            },
+            { 
+                keywords: ['mystery', 'solve', 'detective', 'puzzle', 'puzzling', 'curious'], 
+                mood: 'thoughtful', genre: 'Mystery', 
+                responses: ["Let's put your detective skills to the test.", "Mystery and intrigue await. Can you solve these?"]
+            },
+            { 
+                keywords: ['romantic', 'love', 'date', 'passion', 'heart'], 
+                mood: 'romantic', genre: 'Romance', 
+                responses: ["Love is in the air. Perfect for a cozy night.", "Found some romantic masterpieces for you!"]
+            }
+        ];
+
+        // Specific sorting/meta requests
+        if (lowerText.includes('classic') || lowerText.includes('old') || lowerText.includes('masterpiece')) {
+            filters.sortBy = 'date';
+            response = "Looking back at the golden age of cinema...";
+            isVibe = true;
+        }
+
+        if (lowerText.includes('best') || lowerText.includes('top rated') || lowerText.includes('highly')) {
+            filters.sortBy = 'vote_average';
+            response = "Only the crème de la crème for you.";
+            isVibe = true;
+        }
+
+        // Search for mood in sentence
+        for (const map of mappings) {
+            if (map.keywords.some(kw => lowerText.includes(kw))) {
+                filters.mood = map.mood;
+                filters.genre = map.genre;
+                response = map.responses[Math.floor(Math.random() * map.responses.length)];
+                isVibe = true;
+                break;
+            }
+        }
+
+        // Friendly "Hello" detection
+        if (lowerText.includes('hello') || lowerText.includes('hi ') || lowerText.includes('hey')) {
+            response = "Hello! I'm your MovieQ AI. How can I help you find a movie today?";
+            isVibe = true;
+        }
+
+        if (isVibe) {
+            // Update UI to reflect detected mood
+            elements.moodButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.mood === filters.mood) btn.classList.add('active');
+            });
+            if (elements.genreSelect) elements.genreSelect.value = filters.genre;
+        }
+
+        return { isVibe, filters, response };
     }
 
     // Handle mood filter
@@ -325,21 +472,18 @@ function initializeFilters() {
             <div class="movie-card" data-movie-id="${movie.id}">
                 <img src="${posterUrl}" alt="${movie.title}" class="movie-poster" loading="lazy">
                 <div class="movie-info">
-                    <h3 class="movie-title" title="${movie.title}">${movie.title}</h3>
                     <div class="movie-meta">
                         <span class="movie-year">${releaseYear}</span>
                         <span class="movie-rating">
                             <i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}
                         </span>
                     </div>
+                    <h3 class="movie-title">${movie.title}</h3>
                     <div class="movie-genres">
                         ${movie.genres.slice(0, 2).map(genre => 
                             `<span class="genre-tag">${genre}</span>`
                         ).join('')}
                     </div>
-                    <p class="movie-overview" title="${movie.overview}">
-                        ${movie.overview.substring(0, 100)}${movie.overview.length > 100 ? '...' : ''}
-                    </p>
                 </div>
             </div>
         `;

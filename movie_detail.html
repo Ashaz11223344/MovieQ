@@ -7,357 +7,178 @@
     <link rel="stylesheet" href="static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nova+Square&display=swap');
     /* ===============================
-   Movie Detail Page - Professional Design
-================================ */
-
-.movie-detail-hero {
-    position: relative;
-    height: 70vh;
-    min-height: 500px;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    align-items: flex-end;
-    margin-bottom: 3rem;
-    overflow: hidden;
-    animation: heroReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-@keyframes heroReveal {
-    from {
-        opacity: 0;
-        transform: scale(1.1);
+       Movie Detail Page - Midnight Ocean
+    ================================ */
+    .movie-detail-hero {
+        position: relative;
+        height: 75vh;
+        min-height: 600px;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
     }
-    to {
-        opacity: 1;
-        transform: scale(1);
+
+    .movie-detail-hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, var(--background) 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+        z-index: 1;
     }
-}
 
-.movie-detail-hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(20, 33, 61, 0.1) 20%,
-        rgba(20, 33, 61, 0.3) 40%,
-        rgba(20, 33, 61, 0.7) 70%,
-        var(--prussian-blue) 100%
-    );
-    z-index: 1;
-}
-
-.movie-detail-hero::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 200px;
-    background: linear-gradient(
-        to bottom,
-        rgba(20, 33, 61, 0.8) 0%,
-        transparent 100%
-    );
-    z-index: 1;
-}
-
-.movie-detail-content {
-    position: relative;
-    z-index: 2;
-    color: var(--white);
-    padding: 3rem;
-    max-width: 1400px;
-    margin: 0 auto;
-    animation: contentSlideUp 0.8s ease-out 0.4s both;
-}
-
-@keyframes contentSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(40px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.hero-title {
-    font-size: 3.5rem;
-    font-weight: 800;
-    color: var(--white);
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    position: relative;
-
-    /* Glow effect */
-    text-shadow:
-        0 0 5px rgb(255 255 255 / 40%),
-        0 0 12px rgb(255 255 255 / 35%),
-        0 0 25px rgb(255 255 255 / 25%),
-        2px 2px 10px rgb(0 0 0 / 50%);
-}
-
-/* Optional subtle animated glow */
-@keyframes titleGlow {
-    0% {
-        text-shadow:
-            0 0 5px rgb(255 255 255 / 30%),
-            0 0 15px rgb(255 255 255 / 25%),
-            2px 2px 10px rgb(255 255 255 / 50%);
-    }
-    100% {
-        text-shadow:
-            0 0 8px rgb(255 255 255 / 60%),
-            0 0 25px rgb(255 255 255 / 45%),
-            2px 2px 10px rgb(255 255 255 / 50%);
-    }
-}
-
-.hero-title::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100px;
-    height: 4px;
-    background: var(--orange);
-    border-radius: 2px;
-}
-
-.hero-subtitle {
-    font-size: 1.5rem;
-    color: var(--alabaster-grey);
-    margin-bottom: 1.5rem;
-}
-
-.tagline {
-    font-size: 1.2rem;
-    font-style: italic;
-    color: var(--orange);
-    border-left: 3px solid var(--orange);
-    padding-left: 1rem;
-}
-
-/* ===============================
-   Back Button
-================================ */
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    margin: 2rem 0 3rem;
-    padding: 1rem 2rem;
-    background: var(--white);
-    color: var(--prussian-blue);
-    border-radius: 50px;
-    font-weight: 600;
-    text-decoration: none;
-    box-shadow: 0 8px 25px var(--shadow-light);
-    transition: 0.3s;
-}
-
-.back-btn:hover {
-    color: var(--orange);
-    transform: translateX(-10px);
-    box-shadow: 0 12px 35px var(--shadow-medium);
-}
-
-/* ===============================
-   Layout
-================================ */
-
-.movie-detail-container {
-    display: grid;
-    grid-template-columns: 350px 1fr;
-    gap: 4rem;
-    margin-bottom: 4rem;
-}
-
-.movie-poster-large {
-    width: 100%;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-    transition: 0.4s;
-}
-
-.movie-poster-large:hover {
-    transform: scale(1.03);
-}
-
-/* ===============================
-   Movie Info Card
-================================ */
-
-.movie-info-detail {
-    background: var(--white);
-    padding: 3rem;
-    border-radius: 25px;
-    box-shadow: 0 20px 60px var(--shadow-light);
-    border-left: 6px solid var(--orange);
-}
-
-.movie-info-detail h3 {
-    color: var(--prussian-blue);
-    font-size: 1.5rem;
-    margin: 2rem 0 1rem;
-}
-
-.movie-info-detail p {
-    color: var(--prussian-blue);
-    opacity: 0.9;
-    line-height: 1.7;
-}
-
-/* ===============================
-   Stats
-================================ */
-
-.movie-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1.5rem;
-    margin: 2.5rem 0;
-}
-
-.stat-item {
-    background: linear-gradient(
-        135deg,
-        var(--white),
-        rgba(252,163,17,0.05)
-    );
-    padding: 1.5rem;
-    border-radius: 16px;
-    text-align: center;
-    transition: 0.3s;
-}
-
-.stat-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(252,163,17,0.15);
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--prussian-blue);
-}
-
-.stat-label {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: var(--prussian-blue);
-    opacity: 0.7;
-}
-
-/* ===============================
-   Genres
-================================ */
-
-.genre-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    margin: 2rem 0;
-}
-
-.genre-badge {
-    background: var(--gradient-orange);
-    color: var(--white);
-    padding: 0.6rem 1.4rem;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.genre-badge:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(252,163,17,0.3);
-}
-
-/* ===============================
-   Buttons
-================================ */
-
-.action-buttons {
-    display: flex;
-    gap: 1.5rem;
-    margin: 3rem 0;
-    flex-wrap: wrap;
-}
-
-.watch-now {
-    background: var(--gradient-orange);
-    color: var(--white);
-    border: none;
-    padding: 1.2rem 2.5rem;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.watch-now:hover {
-    transform: translateY(-4px);
-}
-
-.add-to-list {
-    background: var(--white);
-    color: var(--prussian-blue);
-    border: 2px solid var(--orange);
-    padding: 1.2rem 2.5rem;
-    border-radius: 50px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.add-to-list:hover {
-    background: var(--orange);
-    color: var(--white);
-}
-
-/* ===============================
-   Responsive
-================================ */
-
-@media (max-width: 768px) {
-    .movie-detail-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    .action-buttons {
-        flex-direction: column;
-    }
-    .watch-now,
-    .add-to-list {
+    .movie-detail-content {
+        position: relative;
+        z-index: 2;
+        padding-bottom: 4rem;
+        max-width: 1400px;
+        margin: 0 auto;
         width: 100%;
-        justify-content: center;
+        padding-left: 2rem;
     }
-}
 
-@media (max-width: 480px) {
     .hero-title {
-        font-size: 2rem;
+        font-family: var(--font-heading);
+        font-size: 5rem;
+        font-weight: 800;
+        letter-spacing: -3px;
+        line-height: 1;
+        margin-bottom: 1rem;
+        color: white;
     }
-    .movie-info-detail {
-        padding: 2rem 1.5rem;
-    }
-}
 
+    .hero-subtitle {
+        font-family: var(--font-body);
+        font-size: 1.5rem;
+        color: var(--on-surface-variant);
+        margin-bottom: 2rem;
+    }
+
+    /* Layout */
+    .movie-detail-grid {
+        display: grid;
+        grid-template-columns: 380px 1fr;
+        gap: 6rem;
+        margin-top: -100px;
+        position: relative;
+        z-index: 3;
+    }
+
+    .movie-poster-large {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: var(--luminous-shadow);
+        border: 1px solid var(--outline-variant);
+        transition: transform 0.4s ease;
+    }
+
+    .movie-poster-large:hover {
+        transform: scale(1.02);
+    }
+
+    /* Stats & Info */
+    .movie-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .stat-card {
+        background: var(--surface-low);
+        padding: 1.5rem;
+        border-radius: 16px;
+        border: 1px solid var(--outline-variant);
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .stat-value {
+        display: block;
+        font-family: var(--font-heading);
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--primary-light);
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--on-surface-variant);
+    }
+
+    /* Quick Links & Meta */
+    .detail-section {
+        margin-bottom: 4rem;
+    }
+
+    .detail-section h3 {
+        font-family: var(--font-heading);
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--on-surface);
+    }
+
+    .overview-text {
+        font-size: 1.25rem;
+        line-height: 1.8;
+        color: var(--on-surface-variant);
+        max-width: 800px;
+    }
+
+    .genre-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 3rem;
+    }
+
+    .genre-badge {
+        background: var(--surface-highest);
+        color: var(--on-surface);
+        padding: 0.6rem 1.4rem;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: 1px solid var(--outline-variant);
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 2rem;
+        color: var(--on-surface-variant);
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s;
+    }
+
+    .back-btn:hover {
+        color: var(--primary-light);
+    }
+
+    @media (max-width: 992px) {
+        .movie-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        .movie-poster-large {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .hero-title {
+            font-size: 3rem;
+        }
+    }
 </style>
 </head>
 <body>
@@ -427,7 +248,40 @@
                 <p>&copy; 2026 MovieQ. All rights reserved. | AI-Powered Movie Recommendations</p>
             </div>
         </div>
-    </footer>
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModalOverlay">
+        <div class="share-modal">
+            <div class="share-modal-header">
+                <h3>Share this Masterpiece</h3>
+                <button class="close-modal" id="closeShareModal">&times;</button>
+            </div>
+            <div class="share-modal-body">
+                <div class="share-platforms">
+                    <a href="#" class="share-btn whatsapp" id="shareWhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                    <a href="#" class="share-btn twitter" id="shareTwitter">
+                        <i class="fab fa-twitter"></i>
+                        <span>Twitter</span>
+                    </a>
+                    <button class="share-btn download" id="downloadCard">
+                        <i class="fas fa-file-image"></i>
+                        <span>Themed Card</span>
+                    </button>
+                </div>
+                <div class="share-url">
+                    <input type="text" id="shareURL" readonly>
+                    <button class="copy-btn" id="copyURLBtn">Copy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Card for Capture -->
+    <div id="shareCardContainer">
+        <!-- Rendered dynamically -->
+    </div>
 
     <script src="static/js/movieLoader.js"></script>
     <script>
@@ -454,6 +308,9 @@
             
             // Render movie details
             renderMovieDetails(movie);
+            
+            // Initialize Sharing
+            initSharing(movie);
             
             // Setup back button
             const backBtn = document.getElementById('backBtn');
@@ -519,80 +376,62 @@
         <div class="movie-detail-hero" style="background-image: url('${backdropUrl || posterUrl}')">
             <div class="movie-detail-content">
                 <h1 class="hero-title">${movie.title}</h1>
-                <p class="hero-subtitle">${movie.original_title !== movie.title ? movie.original_title : ''}</p>
-                ${movie.tagline ? `<p class="tagline"><em>"${movie.tagline}"</em></p>` : ''}
+                <p class="hero-subtitle">${movie.tagline ? `"${movie.tagline}"` : movie.original_title}</p>
+                <div class="genre-badges">
+                    ${genres.map(genre => `<span class="genre-badge">${genre}</span>`).join('')}
+                </div>
             </div>
         </div>
         
-        <div class="movie-detail-container">
-            <div class="movie-poster-container">
-                <img src="${posterUrl}" alt="${movie.title}" class="movie-poster-large">
-            </div>
-            
-            <div class="movie-info-detail">
-                <div class="movie-stats">
-                    <div class="stat-item">
-                        <span class="stat-value">${movie.vote_average.toFixed(1)}</span>
-                        <span class="stat-label">Rating</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${releaseYear}</span>
-                        <span class="stat-label">Year</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${hours}h ${minutes}m</span>
-                        <span class="stat-label">Duration</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${movie.vote_count.toLocaleString()}</span>
-                        <span class="stat-label">Votes</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${languageName}</span>
-                        <span class="stat-label">Language</span>
-                    </div>
+        <div class="container" style="margin-top: 2rem;">
+            <div class="movie-detail-grid">
+                <div class="poster-container">
+                    <img src="${posterUrl}" alt="${movie.title}" class="movie-poster-large">
+                    <a href="index.html" class="back-btn" id="backBtn">
+                        <i class="fas fa-arrow-left"></i> Home Discovery
+                    </a>
                 </div>
                 
-                <div class="genre-list">
-                    ${genres.map(genre => 
-                        `<span class="genre-badge">${genre}</span>`
-                    ).join('')}
-                </div>
-                
-                <h3>Overview</h3>
-                <p>${movie.overview}</p>
-                
-                ${movie.cast ? `
-                <div style="margin-top: 2rem;">
-                    <h3>Cast</h3>
-                    <p>${movie.cast.split(',').slice(0, 5).join(', ')}${movie.cast.split(',').length > 5 ? '...' : ''}</p>
-                </div>
-                ` : ''}
-                
-                ${movie.director ? `
-                <div style="margin-top: 1rem;">
-                    <h3>Director</h3>
-                    <p>${movie.director}</p>
-                </div>
-                ` : ''}
-                
-                <div style="margin-top: 2rem;">
-                    <h3>Movie Details</h3>
-                    <p><strong>Original Title:</strong> ${movie.original_title}</p>
-                    <p><strong>Release Date:</strong> ${movie.release_date || 'N/A'}</p>
-                    <p><strong>Popularity Score:</strong> ${movie.popularity.toFixed(2)}</p>
-                    ${movie.status ? `<p><strong>Status:</strong> ${movie.status}</p>` : ''}
-                    ${movie.production_companies ? `<p><strong>Production:</strong> ${movie.production_companies.split(',').slice(0, 2).join(', ')}</p>` : ''}
-                    ${movie.imdb_rating ? `<p><strong>IMDB Rating:</strong> ${movie.imdb_rating}</p>` : ''}
-                </div>
-                
-                <div style="margin-top: 2rem; display: flex; gap: 1rem;">
-                    <button class="btn-primary" onclick="shareMovie()">
-                        <i class="fas fa-share"></i> Share
-                    </button>
-                    <button class="btn-surprise" onclick="window.location.href='movie_detail.html?id=${MovieLoader.getRandomMovie().id}'">
-                        <i class="fas fa-random"></i> Random Movie
-                    </button>
+                <div class="info-content">
+                    <div class="movie-stats">
+                        <div class="stat-card">
+                            <span class="stat-value">${movie.vote_average.toFixed(1)}</span>
+                            <span class="stat-label">Rating</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${releaseYear}</span>
+                            <span class="stat-label">Year</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${hours}h ${minutes}m</span>
+                            <span class="stat-label">Duration</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value">${movie.vote_count.toLocaleString()}</span>
+                            <span class="stat-label">Votes</span>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Overview</h3>
+                        <p class="overview-text">${movie.overview}</p>
+                    </div>
+
+                    ${movie.cast ? `
+                    <div class="detail-section">
+                        <h3>Main Cast</h3>
+                        <p class="overview-text" style="font-size: 1.1rem;">${movie.cast.split(',').slice(0, 6).join(', ')}</p>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="action-buttons">
+                        <button class="btn-primary" onclick="shareMovie()">
+                            <i class="fas fa-share"></i> Share Movie
+                        </button>
+                        <button class="btn-surprise" onclick="window.location.href='movie_detail.html?id=${MovieLoader.getRandomMovie().id}'">
+                            <i class="fas fa-random"></i> Random discovery
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -614,17 +453,101 @@
         }
         
         function shareMovie() {
-            if (navigator.share) {
-                navigator.share({
-                    title: document.title,
-                    url: window.location.href
-                });
-            } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    alert('Link copied to clipboard!');
-                });
-            }
+            const modal = document.getElementById('shareModalOverlay');
+            modal.classList.add('active');
+            
+            // Set current URL in input
+            document.getElementById('shareURL').value = window.location.href;
+        }
+
+        function initSharing(movie) {
+            const closeModal = document.getElementById('closeShareModal');
+            const modal = document.getElementById('shareModalOverlay');
+            const copyBtn = document.getElementById('copyURLBtn');
+            const downloadBtn = document.getElementById('downloadCard');
+            
+            // Close modal events
+            closeModal.onclick = () => modal.classList.remove('active');
+            window.onclick = (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            };
+
+            // Copy Link
+            copyBtn.onclick = () => {
+                const urlInput = document.getElementById('shareURL');
+                urlInput.select();
+                document.execCommand('copy');
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+            };
+
+            // Social Deep Links
+            const shareText = `Check out this movie: ${movie.title} on MovieQ!`;
+            const shareUrl = encodeURIComponent(window.location.href);
+            
+            document.getElementById('shareWhatsApp').href = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + window.location.href)}`;
+            document.getElementById('shareTwitter').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${shareUrl}`;
+
+            // Prepare Hidden Card for Download
+            const cardContainer = document.getElementById('shareCardContainer');
+            const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+            const posterUrl = MovieLoader.getPosterUrl(movie);
+
+            cardContainer.innerHTML = `
+                <div class="share-card-inner" id="actualCard">
+                    <div class="card-frame">
+                        <img src="${posterUrl}" class="card-poster">
+                        <div class="card-info">
+                            <h2 class="card-title">${movie.title}</h2>
+                            <div class="card-meta">
+                                <span>${releaseYear}</span>
+                                <span><i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}</span>
+                                <span>${movie.original_language.toUpperCase()}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="card-branding">
+                                <div class="card-logo"><i class="fas fa-film"></i> MovieQ</div>
+                                <div class="card-url">movie-q.com/discover</div>
+                            </div>
+                            <div class="card-qr-wrapper" id="cardQR"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Generate QR Code for the card
+            new QRCode(document.getElementById("cardQR"), {
+                text: window.location.href,
+                width: 80,
+                height: 80,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            // Download Card as Image
+            downloadBtn.onclick = async () => {
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                
+                try {
+                    const canvas = await html2canvas(document.getElementById('actualCard'), {
+                        useCORS: true,
+                        scale: 1,
+                        backgroundColor: '#000000'
+                    });
+                    
+                    const link = document.createElement('a');
+                    link.download = `MovieQ-${movie.title.replace(/\s+/g, '-')}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                } catch (err) {
+                    console.error('Error generating card:', err);
+                    alert('Could not generate the card. You can still share the link!');
+                } finally {
+                    downloadBtn.innerHTML = '<i class="fas fa-file-image"></i> <span>Themed Card</span>';
+                }
+            };
         }
     // Enhanced movie detail interactions
 function initMovieDetailInteractions() {

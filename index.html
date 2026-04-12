@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
     <!-- Header -->
@@ -37,11 +38,25 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1 class="hero-title">Find Movies That Match Your <span class="highlight">Mood</span></h1>
-                <p class="hero-subtitle">AI-powered recommendations for romantic, happy, sad, or any mood you're in</p>
+                <h1 class="hero-title">Experience the <span class="highlight">Midnight Ocean</span>.</h1>
+                <p class="hero-subtitle">Discover curated movies that resonate with your current frequency. Beyond typical discovery.</p>
+                
                 <div class="hero-search">
-                    <input type="text" id="searchInput" placeholder="Search for movies, genres, or keywords...">
-                    <button id="searchBtn" class="btn-primary"><i class="fas fa-search"></i> Search</button>
+                    <div class="ai-assistant-wrapper">
+                        <div class="assistant-status" id="assistantStatus">
+                            <span class="status-dot"></span>
+                            <span class="status-text">AI Assistant Active</span>
+                        </div>
+                        <div class="ai-response-bubble" id="aiResponseBubble"></div>
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Search movies, directors, or vibes...">
+                            <button id="searchBtn" class="btn-search">Find</button>
+                        </div>
+                    </div>
+                    <button id="surpriseBtn" class="btn-surprise">
+                        <i class="fas fa-random"></i> Surprise Me
+                    </button>
                 </div>
             </div>
         </div>
@@ -50,40 +65,29 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Filters Section -->
-            <section class="filters-section">
-                <div class="section-header">
-                    <h2><i class="fas fa-filter"></i> Filter Movies</h2>
-                </div>
-                <div class="filters-grid">
-                    <!-- Mood Filters -->
-                    <div class="filter-card" id="mood-search">
-                        <h3><i class="fas fa-smile"></i> Search by Mood</h3>
-                        <div class="mood-buttons">
-                            <button class="mood-btn" data-mood="romantic">
-                                <i class="fas fa-heart"></i> Romantic
-                            </button>
-                            <button class="mood-btn" data-mood="happy">
-                                <i class="fas fa-laugh"></i> Happy
-                            </button>
-                            <button class="mood-btn" data-mood="sad">
-                                <i class="fas fa-sad-tear"></i> Sad
-                            </button>
-                            <button class="mood-btn" data-mood="adventure">
-                                <i class="fas fa-mountain"></i> Adventure
-                            </button>
-                            <button class="mood-btn" data-mood="thriller">
-                                <i class="fas fa-exclamation-triangle"></i> Thriller
-                            </button>
-                            <button class="mood-btn" data-mood="comedy">
-                                <i class="fas fa-theater-masks"></i> Comedy
-                            </button>
-                        </div>
+            <!-- Discovery & Filters -->
+            <section class="discovery-section">
+                <!-- Mood Search -->
+                <div class="mood-search" id="mood-search">
+                    <div class="section-title">
+                        <h2>How are you <span class="highlight">feeling</span>?</h2>
                     </div>
+                    <div class="mood-grid">
+                        <button class="mood-btn" data-mood="happy"><i data-lucide="smile"></i> Happy</button>
+                        <button class="mood-btn" data-mood="sad"><i data-lucide="cloud-rain"></i> Sad</button>
+                        <button class="mood-btn" data-mood="excited"><i data-lucide="rocket"></i> Excited</button>
+                        <button class="mood-btn" data-mood="relaxed"><i data-lucide="coffee"></i> Relaxed</button>
+                        <button class="mood-btn" data-mood="scared"><i data-lucide="ghost"></i> Scared</button>
+                        <button class="mood-btn" data-mood="thoughtful"><i data-lucide="brain"></i> Thoughtful</button>
+                        <button class="mood-btn" data-mood="romantic"><i data-lucide="heart"></i> Romantic</button>
+                        <button class="mood-btn" data-mood="bored"><i data-lucide="moon"></i> Bored</button>
+                    </div>
+                </div>
 
+                <div class="filters-row">
                     <!-- Language Filter -->
                     <div class="filter-card" id="language-search">
-                        <h3><i class="fas fa-globe"></i> Filter by Language</h3>
+                        <h3><i class="fas fa-globe"></i> Language</h3>
                         <div class="language-filter">
                             <select id="languageSelect">
                                 <option value="">All Languages</option>
@@ -101,7 +105,7 @@
 
                     <!-- Genre Filter -->
                     <div class="filter-card">
-                        <h3><i class="fas fa-tags"></i> Filter by Genre</h3>
+                        <h3><i class="fas fa-tags"></i> Genre</h3>
                         <div class="genre-filter">
                             <select id="genreSelect">
                                 <option value="">All Genres</option>
@@ -110,26 +114,16 @@
                                 <option value="Animation">Animation</option>
                                 <option value="Comedy">Comedy</option>
                                 <option value="Crime">Crime</option>
-                                <option value="Documentary">Documentary</option>
                                 <option value="Drama">Drama</option>
-                                <option value="Family">Family</option>
-                                <option value="Fantasy">Fantasy</option>
-                                <option value="History">History</option>
+                                <option value="Sci-Fi">Sci-Fi</option>
                                 <option value="Horror">Horror</option>
-                                <option value="Music">Music</option>
-                                <option value="Mystery">Mystery</option>
-                                <option value="Romance">Romance</option>
-                                <option value="Science Fiction">Science Fiction</option>
-                                <option value="Thriller">Thriller</option>
-                                <option value="War">War</option>
-                                <option value="Western">Western</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 
                 <div class="active-filters" id="activeFilters">
-                    <!-- Active filters will appear here -->
+                    <!-- Active filters appear here -->
                 </div>
             </section>
 
@@ -207,5 +201,6 @@
     <script src="static/js/movieLoader.js"></script>
     <script src="static/js/ui.js"></script>
     <script src="static/js/main.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
