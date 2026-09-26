@@ -1,0 +1,15 @@
+# Large raw datasets (>100MB)
+*.csv
+TMDB_movie_dataset_v11.csv
+
+# Python cache & virtualenvs
+__pycache__/
+*.pyc
+.venv
+venv/
+
+# System and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

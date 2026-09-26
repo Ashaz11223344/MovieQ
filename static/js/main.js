@@ -50,10 +50,21 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
         
+        if (urlParams.has('sort')) {
+            initialFilters.sortBy = urlParams.get('sort');
+            const sortSelect = document.getElementById('sortSelect');
+            if (sortSelect) {
+                sortSelect.value = initialFilters.sortBy;
+            }
+        } else {
+            initialFilters.sortBy = 'recommended';
+        }
+        
         // Apply filters and display movies
         const totalPages = MovieLoader.filterMovies(initialFilters);
         UIManager.updateMoviesDisplay();
         UIManager.updatePagination(totalPages);
+        UIManager.initDailyFeaturedPick();
         
         // Hide loading indicator
         UIManager.hideLoading();

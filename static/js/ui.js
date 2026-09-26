@@ -10,6 +10,7 @@ const UIManager = (function() {
         setupEventListeners();
         initializeFilters();
         initAIAssistant();
+        initDailyFeaturedPick();
     }
 
     // Cache DOM elements
@@ -30,6 +31,11 @@ const UIManager = (function() {
             genreSelect: document.getElementById('genreSelect'),
             sortSelect: document.getElementById('sortSelect'),
             activeFilters: document.getElementById('activeFilters'),
+            
+            // Section Actions
+            suggestNewBtn: document.getElementById('suggestNewBtn'),
+            suggestionBadge: document.getElementById('suggestionBadge'),
+            feedStatusTag: document.getElementById('feedStatusTag'),
             
             // Movies
             moviesGrid: document.getElementById('moviesGrid'),
@@ -82,6 +88,11 @@ const UIManager = (function() {
         }
         if (elements.sortSelect) {
             elements.sortSelect.addEventListener('change', handleSortChange);
+        }
+
+        // Suggest New Movies
+        if (elements.suggestNewBtn) {
+            elements.suggestNewBtn.addEventListener('click', handleSuggestNewMovies);
         }
 
         // Pagination
@@ -210,11 +221,21 @@ function initializeFilters() {
         if (!text || text.length < 3) return { isVibe: false };
         
         const lowerText = text.toLowerCase();
-        const filters = { searchText: '', mood: null, genre: '', sortBy: 'popularity' };
+        const filters = { searchText: '', mood: null, genre: '', sortBy: 'recommended' };
         let isVibe = false;
         let response = "Resonating with your frequency... finding matches.";
 
-        // Conversational "Training" Data (Expanded Mappings)
+        // Special: User asks for fresh suggestions or new movies
+        if (lowerText.includes('new movie') || lowerText.includes('suggest') || lowerText.includes('fresh') || lowerText.includes('change movie') || lowerText.includes('different movie') || lowerText.includes('shuffle')) {
+            handleSuggestNewMovies();
+            return {
+                isVibe: true,
+                filters: { sortBy: 'recommended', mood: null, genre: '', language: '', searchText: '' },
+                response: "Rolling the algorithm! Loaded 30 fresh recommendations across our 1.5M catalog."
+            };
+        }
+
+        // Conversational "Training" Data (Expanded 16 Mood Mappings)
         const mappings = [
             { 
                 keywords: ['emotional', 'sad', 'touching', 'cry', 'heartbreaking', 'tear', 'tender'], 
@@ -227,29 +248,74 @@ function initializeFilters() {
                 responses: ["Coming right up! Let's brighten your day with these.", "Happiness detected. Here are some feel-good gems!"]
             },
             { 
-                keywords: ['fast-paced', 'action', 'intense', 'thrill', 'adventure', 'explosive'], 
+                keywords: ['fast-paced', 'action', 'adrenaline', 'explosive', 'martial arts', 'superhero'], 
                 mood: 'excited', genre: 'Action', 
                 responses: ["Hold on tight! These movies are a wild ride.", "Adrenaline rush incoming! Action collection ready."]
             },
             { 
-                keywords: ['scary', 'spooky', 'horror', 'creepy', 'nightmare', 'terrifying'], 
+                keywords: ['scary', 'spooky', 'horror', 'creepy', 'nightmare', 'terrifying', 'slasher'], 
                 mood: 'scared', genre: 'Horror', 
                 responses: ["Turn off the lights. Here are some spine-chilling picks.", "Brave choice! Nightmare fuel coming your way."]
             },
             { 
-                keywords: ['relax', 'chill', 'calm', 'peaceful', 'soothing'], 
-                mood: 'relaxed', genre: 'Animation', 
+                keywords: ['relax', 'chill', 'calm', 'peaceful', 'soothing', 'cozy', 'comfort'], 
+                mood: 'relaxed', genre: 'Family', 
                 responses: ["Time to unwind. These movies have the perfect chill factor.", "Relaxation mode active. Enjoy these peaceful vibes."]
             },
             { 
-                keywords: ['mystery', 'solve', 'detective', 'puzzle', 'puzzling', 'curious'], 
-                mood: 'thoughtful', genre: 'Mystery', 
+                keywords: ['mind-bending', 'sci-fi', 'space', 'cyberpunk', 'time travel', 'alien', 'future', 'science fiction', 'matrix'], 
+                mood: 'thoughtful', genre: 'Science Fiction', 
+                responses: ["Prepare to have your mind blown.", "Exploring deep concepts and futuristic worlds..."]
+            },
+            { 
+                keywords: ['romantic', 'love', 'date', 'passion', 'heart', 'rom-com'], 
+                mood: 'romantic', genre: 'Romance', 
+                responses: ["Love is in the air. Perfect for a cozy night.", "Found some romantic masterpieces for you!"]
+            },
+            { 
+                keywords: ['detective', 'mystery', 'noir', 'crime', 'whodunit', 'investigation', 'sherlock', 'puzzle'], 
+                mood: 'detective', genre: 'Mystery', 
                 responses: ["Let's put your detective skills to the test.", "Mystery and intrigue await. Can you solve these?"]
             },
             { 
-                keywords: ['romantic', 'love', 'date', 'passion', 'heart'], 
-                mood: 'romantic', genre: 'Romance', 
-                responses: ["Love is in the air. Perfect for a cozy night.", "Found some romantic masterpieces for you!"]
+                keywords: ['epic', 'fantasy', 'magic', 'dragons', 'lord of the rings', 'myth', 'sword'], 
+                mood: 'epic', genre: 'Fantasy', 
+                responses: ["Journey into legendary realms and grand adventures.", "Epic fantasy worlds are unlocked!"]
+            },
+            { 
+                keywords: ['documentary', 'true story', 'history', 'biography', 'real life', 'historical', 'curious'], 
+                mood: 'curious', genre: 'Documentary', 
+                responses: ["Fascinating real-world accounts and untold truths.", "Curiosity rewarded: discovering real stories."]
+            },
+            { 
+                keywords: ['intense', 'suspense', 'edge of seat', 'dark thriller', 'late night', 'nail-biting'], 
+                mood: 'intense', genre: 'Thriller', 
+                responses: ["Late night thrills ready. Keep the door locked.", "High-voltage suspense coming up!"]
+            },
+            { 
+                keywords: ['music', 'concert', 'musical', 'soundtrack', 'songs', 'band', 'rock'], 
+                mood: 'musical', genre: 'Music', 
+                responses: ["Crank up the volume! Iconic music reels loading...", "Rhythm and melody ready for your ears."]
+            },
+            { 
+                keywords: ['war', 'military', 'soldier', 'battle', 'combat', 'gritty', 'army'], 
+                mood: 'gritty', genre: 'War', 
+                responses: ["Grit, honor, and harrowing battlefield sagas.", "Historical war chronicles ready."]
+            },
+            { 
+                keywords: ['western', 'cowboy', 'outlaw', 'wild west', 'gunslinger', 'sheriff'], 
+                mood: 'western', genre: 'Western', 
+                responses: ["Dust off your boots. High noon in the wild west.", "Grit, showdowns, and desert winds."]
+            },
+            { 
+                keywords: ['animated', 'animation', 'anime', 'cartoon', 'pixar', 'ghibli', 'disney'], 
+                mood: 'animated', genre: 'Animation', 
+                responses: ["Pure visual magic from masters of animation.", "Colorful, inventive worlds loading up!"]
+            },
+            { 
+                keywords: ['bored', 'crazy', 'wild', 'random', 'fun', 'anything', 'surprise'], 
+                mood: 'bored', genre: 'Comedy', 
+                responses: ["Boredom cure activated! Here's something wild and unpredictable.", "Let's shake things up!"]
             }
         ];
 
@@ -297,15 +363,17 @@ function initializeFilters() {
 
     // Handle mood filter
     function handleMoodFilter(mood) {
-        // Update active state on buttons
-        elements.moodButtons.forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.dataset.mood === mood) {
-                btn.classList.add('active');
-            }
-        });
+        const isAlreadyActive = document.querySelector(`.mood-btn.active[data-mood="${mood}"]`);
         
-        updateFilters({ mood });
+        elements.moodButtons.forEach(btn => btn.classList.remove('active'));
+
+        if (isAlreadyActive) {
+            updateFilters({ mood: null });
+        } else {
+            const targetBtn = Array.from(elements.moodButtons).find(btn => btn.dataset.mood === mood);
+            if (targetBtn) targetBtn.classList.add('active');
+            updateFilters({ mood });
+        }
     }
 
     // Handle filter change
@@ -463,24 +531,28 @@ function initializeFilters() {
         });
     }
 
-    // Create movie card HTML
+    // Create movie card HTML with Grunge Collage photocopied aesthetic
     function createMovieCard(movie) {
         const posterUrl = MovieLoader.getPosterUrl(movie);
         const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+        const rating = typeof movie.vote_average === 'number' ? movie.vote_average.toFixed(1) : parseFloat(movie.vote_average || 0).toFixed(1);
+        const catalogNum = String(movie.id).replace(/\D/g, '').slice(0, 4) || '8012';
         
         return `
             <div class="movie-card" data-movie-id="${movie.id}">
-                <img src="${posterUrl}" alt="${movie.title}" class="movie-poster" loading="lazy">
+                <div class="movie-poster-wrap">
+                    <span class="movie-catalog-num">★ MOVIE</span>
+                    <span class="movie-rating-badge">★ ${rating}</span>
+                    <img src="${posterUrl}" alt="${movie.title}" class="movie-poster" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80'">
+                </div>
                 <div class="movie-info">
                     <div class="movie-meta">
                         <span class="movie-year">${releaseYear}</span>
-                        <span class="movie-rating">
-                            <i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}
-                        </span>
+                        <span class="movie-lang tech-coord">${(movie.original_language || 'EN').toUpperCase()}</span>
                     </div>
                     <h3 class="movie-title">${movie.title}</h3>
                     <div class="movie-genres">
-                        ${movie.genres.slice(0, 2).map(genre => 
+                        ${(Array.isArray(movie.genres) ? movie.genres : []).slice(0, 2).map(genre => 
                             `<span class="genre-tag">${genre}</span>`
                         ).join('')}
                     </div>
@@ -592,6 +664,166 @@ function initializeFilters() {
         }
     }
 
+    // Initialize Tonight's Pick hero collage with a movie that updates daily based on the calendar date
+    function initDailyFeaturedPick() {
+        const collageGraphic = document.querySelector('.hero-collage-graphic');
+        if (!collageGraphic) return;
+
+        if (typeof MovieLoader === 'undefined' || !MovieLoader.getDailyFeaturedMovie) return;
+
+        const movie = MovieLoader.getDailyFeaturedMovie();
+        if (!movie) return;
+
+        const posterUrl = MovieLoader.getPosterUrl(movie.poster_path);
+        const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : (movie.year || 'CLASSIC');
+        const rating = (typeof movie.vote_average === 'number' ? movie.vote_average : parseFloat(movie.vote_average) || 8.0).toFixed(1);
+        const imdb = (typeof movie.imdb_rating === 'number' && movie.imdb_rating > 0 ? movie.imdb_rating : parseFloat(movie.imdb_rating) || rating).toFixed(1);
+        
+        // Format today's date (e.g. "SEP 25")
+        const now = new Date();
+        const dateOptions = { month: 'short', day: 'numeric' };
+        const dateStr = now.toLocaleDateString('en-US', dateOptions).toUpperCase();
+
+        // 1. Poster background
+        const innerImg = collageGraphic.querySelector('.collage-inner-img');
+        if (innerImg) {
+            innerImg.style.backgroundImage = `url('${posterUrl}')`;
+        }
+
+        // 2. Fragment card
+        const fragmentCard = collageGraphic.querySelector('.collage-fragment-card');
+        if (fragmentCard) {
+            fragmentCard.innerHTML = `
+                <div class="tape-strip tape-red" style="top:-10px; right:-15px;">TODAY: ${dateStr}</div>
+                <h4>TONIGHT'S PICK</h4>
+                <p style="font-weight: 700; margin-top: 4px; color: var(--charcoal);">${movie.title} (${releaseYear})</p>
+                <p style="font-size: 0.68rem; opacity: 0.95; margin-top: 2px; font-weight: 700; color: var(--crimson);">★ TMDB ${rating} • IMDb ${imdb}</p>
+            `;
+            fragmentCard.style.cursor = 'pointer';
+            fragmentCard.title = `Tonight's Pick: ${movie.title} (${releaseYear}) - TMDB: ${rating}/10, IMDb: ${imdb}/10 - Click for details`;
+            fragmentCard.onclick = () => {
+                window.location.href = `movie_detail.html?id=${movie.id}`;
+            };
+        }
+
+        // 3. Frame meta bottom bar
+        const frameMeta = collageGraphic.querySelector('.collage-frame-meta');
+        if (frameMeta) {
+            let firstGenre = 'FEATURED';
+            if (Array.isArray(movie.genres) && movie.genres.length > 0) {
+                firstGenre = typeof movie.genres[0] === 'string' ? movie.genres[0] : (movie.genres[0].name || 'CINEMA');
+            } else if (movie.genre_names) {
+                firstGenre = movie.genre_names.split(',')[0].trim();
+            }
+            frameMeta.innerHTML = `
+                <span>★ ${rating} (IMDb ${imdb})</span>
+                <span class="tech-cross"></span>
+                <span>${firstGenre.toUpperCase()}</span>
+                <span class="tech-cross"></span>
+                <span>${releaseYear}</span>
+            `;
+        }
+
+        // 4. Gold circular badge
+        const badgeGold = collageGraphic.querySelector('.collage-badge-gold');
+        if (badgeGold) {
+            badgeGold.innerHTML = `
+                <span class="badge-text-top">8+ MASTERPIECE</span>
+                <span class="badge-text-main">${rating}</span>
+                <span class="badge-text-top">IMDb ${imdb}</span>
+            `;
+            badgeGold.style.cursor = 'pointer';
+            badgeGold.title = `Tonight's Pick: ${movie.title} - TMDB: ${rating}/10, IMDb: ${imdb}/10 - Click to watch/read`;
+            badgeGold.onclick = (e) => {
+                e.stopPropagation();
+                window.location.href = `movie_detail.html?id=${movie.id}`;
+            };
+        }
+
+        // 5. Main frame click
+        const mainFrame = collageGraphic.querySelector('.collage-frame-main');
+        if (mainFrame) {
+            mainFrame.style.cursor = 'pointer';
+            mainFrame.title = `Tonight's Pick: ${movie.title} (${releaseYear}) - Click for details`;
+            mainFrame.onclick = () => {
+                window.location.href = `movie_detail.html?id=${movie.id}`;
+            };
+        }
+
+        // 6. Barcode Stamp
+        const barcodeStamp = collageGraphic.querySelector('.collage-barcode-stamp');
+        if (barcodeStamp) {
+            barcodeStamp.innerHTML = `|||||||||||||||||||| DAY #${now.getDate()}`;
+        }
+    }
+
+    // Toast Notification (Floating Zine Stamp)
+    function showToast(message) {
+        let toast = document.getElementById('suggestionToast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'suggestionToast';
+            toast.className = 'suggestion-toast';
+            document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<i class="fas fa-dice"></i> <span>${message}</span>`;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3800);
+    }
+
+    // Dynamic Movie Suggestion Handler
+    async function handleSuggestNewMovies() {
+        if (elements.suggestNewBtn) {
+            elements.suggestNewBtn.classList.add('rolling');
+        }
+        showLoading();
+
+        try {
+            const result = await MovieLoader.suggestNewMovies();
+
+            if (elements.sortSelect) {
+                elements.sortSelect.value = 'recommended';
+            }
+
+            // Clear any active mood button so the user sees the global fresh suggestions
+            elements.moodButtons.forEach(btn => btn.classList.remove('active'));
+            if (elements.genreSelect) elements.genreSelect.value = '';
+            if (elements.languageSelect) elements.languageSelect.value = '';
+            if (elements.searchInput) elements.searchInput.value = '';
+
+            // Update UI with fresh recommendations
+            updateFilters({ sortBy: 'recommended', mood: null, genre: '', language: '', searchText: '' });
+
+            if (elements.suggestionBadge) {
+                elements.suggestionBadge.textContent = `// SEED #${result.seed.toString().slice(-4)}`;
+            }
+
+            if (elements.feedStatusTag) {
+                const chunkInfo = result.newlyLoadedChunk ? ` [CHUNK #${result.newlyLoadedChunk} MERGED]` : '';
+                elements.feedStatusTag.innerHTML = `<i class="fas fa-satellite-dish"></i> FRESH BATCH ACTIVE (${result.totalMovies.toLocaleString()} TITLES IN POOL)${chunkInfo}`;
+            }
+
+            showToast(`Rolled fresh recommendations from 1.5M movie catalog!`);
+
+            const container = document.getElementById('movies-container');
+            if (container && window.scrollY > container.offsetTop + 150) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
+        } catch (err) {
+            console.error('Error rolling new suggestions:', err);
+        } finally {
+            hideLoading();
+            setTimeout(() => {
+                if (elements.suggestNewBtn) {
+                    elements.suggestNewBtn.classList.remove('rolling');
+                }
+            }, 450);
+        }
+    }
+
     // Public API
     return {
         initialize,
@@ -599,6 +831,9 @@ function initializeFilters() {
         showLoading,
         hideLoading,
         updateMoviesDisplay,
-        updatePagination
+        updatePagination,
+        initDailyFeaturedPick,
+        handleSuggestNewMovies,
+        showToast
     };
 })();

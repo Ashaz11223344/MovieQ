@@ -4,31 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MovieQ - Discover Your Next Favorite Movie</title>
-    <link rel="stylesheet" href="static/css/styles.css">
-    <link rel="icon" type="image/png"
-        href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+    <title>MovieQ — Discover Great Movies & Chill</title>
+    <link rel="stylesheet" href="static/css/styles.css?v=2.5">
+    <link rel="icon" type="image/webp" href="favicon.webp">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
-    <!-- Header -->
+    <!-- Top Hero Banner: Marquee Jitter Stop-Motion (Component 1) -->
+    <div class="hero-marquee-banner">
+        <div class="marquee-track">
+            <span class="marquee-item"><span class="accent-star">★</span> MOVIEQ // POPCORN & CHILL</span>
+            <span class="marquee-item">/// FIND YOUR NEXT FAVORITE MOVIE ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> NO MORE ENDLESS SCROLLING</span>
+            <span class="marquee-item">/// CURATED CLASSICS & HIDDEN GEMS ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> GRAB A SNACK & HIT PLAY</span>
+            <span class="marquee-item">/// PERFECT PICKS FOR MOVIE NIGHT ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> MOVIEQ // POPCORN & CHILL</span>
+            <span class="marquee-item">/// FIND YOUR NEXT FAVORITE MOVIE ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> NO MORE ENDLESS SCROLLING</span>
+            <span class="marquee-item">/// CURATED CLASSICS & HIDDEN GEMS ///</span>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                    <a href="index.html">
+                        <i class="fas fa-compact-disc"></i> MOVIEQ
+                    </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="#mood-search"><i class="fas fa-smile"></i> Mood Search</a></li>
-                    <li><a href="#language-search"><i class="fas fa-globe"></i> Language</a></li>
+                    <li><a href="index.html" class="active"><i class="fas fa-film"></i> Movies</a></li>
+                    <li><a href="#mood-search"><i class="fas fa-smile"></i> Moods</a></li>
+                    <li><a href="#language-search"><i class="fas fa-globe"></i> Languages</a></li>
                     <li><a href="aboutme.html"><i class="fas fa-user"></i> About Me</a></li>
                 </ul>
                 <div class="nav-actions">
-                    <button id="surpriseBtn" class="btn-surprise"><i class="fas fa-gift"></i> Surprise Me</button>
+                    <button id="surpriseBtn" class="btn-surprise">
+                        <i class="fas fa-gift"></i> Surprise Me
+                    </button>
                 </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
@@ -37,61 +56,202 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (Components 2, 3, 4) -->
     <section class="hero">
         <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Experience the <span class="highlight">Midnight Ocean</span>.</h1>
-                <p class="hero-subtitle">Discover curated movies that resonate with your current frequency. Beyond
-                    typical discovery.</p>
+            <div class="hero-grid">
+                <!-- Distressed Text Block & Search Console -->
+                <div class="hero-content">
+                    <div class="hero-tagline-badge">
+                        <span class="rec-dot"></span>
+                        <span>🍿 MOVIE NIGHT MADE SIMPLE</span>
+                    </div>
 
-                <div class="hero-search">
-                    <div class="ai-assistant-wrapper">
-                        <div class="assistant-status" id="assistantStatus">
-                            <span class="status-dot"></span>
-                            <span class="status-text">AI Assistant Available</span>
-                        </div>
-                        <div class="ai-response-bubble" id="aiResponseBubble"></div>
-                        <div class="search-input-wrapper">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchInput" placeholder="Search movies, directors, or vibes...">
-                            <button id="searchBtn" class="btn-search">Find</button>
+                    <!-- Component 2: Distressed Text Block with Component 4: Script Element -->
+                    <h1 class="hero-title">
+                        <span class="title-row">FIND MOVIES.</span>
+                        <span class="title-row title-accent">HIT PLAY & CHILL.</span>
+                        <span class="script-accent">Tonight's Picks</span>
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        Stop wasting an hour looking for something to watch. Pick how you feel, search your vibe, or let us surprise you with a great movie.
+                    </p>
+
+                    <!-- AI Search & Prompt Console -->
+                    <div class="hero-search">
+                        <div class="ai-assistant-wrapper">
+                            <div class="assistant-status" id="assistantStatus">
+                                <div class="status-left">
+                                    <span class="status-dot"></span>
+                                    <span class="status-text">AI Movie Assistant: Ready</span>
+                                </div>
+                                <span class="status-annotation">[SMART MATCH]</span>
+                            </div>
+
+                            <div class="ai-response-bubble" id="aiResponseBubble"></div>
+
+                            <div class="search-input-wrapper">
+                                <span class="search-prefix">&gt;_</span>
+                                <input type="text" id="searchInput" placeholder="Search by title, director, or what kind of movie you're craving...">
+                                <button id="searchBtn" class="btn-search">FIND</button>
+                            </div>
                         </div>
                     </div>
-                    <button id="surpriseBtn" class="btn-surprise">
-                        <i class="fas fa-random"></i> Surprise Me
-                    </button>
+                </div>
+
+                <!-- Component 3: Central Graphic (Fragmented Collage) -->
+                <div class="hero-collage-graphic">
+                    <div class="collage-fragment-card">
+                        <div class="tape-strip tape-red" style="top:-10px; right:-15px;">FEATURED</div>
+                        <h4>TONIGHT'S PICK</h4>
+                        <p>High rating, engaging story, and 100% worth your movie night.</p>
+                    </div>
+
+                    <div class="collage-frame-main">
+                        <div class="tape-strip" style="top:-8px; left:20px;"></div>
+                        <div class="collage-inner-img"></div>
+                        <div class="collage-frame-meta">
+                            <span>MOVIE NIGHT</span>
+                            <span class="tech-cross"></span>
+                            <span>POPCORN READY</span>
+                        </div>
+                    </div>
+
+                    <div class="collage-badge-gold">
+                        <span class="badge-text-top">CURATED</span>
+                        <span class="badge-text-main">100%</span>
+                        <span class="badge-text-top">GOOD VIBES</span>
+                    </div>
+
+                    <div class="collage-barcode-stamp">
+                        |||||||||||||||||||| MOVIEQ
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Secondary Reverse Scrolling Tape Banner -->
+    <div class="hero-marquee-banner marquee-black">
+        <div class="marquee-track track-reverse">
+            <span class="marquee-item">/// FEEL-GOOD COMEDIES</span>
+            <span class="marquee-item"><span class="accent-star">✦</span> MIND-BENDING THRILLERS</span>
+            <span class="marquee-item">/// COZY WEEKEND CLASSICS</span>
+            <span class="marquee-item"><span class="accent-star">✦</span> LATE NIGHT ACTION</span>
+            <span class="marquee-item">/// ANIME NIGHT</span>
+            <span class="marquee-item"><span class="accent-star">✦</span> ALL-TIME MASTERPIECES</span>
+            <span class="marquee-item">/// POPCORN ESSENTIALS ///</span>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <!-- Discovery & Filters -->
+            <!-- Discovery & Filters Section -->
             <section class="discovery-section">
-                <!-- Mood Search -->
+                <!-- Mood Search: Stamped Zine Tickets -->
                 <div class="mood-search" id="mood-search">
                     <div class="section-title">
-                        <h2>How are you <span class="highlight">feeling</span>?</h2>
+                        <h2>
+                            <span class="section-tag">[MOODS]</span>
+                            HOW ARE YOU <span class="highlight">FEELING</span>?
+                        </h2>
                     </div>
+
                     <div class="mood-grid">
-                        <button class="mood-btn" data-mood="happy"><i data-lucide="smile"></i> Happy</button>
-                        <button class="mood-btn" data-mood="sad"><i data-lucide="cloud-rain"></i> Sad</button>
-                        <button class="mood-btn" data-mood="excited"><i data-lucide="rocket"></i> Excited</button>
-                        <button class="mood-btn" data-mood="relaxed"><i data-lucide="coffee"></i> Relaxed</button>
-                        <button class="mood-btn" data-mood="scared"><i data-lucide="ghost"></i> Scared</button>
-                        <button class="mood-btn" data-mood="thoughtful"><i data-lucide="brain"></i> Thoughtful</button>
-                        <button class="mood-btn" data-mood="romantic"><i data-lucide="heart"></i> Romantic</button>
-                        <button class="mood-btn" data-mood="bored"><i data-lucide="moon"></i> Bored</button>
+                        <button class="mood-btn" data-mood="happy">
+                            <span class="mood-code">[01]</span>
+                            <i data-lucide="smile"></i>
+                            <span>Feel-Good</span>
+                        </button>
+                        <button class="mood-btn" data-mood="sad">
+                            <span class="mood-code">[02]</span>
+                            <i data-lucide="cloud-rain"></i>
+                            <span>Emotional</span>
+                        </button>
+                        <button class="mood-btn" data-mood="excited">
+                            <span class="mood-code">[03]</span>
+                            <i data-lucide="zap"></i>
+                            <span>Adrenaline</span>
+                        </button>
+                        <button class="mood-btn" data-mood="relaxed">
+                            <span class="mood-code">[04]</span>
+                            <i data-lucide="coffee"></i>
+                            <span>Cozy Chill</span>
+                        </button>
+                        <button class="mood-btn" data-mood="scared">
+                            <span class="mood-code">[05]</span>
+                            <i data-lucide="skull"></i>
+                            <span>Spooky</span>
+                        </button>
+                        <button class="mood-btn" data-mood="thoughtful">
+                            <span class="mood-code">[06]</span>
+                            <i data-lucide="brain"></i>
+                            <span>Mind-Bending</span>
+                        </button>
+                        <button class="mood-btn" data-mood="romantic">
+                            <span class="mood-code">[07]</span>
+                            <i data-lucide="heart"></i>
+                            <span>Romantic</span>
+                        </button>
+                        <button class="mood-btn" data-mood="detective">
+                            <span class="mood-code">[08]</span>
+                            <i data-lucide="search"></i>
+                            <span>Mystery</span>
+                        </button>
+                        <button class="mood-btn" data-mood="epic">
+                            <span class="mood-code">[09]</span>
+                            <i data-lucide="flame"></i>
+                            <span>Epic Fantasy</span>
+                        </button>
+                        <button class="mood-btn" data-mood="curious">
+                            <span class="mood-code">[10]</span>
+                            <i data-lucide="book-open"></i>
+                            <span>Real Story</span>
+                        </button>
+                        <button class="mood-btn" data-mood="intense">
+                            <span class="mood-code">[11]</span>
+                            <i data-lucide="moon"></i>
+                            <span>Late Thrill</span>
+                        </button>
+                        <button class="mood-btn" data-mood="musical">
+                            <span class="mood-code">[12]</span>
+                            <i data-lucide="music"></i>
+                            <span>Music & Vibes</span>
+                        </button>
+                        <button class="mood-btn" data-mood="gritty">
+                            <span class="mood-code">[13]</span>
+                            <i data-lucide="shield"></i>
+                            <span>War & Grit</span>
+                        </button>
+                        <button class="mood-btn" data-mood="western">
+                            <span class="mood-code">[14]</span>
+                            <i data-lucide="sun"></i>
+                            <span>Wild West</span>
+                        </button>
+                        <button class="mood-btn" data-mood="animated">
+                            <span class="mood-code">[15]</span>
+                            <i data-lucide="clapperboard"></i>
+                            <span>Animation</span>
+                        </button>
+                        <button class="mood-btn" data-mood="bored">
+                            <span class="mood-code">[16]</span>
+                            <i data-lucide="sparkles"></i>
+                            <span>Wild & Fun</span>
+                        </button>
                     </div>
                 </div>
 
+                <!-- Filters Row -->
                 <div class="filters-row">
                     <!-- Language Filter -->
                     <div class="filter-card" id="language-search">
-                        <h3><i class="fas fa-globe"></i> Language</h3>
+                        <div class="tape-strip" style="top:-8px; right:20px; width:70px;"></div>
+                        <h3>
+                            <span><i class="fas fa-globe-americas"></i> Language</span>
+                            <span class="card-spec">[FILTER]</span>
+                        </h3>
                         <div class="language-filter">
                             <select id="languageSelect">
                                 <option value="">All Languages</option>
@@ -102,14 +262,18 @@
                                 <option value="de">German</option>
                                 <option value="ja">Japanese</option>
                                 <option value="ko">Korean</option>
-                                <option value="cn">Chinese</option>
+                                <option value="pt">Portuguese</option>
                             </select>
                         </div>
                     </div>
 
                     <!-- Genre Filter -->
                     <div class="filter-card">
-                        <h3><i class="fas fa-tags"></i> Genre</h3>
+                        <div class="tape-strip" style="top:-8px; left:20px; width:70px;"></div>
+                        <h3>
+                            <span><i class="fas fa-tags"></i> Genre</span>
+                            <span class="card-spec">[FILTER]</span>
+                        </h3>
                         <div class="genre-filter">
                             <select id="genreSelect">
                                 <option value="">All Genres</option>
@@ -121,42 +285,61 @@
                                 <option value="Drama">Drama</option>
                                 <option value="Sci-Fi">Sci-Fi</option>
                                 <option value="Horror">Horror</option>
+                                <option value="Thriller">Thriller</option>
+                                <option value="Mystery">Mystery</option>
+                                <option value="Romance">Romance</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
+                <!-- Active Filters Evidence Slips -->
                 <div class="active-filters" id="activeFilters">
-                    <!-- Active filters appear here -->
+                    <!-- Pinned filter tags appear here -->
                 </div>
             </section>
 
             <!-- Movies Section -->
-            <section class="movies-section">
+            <section class="movies-section" id="movies-container">
                 <div class="section-header">
-                    <h2><i class="fas fa-film"></i> Popular Movies</h2>
-                    <div class="sort-options">
-                        <select id="sortSelect">
-                            <option value="popularity">Sort by Popularity</option>
-                            <option value="rating">Sort by Rating</option>
-                            <option value="date">Sort by Release Date</option>
-                            <option value="title">Sort by Title</option>
-                        </select>
+                    <div class="section-header-title">
+                        <h2>
+                            <i class="fas fa-film"></i> POPULAR MOVIES
+                            <span class="sub-stamp" id="suggestionBadge">// DYNAMIC PICKS</span>
+                        </h2>
+                        <span class="feed-status-tag" id="feedStatusTag">
+                            <i class="fas fa-satellite-dish"></i> AUTO-ROTATING FROM 1.5M CATALOG
+                        </span>
+                    </div>
+                    <div class="section-header-actions">
+                        <button id="suggestNewBtn" class="btn-suggest-new" title="Roll for fresh movie suggestions">
+                            <i class="fas fa-dice"></i> <span>SUGGEST NEW MOVIES</span>
+                        </button>
+                        <div class="sort-options">
+                            <select id="sortSelect">
+                                <option value="recommended" selected>✨ Smart Suggestions (Dynamic)</option>
+                                <option value="popularity">🔥 All-Time Most Popular</option>
+                                <option value="rating">⭐ Top Rated (Critics' Choice)</option>
+                                <option value="hidden_gems">💎 Hidden Gems</option>
+                                <option value="date">📅 Release Date (Newest)</option>
+                                <option value="title">🔤 Title (A-Z)</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Loading Indicator -->
                 <div class="loading-indicator" id="loadingIndicator">
                     <div class="spinner"></div>
-                    <p>Loading movies...</p>
+                    <p>LOADING MOVIES...</p>
                 </div>
 
-                <!-- Movies Grid -->
+                <!-- Movies Grid (Photocopied Zine Cards) -->
                 <div class="movies-grid" id="moviesGrid">
-                    <!-- Movie cards will be dynamically inserted here -->
+                    <!-- Dynamically rendered via ui.js -->
                 </div>
 
-                <!-- Pagination -->
+                <!-- Pagination (Cassette Transport Deck) -->
                 <div class="pagination" id="pagination">
                     <button class="pagination-btn" id="prevBtn" disabled>
                         <i class="fas fa-chevron-left"></i> Previous
@@ -175,37 +358,45 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
-                    <p>Discover movies that match your mood and preferences</p>
+                    <a href="index.html"><i class="fas fa-compact-disc"></i> MOVIEQ</a>
+                    <p>
+                        Discover movies that match your mood and preferences. Simple, fun movie discovery for cozy nights and great watchlist picks.
+                    </p>
                 </div>
+
                 <div class="footer-links">
-                    <h4>Quick Links</h4>
+                    <h4>QUICK LINKS</h4>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html">Movies</a></li>
                         <li><a href="#mood-search">Mood Search</a></li>
                         <li><a href="#language-search">Language Filter</a></li>
                         <li><a href="aboutme.html">About Me</a></li>
                     </ul>
                 </div>
+
                 <div class="footer-cta">
-                    <h4>Get Surprised!</h4>
-                    <p>Let us pick a random movie for you</p>
+                    <h4>SURPRISE ME</h4>
+                    <p>Can't decide? Let us pick a random movie for you.</p>
                     <button id="footerSurpriseBtn" class="btn-surprise">
-                        <i class="fas fa-gift"></i> Surprise Me
+                        <i class="fas fa-random"></i> Surprise Me
                     </button>
                 </div>
             </div>
+
             <div class="footer-bottom">
-                <p>&copy; 2026 MovieQ. All rights reserved. | AI-Powered Movie Recommendations</p>
+                <p>&copy; 2026 MOVIEQ // Discover great movies & chill</p>
+                <span class="barcode-repr">||||| ||| ||||||| || |||||| MOVIEQ</span>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript Files -->
-    <script src="static/js/movieLoader.js"></script>
-    <script src="static/js/ui.js"></script>
-    <script src="static/js/main.js"></script>
-    <script>lucide.createIcons();</script>
+    <script src="static/js/movieLoader.js?v=2.5"></script>
+    <script src="static/js/ui.js?v=2.5"></script>
+    <script src="static/js/main.js?v=2.5"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

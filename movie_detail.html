@@ -6,195 +6,145 @@
     <title>Movie Details - MovieQ</title>
     <link rel="stylesheet" href="static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+    <link rel="icon" type="image/webp" href="favicon.webp">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-<style>
-    /* ===============================
-       Movie Detail Page - Midnight Ocean
-    ================================ */
-    .movie-detail-hero {
-        position: relative;
-        height: 75vh;
-        min-height: 600px;
-        background-size: cover;
-        background-position: center;
-        display: flex;
-        align-items: flex-end;
-        overflow: hidden;
-    }
-
-    .movie-detail-hero::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(to top, var(--background) 0%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
-        z-index: 1;
-    }
-
-    .movie-detail-content {
-        position: relative;
-        z-index: 2;
-        padding-bottom: 4rem;
-        max-width: 1400px;
-        margin: 0 auto;
-        width: 100%;
-        padding-left: 2rem;
-    }
-
-    .hero-title {
-        font-family: var(--font-heading);
-        font-size: 5rem;
-        font-weight: 800;
-        letter-spacing: -3px;
-        line-height: 1;
-        margin-bottom: 1rem;
-        color: white;
-    }
-
-    .hero-subtitle {
-        font-family: var(--font-body);
-        font-size: 1.5rem;
-        color: var(--on-surface-variant);
-        margin-bottom: 2rem;
-    }
-
-    /* Layout */
-    .movie-detail-grid {
-        display: grid;
-        grid-template-columns: 380px 1fr;
-        gap: 6rem;
-        margin-top: -100px;
-        position: relative;
-        z-index: 3;
-    }
-
-    .movie-poster-large {
-        width: 100%;
-        border-radius: 20px;
-        box-shadow: var(--luminous-shadow);
-        border: 1px solid var(--outline-variant);
-        transition: transform 0.4s ease;
-    }
-
-    .movie-poster-large:hover {
-        transform: scale(1.02);
-    }
-
-    /* Stats & Info */
-    .movie-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 1.5rem;
-        margin-bottom: 3rem;
-    }
-
-    .stat-card {
-        background: var(--surface-low);
-        padding: 1.5rem;
-        border-radius: 16px;
-        border: 1px solid var(--outline-variant);
-        text-align: center;
-        backdrop-filter: blur(10px);
-    }
-
-    .stat-value {
-        display: block;
-        font-family: var(--font-heading);
-        font-size: 2rem;
-        font-weight: 800;
-        color: var(--primary-light);
-    }
-
-    .stat-label {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--on-surface-variant);
-    }
-
-    /* Quick Links & Meta */
-    .detail-section {
-        margin-bottom: 4rem;
-    }
-
-    .detail-section h3 {
-        font-family: var(--font-heading);
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-        color: var(--on-surface);
-    }
-
-    .overview-text {
-        font-size: 1.25rem;
-        line-height: 1.8;
-        color: var(--on-surface-variant);
-        max-width: 800px;
-    }
-
-    .genre-badges {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 3rem;
-    }
-
-    .genre-badge {
-        background: var(--surface-highest);
-        color: var(--on-surface);
-        padding: 0.6rem 1.4rem;
-        border-radius: 50px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        border: 1px solid var(--outline-variant);
-    }
-
-    .back-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 2rem;
-        color: var(--on-surface-variant);
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s;
-    }
-
-    .back-btn:hover {
-        color: var(--primary-light);
-    }
-
-    @media (max-width: 992px) {
-        .movie-detail-grid {
-            grid-template-columns: 1fr;
-            gap: 3rem;
+    <style>
+        .action-buttons {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
             margin-top: 2rem;
         }
-        .movie-poster-large {
-            max-width: 400px;
-            margin: 0 auto;
+
+        .btn-primary {
+            font-family: var(--font-headline);
+            font-size: 1.25rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: var(--charcoal);
+            color: var(--paper);
+            border: 3px solid var(--charcoal);
+            box-shadow: var(--brutal-shadow);
+            padding: 0.65rem 1.6rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            transition: all 0.08s steps(2);
         }
-        .hero-title {
-            font-size: 3rem;
+
+        .btn-primary:hover {
+            background: var(--crimson);
+            color: var(--paper);
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px var(--charcoal);
         }
-    }
-</style>
+
+        /* Themed Movie Card for Download */
+        #shareCardContainer {
+            position: fixed;
+            left: -9999px;
+            top: -9999px;
+        }
+
+        .share-card-inner {
+            width: 480px;
+            background: #F0EAD6;
+            border: 6px solid #1A1A1A;
+            padding: 24px;
+            box-shadow: 10px 10px 0px #1A1A1A;
+            font-family: 'Special Elite', monospace;
+            color: #1A1A1A;
+        }
+
+        .share-card-inner .card-frame {
+            border: 2px dashed #1A1A1A;
+            padding: 16px;
+            background: #FAF6EA;
+        }
+
+        .share-card-inner .card-poster {
+            width: 100%;
+            height: 380px;
+            object-fit: cover;
+            border: 3px solid #1A1A1A;
+            margin-bottom: 16px;
+        }
+
+        .share-card-inner .card-title {
+            font-family: 'Anton', sans-serif;
+            font-size: 2.2rem;
+            line-height: 1;
+            text-transform: uppercase;
+            color: #DC143C;
+            margin-bottom: 8px;
+        }
+
+        .share-card-inner .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border-top: 2px solid #1A1A1A;
+            border-bottom: 2px solid #1A1A1A;
+            padding: 6px 0;
+            margin-bottom: 16px;
+        }
+
+        .share-card-inner .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .share-card-inner .card-branding .card-logo {
+            font-family: 'Anton', sans-serif;
+            font-size: 1.5rem;
+            color: #1A1A1A;
+        }
+
+        .share-card-inner .card-branding .card-url {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.75rem;
+            color: #DC143C;
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
+    <!-- Top Hero Banner: Marquee Jitter Stop-Motion (Component 1) -->
+    <div class="hero-marquee-banner">
+        <div class="marquee-track">
+            <span class="marquee-item"><span class="accent-star">★</span> MOVIE NIGHT PICK // MOVIEQ</span>
+            <span class="marquee-item">/// POPCORN READY ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> DISCOVER GREAT MOVIES</span>
+            <span class="marquee-item">/// WATCH & CHILL ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> CURATED RECOMMENDATIONS</span>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                    <a href="index.html">
+                        <i class="fas fa-compact-disc"></i> MOVIEQ
+                    </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Mood Search</a></li>
-                    <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Language</a></li>
+                    <li><a href="index.html"><i class="fas fa-film"></i> Movies</a></li>
+                    <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Moods</a></li>
+                    <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Languages</a></li>
                     <li><a href="aboutme.html"><i class="fas fa-user"></i> About Me</a></li>
                 </ul>
+                <div class="nav-actions">
+                    <button id="surpriseBtn" class="btn-surprise">
+                        <i class="fas fa-gift"></i> Surprise Me
+                    </button>
+                </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -202,19 +152,12 @@
         </div>
     </header>
 
-    <!-- Movie Detail Content -->
+    <!-- Movie Detail Container -->
     <main class="main-content">
-        <div class="container">
-            <a href="index.html" class="back-btn" id="backBtn">
-                <i class="fas fa-arrow-left"></i> Back to Movies
-            </a>
-            
-            <div id="movieDetail">
-                <!-- Movie details will be loaded here -->
-                <div class="loading-indicator" id="loadingIndicator">
-                    <div class="spinner"></div>
-                    <p>Loading movie details...</p>
-                </div>
+        <div id="movieDetail">
+            <div class="loading-indicator" id="loadingIndicator">
+                <div class="spinner"></div>
+                <p>LOADING MOVIE DETAILS...</p>
             </div>
         </div>
     </main>
@@ -224,35 +167,39 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
-                    <p>Discover movies that match your mood and preferences</p>
+                    <a href="index.html"><i class="fas fa-compact-disc"></i> MOVIEQ</a>
+                    <p>Discover movies that match your mood and preferences. Simple, fun movie discovery for cozy nights.</p>
                 </div>
                 <div class="footer-links">
-                    <h4>Quick Links</h4>
+                    <h4>QUICK LINKS</h4>
                     <ul>
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html">Movies</a></li>
                         <li><a href="index.html#mood-search">Mood Search</a></li>
                         <li><a href="index.html#language-search">Language Filter</a></li>
                         <li><a href="aboutme.html">About Me</a></li>
                     </ul>
                 </div>
                 <div class="footer-cta">
-                    <h4>Get Surprised!</h4>
-                    <p>Let us pick a random movie for you</p>
+                    <h4>SURPRISE ME</h4>
+                    <p>Can't decide? Let us pick a random movie for you.</p>
                     <button id="footerSurpriseBtn" class="btn-surprise">
-                        <i class="fas fa-gift"></i> Surprise Me
+                        <i class="fas fa-random"></i> Surprise Me
                     </button>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 MovieQ. All rights reserved. | AI-Powered Movie Recommendations</p>
+                <p>&copy; 2026 MOVIEQ // Discover great movies & chill</p>
+                <span class="barcode-repr">||||| ||| ||||||| || |||||| MOVIEQ</span>
             </div>
         </div>
+    </footer>
+
     <!-- Share Modal -->
     <div class="modal-overlay" id="shareModalOverlay">
         <div class="share-modal">
+            <div class="tape-strip tape-red" style="top:-10px; right:30px;">RECOMMENDED</div>
             <div class="share-modal-header">
-                <h3>Share this Masterpiece</h3>
+                <h3>SHARE WITH FRIENDS</h3>
                 <button class="close-modal" id="closeShareModal">&times;</button>
             </div>
             <div class="share-modal-body">
@@ -262,47 +209,44 @@
                         <span>WhatsApp</span>
                     </a>
                     <a href="#" class="share-btn twitter" id="shareTwitter">
-                        <i class="fab fa-twitter"></i>
-                        <span>Twitter</span>
+                        <i class="fab fa-x-twitter"></i>
+                        <span>X / Twitter</span>
                     </a>
                     <button class="share-btn download" id="downloadCard">
                         <i class="fas fa-file-image"></i>
-                        <span>Themed Card</span>
+                        <span>Movie Card</span>
                     </button>
                 </div>
                 <div class="share-url">
                     <input type="text" id="shareURL" readonly>
-                    <button class="copy-btn" id="copyURLBtn">Copy</button>
+                    <button class="copy-btn" id="copyURLBtn">COPY</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Hidden Card for Capture -->
-    <div id="shareCardContainer">
-        <!-- Rendered dynamically -->
-    </div>
+    <!-- Hidden Card for html2canvas Capture -->
+    <div id="shareCardContainer"></div>
 
     <script src="static/js/movieLoader.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
-            // Get movie ID from URL
             const urlParams = new URLSearchParams(window.location.search);
             const movieId = urlParams.get('id');
             
             if (!movieId) {
-                showError('No movie specified');
+                showError('NO MOVIE SPECIFIED');
                 return;
             }
             
-            // Load movies first
+            // Load movies
             await MovieLoader.loadMovies();
             
             // Get movie details
             const movie = MovieLoader.getMovieById(movieId);
             
             if (!movie) {
-                showError('Movie not found');
+                showError('MOVIE NOT FOUND');
                 return;
             }
             
@@ -312,41 +256,18 @@
             // Initialize Sharing
             initSharing(movie);
             
-            // Setup back button
-            const backBtn = document.getElementById('backBtn');
-            backBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Try to restore previous filters and page
-                const savedFilters = sessionStorage.getItem('movieFilters');
-                const savedPage = sessionStorage.getItem('currentPage');
-                
-                if (savedFilters && savedPage) {
-                    const filters = JSON.parse(savedFilters);
-                    const params = new URLSearchParams();
-                    
-                    if (filters.mood) params.set('mood', filters.mood);
-                    if (filters.language) params.set('language', filters.language);
-                    if (filters.genre) params.set('genre', filters.genre);
-                    if (filters.searchText) params.set('search', filters.searchText);
-                    if (savedPage !== '1') params.set('page', savedPage);
-                    
-                    window.location.href = `index.html?${params.toString()}`;
-                } else {
-                    window.location.href = 'index.html';
+            // Setup surprise button
+            const surpriseBtns = [document.getElementById('surpriseBtn'), document.getElementById('footerSurpriseBtn')];
+            surpriseBtns.forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        const randomMovie = MovieLoader.getRandomMovie();
+                        if (randomMovie) {
+                            window.location.href = `movie_detail.html?id=${randomMovie.id}`;
+                        }
+                    });
                 }
             });
-            
-            // Setup surprise button
-            const surpriseBtn = document.getElementById('footerSurpriseBtn');
-            if (surpriseBtn) {
-                surpriseBtn.addEventListener('click', function() {
-                    const randomMovie = MovieLoader.getRandomMovie();
-                    if (randomMovie) {
-                        window.location.href = `movie_detail.html?id=${randomMovie.id}`;
-                    }
-                });
-            }
             
             // Setup mobile menu
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -359,95 +280,122 @@
         });
         
         function renderMovieDetails(movie) {
-    const posterUrl = MovieLoader.getPosterUrl(movie);
-    const backdropUrl = MovieLoader.getBackdropUrl(movie);
-    const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
-    const languageName = MovieLoader.getLanguageName(movie.original_language);
-    
-    // Format duration if available
-    const runtime = movie.runtime || Math.floor(Math.random() * 60) + 90;
-    const hours = Math.floor(runtime / 60);
-    const minutes = runtime % 60;
-    
-    // Format genres
-    const genres = Array.isArray(movie.genres) ? movie.genres : [movie.genre_names];
-    
-    const movieDetailHTML = `
-        <div class="movie-detail-hero" style="background-image: url('${backdropUrl || posterUrl}')">
-            <div class="movie-detail-content">
-                <h1 class="hero-title">${movie.title}</h1>
-                <p class="hero-subtitle">${movie.tagline ? `"${movie.tagline}"` : movie.original_title}</p>
-                <div class="genre-badges">
-                    ${genres.map(genre => `<span class="genre-badge">${genre}</span>`).join('')}
-                </div>
-            </div>
-        </div>
-        
-        <div class="container" style="margin-top: 2rem;">
-            <div class="movie-detail-grid">
-                <div class="poster-container">
-                    <img src="${posterUrl}" alt="${movie.title}" class="movie-poster-large">
-                    <a href="index.html" class="back-btn" id="backBtn">
-                        <i class="fas fa-arrow-left"></i> Home Discovery
-                    </a>
+            const posterUrl = MovieLoader.getPosterUrl(movie);
+            const backdropUrl = MovieLoader.getBackdropUrl(movie);
+            const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
+            const languageName = MovieLoader.getLanguageName(movie.original_language);
+            
+            const runtime = movie.runtime || 118;
+            const hours = Math.floor(runtime / 60);
+            const minutes = runtime % 60;
+            const rating = typeof movie.vote_average === 'number' ? movie.vote_average.toFixed(1) : parseFloat(movie.vote_average || 0).toFixed(1);
+            const catalogNum = String(movie.id).replace(/\D/g, '').slice(0, 4) || '9102';
+            
+            const genres = Array.isArray(movie.genres) ? movie.genres : (movie.genre_names ? movie.genre_names.split(',') : ['Cinema']);
+            
+            const movieDetailHTML = `
+                <div class="movie-detail-hero" style="background-image: url('${backdropUrl || posterUrl}')">
+                    <div class="container">
+                        <div class="movie-detail-content">
+                            <div class="hero-tagline-badge">
+                                <span class="rec-dot"></span>
+                                <span>FEATURED MOVIE // MOVIEQ PICKS</span>
+                            </div>
+                            <h1 class="hero-title">${movie.title}</h1>
+                            <p class="hero-subtitle">${movie.tagline ? `"${movie.tagline}"` : (movie.original_title || 'Great Watch')}</p>
+                            <div class="genre-badges">
+                                ${genres.map(genre => `<span class="genre-badge">${genre.trim()}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="info-content">
-                    <div class="movie-stats">
-                        <div class="stat-card">
-                            <span class="stat-value">${movie.vote_average.toFixed(1)}</span>
-                            <span class="stat-label">Rating</span>
+                <div class="container">
+                    <div class="movie-detail-grid">
+                        <div class="poster-container">
+                            <div class="tape-strip tape-red" style="top:-12px; left:20px;">RECOMMENDED</div>
+                            <img src="${posterUrl}" alt="${movie.title}" class="movie-poster-large" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80'">
+                            <a href="index.html" class="back-btn" id="backBtn">
+                                <i class="fas fa-arrow-left"></i> BACK TO MOVIES
+                            </a>
                         </div>
-                        <div class="stat-card">
-                            <span class="stat-value">${releaseYear}</span>
-                            <span class="stat-label">Year</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value">${hours}h ${minutes}m</span>
-                            <span class="stat-label">Duration</span>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-value">${movie.vote_count.toLocaleString()}</span>
-                            <span class="stat-label">Votes</span>
-                        </div>
-                    </div>
-                    
-                    <div class="detail-section">
-                        <h3>Overview</h3>
-                        <p class="overview-text">${movie.overview}</p>
-                    </div>
+                        
+                        <div class="info-content">
+                            <div class="movie-stats">
+                                <div class="stat-card">
+                                    <div class="tape-strip" style="top:-8px; right:10px; width:50px;"></div>
+                                    <span class="stat-value">★ ${rating}</span>
+                                    <span class="stat-label">RATING</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value">${releaseYear}</span>
+                                    <span class="stat-label">RELEASE YEAR</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value">${hours}h ${minutes}m</span>
+                                    <span class="stat-label">DURATION</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-value">${languageName}</span>
+                                    <span class="stat-label">LANGUAGE</span>
+                                </div>
+                            </div>
+                            
+                            <div class="detail-section">
+                                <div class="tape-strip" style="top:-8px; left:30px; width:70px;"></div>
+                                <h3>
+                                    <span>STORY OVERVIEW</span>
+                                    <span class="section-index">[OVERVIEW]</span>
+                                </h3>
+                                <p class="overview-text">${movie.overview}</p>
+                            </div>
 
-                    ${movie.cast ? `
-                    <div class="detail-section">
-                        <h3>Main Cast</h3>
-                        <p class="overview-text" style="font-size: 1.1rem;">${movie.cast.split(',').slice(0, 6).join(', ')}</p>
-                    </div>
-                    ` : ''}
-                    
-                    <div class="action-buttons">
-                        <button class="btn-primary" onclick="shareMovie()">
-                            <i class="fas fa-share"></i> Share Movie
-                        </button>
-                        <button class="btn-surprise" onclick="window.location.href='movie_detail.html?id=${MovieLoader.getRandomMovie().id}'">
-                            <i class="fas fa-random"></i> Random discovery
-                        </button>
+                            ${movie.cast ? `
+                            <div class="detail-section">
+                                <h3>
+                                    <span>CAST & CREW</span>
+                                    <span class="section-index">[DETAILS]</span>
+                                </h3>
+                                <p class="overview-text" style="font-size: 1.1rem;"><strong>Cast:</strong> ${movie.cast.split(',').slice(0, 6).join(', ')}</p>
+                                ${movie.director ? `<p class="overview-text" style="font-size: 1.1rem; margin-top:0.5rem;"><strong>Director:</strong> ${movie.director}</p>` : ''}
+                            </div>
+                            ` : ''}
+                            
+                            <div class="action-buttons">
+                                <button class="btn-primary" onclick="shareMovie()">
+                                    <i class="fas fa-share-alt"></i> SHARE MOVIE
+                                </button>
+                                <button class="btn-surprise" id="detailSurpriseBtn">
+                                    <i class="fas fa-random"></i> SURPRISE ME NEXT
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    `;
-    
-    document.getElementById('movieDetail').innerHTML = movieDetailHTML;
-}
+            `;
+            
+            document.getElementById('movieDetail').innerHTML = movieDetailHTML;
+
+            const detailSurpriseBtn = document.getElementById('detailSurpriseBtn');
+            if (detailSurpriseBtn) {
+                detailSurpriseBtn.addEventListener('click', () => {
+                    const rnd = MovieLoader.getRandomMovie();
+                    if (rnd) window.location.href = `movie_detail.html?id=${rnd.id}`;
+                });
+            }
+        }
         
         function showError(message) {
             document.getElementById('movieDetail').innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-exclamation-triangle fa-3x"></i>
-                    <h3>${message}</h3>
-                    <button onclick="window.location.href='index.html'" class="btn-primary">
-                        <i class="fas fa-home"></i> Back to Home
-                    </button>
+                <div class="container" style="padding: 4rem 1.5rem;">
+                    <div class="no-results">
+                        <i class="fas fa-exclamation-triangle fa-3x"></i>
+                        <h3>${message}</h3>
+                        <p style="margin: 1rem 0 2rem; font-family: var(--font-typewriter);">We couldn't find details for this movie.</p>
+                        <button onclick="window.location.href='index.html'" class="btn-primary">
+                            <i class="fas fa-arrow-left"></i> BACK TO MOVIES
+                        </button>
+                    </div>
                 </div>
             `;
         }
@@ -455,8 +403,6 @@
         function shareMovie() {
             const modal = document.getElementById('shareModalOverlay');
             modal.classList.add('active');
-            
-            // Set current URL in input
             document.getElementById('shareURL').value = window.location.href;
         }
 
@@ -466,22 +412,20 @@
             const copyBtn = document.getElementById('copyURLBtn');
             const downloadBtn = document.getElementById('downloadCard');
             
-            // Close modal events
             closeModal.onclick = () => modal.classList.remove('active');
             window.onclick = (e) => {
                 if (e.target === modal) modal.classList.remove('active');
             };
 
-            // Copy Link
             copyBtn.onclick = () => {
                 const urlInput = document.getElementById('shareURL');
                 urlInput.select();
-                document.execCommand('copy');
-                copyBtn.textContent = 'Copied!';
-                setTimeout(() => copyBtn.textContent = 'Copy', 2000);
+                navigator.clipboard.writeText(urlInput.value).then(() => {
+                    copyBtn.textContent = 'COPIED!';
+                    setTimeout(() => copyBtn.textContent = 'COPY', 2000);
+                });
             };
 
-            // Social Deep Links
             const shareText = `Check out this movie: ${movie.title} on MovieQ!`;
             const shareUrl = encodeURIComponent(window.location.href);
             
@@ -496,19 +440,19 @@
             cardContainer.innerHTML = `
                 <div class="share-card-inner" id="actualCard">
                     <div class="card-frame">
-                        <img src="${posterUrl}" class="card-poster">
+                        <img src="${posterUrl}" class="card-poster" crossorigin="anonymous">
                         <div class="card-info">
                             <h2 class="card-title">${movie.title}</h2>
                             <div class="card-meta">
-                                <span>${releaseYear}</span>
-                                <span><i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}</span>
-                                <span>${movie.original_language.toUpperCase()}</span>
+                                <span>YEAR: ${releaseYear}</span>
+                                <span>RATING: ★ ${(movie.vote_average || 8).toFixed(1)}</span>
+                                <span>MOVIEQ PICK</span>
                             </div>
                         </div>
                         <div class="card-footer">
                             <div class="card-branding">
-                                <div class="card-logo"><i class="fas fa-film"></i> MovieQ</div>
-                                <div class="card-url">movie-q.com/discover</div>
+                                <div class="card-logo">MOVIEQ</div>
+                                <div class="card-url">DISCOVER GREAT MOVIES & CHILL</div>
                             </div>
                             <div class="card-qr-wrapper" id="cardQR"></div>
                         </div>
@@ -516,195 +460,43 @@
                 </div>
             `;
 
-            // Generate QR Code for the card
-            new QRCode(document.getElementById("cardQR"), {
-                text: window.location.href,
-                width: 80,
-                height: 80,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            // Generate QR Code
+            try {
+                new QRCode(document.getElementById("cardQR"), {
+                    text: window.location.href,
+                    width: 70,
+                    height: 70,
+                    colorDark: "#1A1A1A",
+                    colorLight: "#FAF6EA",
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            } catch (err) {
+                console.warn('QR code generation notice:', err);
+            }
 
-            // Download Card as Image
-            downloadBtn.onclick = async () => {
-                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            // Download handler
+            downloadBtn.onclick = () => {
+                const card = document.getElementById('actualCard');
+                if (!card) return;
+                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CREATING CARD...';
                 
-                try {
-                    const canvas = await html2canvas(document.getElementById('actualCard'), {
-                        useCORS: true,
-                        scale: 1,
-                        backgroundColor: '#000000'
-                    });
-                    
+                html2canvas(card, {
+                    useCORS: true,
+                    scale: 2,
+                    backgroundColor: '#F0EAD6'
+                }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = `MovieQ-${movie.title.replace(/\s+/g, '-')}.png`;
+                    link.download = `MOVIEQ_${movie.title.replace(/\s+/g, '_')}_CARD.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
-                } catch (err) {
-                    console.error('Error generating card:', err);
-                    alert('Could not generate the card. You can still share the link!');
-                } finally {
-                    downloadBtn.innerHTML = '<i class="fas fa-file-image"></i> <span>Themed Card</span>';
-                }
+                    downloadBtn.innerHTML = '<i class="fas fa-check"></i> DOWNLOADED!';
+                    setTimeout(() => downloadBtn.innerHTML = '<i class="fas fa-file-image"></i> Movie Card', 2500);
+                }).catch(() => {
+                    downloadBtn.innerHTML = '<i class="fas fa-times"></i> FAILED';
+                    setTimeout(() => downloadBtn.innerHTML = '<i class="fas fa-file-image"></i> Movie Card', 2000);
+                });
             };
         }
-    // Enhanced movie detail interactions
-function initMovieDetailInteractions() {
-    // Parallax effect for hero section
-    window.addEventListener('scroll', () => {
-        const hero = document.querySelector('.movie-detail-hero');
-        const scrolled = window.pageYOffset;
-        const rate = scrolled * -0.5;
-        hero.style.transform = `translate3d(0, ${rate}px, 0)`;
-    });
-
-    // Watch trailer functionality
-    function playTrailer() {
-        const trailerBtn = document.querySelector('.play-trailer');
-        trailerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        
-        // Simulate trailer loading
-        setTimeout(() => {
-            trailerBtn.innerHTML = '<i class="fas fa-play"></i>';
-            alert('Trailer would play here! In a real implementation, this would open a modal or play a video.');
-        }, 1500);
-    }
-
-    // Load similar movies
-    async function loadSimilarMovies(movieId) {
-        const loading = document.getElementById('similarMoviesLoading');
-        const grid = document.getElementById('similarMoviesGrid');
-        
-        if (!loading || !grid) return;
-        
-        loading.style.display = 'flex';
-        grid.innerHTML = '';
-        
-        try {
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // Get similar movies (using random movies for demo)
-            const allMovies = await MovieLoader.loadMovies();
-            const similarMovies = allMovies
-                .filter(m => m.id !== movieId)
-                .sort(() => Math.random() - 0.5)
-                .slice(0, 6);
-            
-            loading.style.display = 'none';
-            
-            if (similarMovies.length > 0) {
-                grid.innerHTML = similarMovies.map(movie => `
-                    <div class="movie-card" onclick="window.location.href='movie_detail.html?id=${movie.id}'">
-                        <img src="${MovieLoader.getPosterUrl(movie)}" alt="${movie.title}" class="movie-poster">
-                        <div class="movie-info">
-                            <h3 class="movie-title">${movie.title}</h3>
-                            <div class="movie-meta">
-                                <span class="movie-year">${movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A'}</span>
-                                <span class="movie-rating">
-                                    <i class="fas fa-star"></i> ${movie.vote_average.toFixed(1)}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } else {
-                grid.innerHTML = '<p class="no-results">No similar movies found.</p>';
-            }
-        } catch (error) {
-            console.error('Error loading similar movies:', error);
-            loading.style.display = 'none';
-            grid.innerHTML = '<p class="error-state">Failed to load similar movies.</p>';
-        }
-    }
-
-    // Add to list functionality
-    document.addEventListener('click', (e) => {
-        if (e.target.closest('.add-to-list')) {
-            const btn = e.target.closest('.add-to-list');
-            const originalHTML = btn.innerHTML;
-            
-            btn.innerHTML = '<i class="fas fa-check"></i> Added to List';
-            btn.style.background = 'var(--prussian-blue)';
-            btn.style.color = 'var(--white)';
-            btn.style.borderColor = 'var(--prussian-blue)';
-            
-            // Show notification
-            showNotification('Movie added to your watchlist!');
-            
-            // Reset button after 3 seconds
-            setTimeout(() => {
-                btn.innerHTML = originalHTML;
-                btn.style.background = '';
-                btn.style.color = '';
-                btn.style.borderColor = '';
-            }, 3000);
-        }
-    });
-
-    // Notification system
-    function showNotification(message) {
-        const notification = document.createElement('div');
-        notification.className = 'notification';
-        notification.innerHTML = `
-            <i class="fas fa-check-circle"></i>
-            <span>${message}</span>
-        `;
-        
-        Object.assign(notification.style, {
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            background: 'var(--prussian-blue)',
-            color: 'var(--white)',
-            padding: '1rem 2rem',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px',
-            zIndex: '9999',
-            animation: 'slideInRight 0.3s ease-out'
-        });
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.animation = 'slideOutRight 0.3s ease-out';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
-
-    // Add notification animation CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-    `;
-    document.head.appendChild(style);
-
-    return { loadSimilarMovies, playTrailer };
-}
-
-// Call this in your DOMContentLoaded event
-document.addEventListener('DOMContentLoaded', async function() {
-    // ... existing code ...
-    
-    // Initialize enhanced interactions
-    const { loadSimilarMovies } = initMovieDetailInteractions();
-    
-    // Load similar movies if on detail page
-    if (movieId && loadSimilarMovies) {
-        loadSimilarMovies(movieId);
-    }
-});
     </script>
 </body>
 </html>

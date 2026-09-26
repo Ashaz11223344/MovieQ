@@ -1,390 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Ashaz SameerKhan Pathan</title>
-    <meta name="description" content="Meet the creator behind MovieQ — a platform designed to make movie discovery effortless.">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/LndkdvCj/cropped-circle-image.png' border='0' alt='cropped-circle-image">
+    <title>About Me | Ashaz SameerKhan Pathan - MovieQ</title>
+    <meta name="description"
+        content="Meet the creator behind MovieQ — a platform designed to make movie discovery effortless and fun.">
     <link rel="stylesheet" href="static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/webp" href="favicon.webp">
     <script src="https://unpkg.com/lucide@latest"></script>
 
-<style>
-    /* ===============================
-       About Me - Midnight Ocean : Editorial
-    ================================ */
-
-    /* — Page-level layout — */
-    .about-page {
-        padding-top: 120px;
-    }
-
-    /* — Hero / Intro — */
-    .about-hero {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6rem;
-        align-items: center;
-        padding: 6rem 0 8rem;
-    }
-
-    .about-hero-text h1 {
-        font-family: var(--font-heading);
-        font-size: 4.5rem;
-        font-weight: 800;
-        letter-spacing: -3px;
-        line-height: 1.05;
-        color: var(--on-surface);
-        margin-bottom: 2rem;
-    }
-
-    .about-hero-text h1 span {
-        color: var(--primary-dim);
-    }
-
-    .about-hero-text .lead {
-        font-size: 1.25rem;
-        color: var(--on-surface-variant);
-        line-height: 1.9;
-        margin-bottom: 2.5rem;
-        max-width: 540px;
-    }
-
-    .about-hero-visual {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .avatar-ring {
-        width: 340px;
-        height: 340px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--surface-low) 0%, var(--surface-high) 100%);
-        border: 2px solid var(--outline-variant);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
-
-    .avatar-ring::before {
-        content: '';
-        position: absolute;
-        inset: -12px;
-        border-radius: 50%;
-        border: 1px solid var(--outline-variant);
-        opacity: 0.5;
-    }
-
-    .avatar-ring i {
-        font-size: 6rem;
-        color: var(--primary-dim);
-        opacity: 0.7;
-    }
-
-    .social-row {
-        display: flex;
-        gap: 1rem;
-    }
-
-    .social-btn {
-        width: 52px;
-        height: 52px;
-        background: var(--surface);
-        border: 1px solid var(--outline-variant);
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--on-surface-variant);
-        text-decoration: none;
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
-    }
-
-    .social-btn:hover {
-        background: var(--primary-dim);
-        color: white;
-        border-color: var(--primary-dim);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 24px rgba(91, 136, 178, 0.25);
-    }
-
-    /* — Divider — */
-    .section-divider {
-        height: 1px;
-        background: var(--outline-variant);
-        margin: 0;
-        border: none;
-    }
-
-    /* — Project Section — */
-    .about-project {
-        padding: 8rem 0;
-    }
-
-    .about-project .section-label {
-        font-family: var(--font-heading);
-        font-size: 0.85rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        color: var(--primary-dim);
-        margin-bottom: 1.5rem;
-    }
-
-    .about-project h2 {
-        font-family: var(--font-heading);
-        font-size: 3.5rem;
-        font-weight: 800;
-        letter-spacing: -2px;
-        color: var(--on-surface);
-        margin-bottom: 2rem;
-        max-width: 700px;
-    }
-
-    .about-project .project-desc {
-        font-size: 1.15rem;
-        color: var(--on-surface-variant);
-        line-height: 1.9;
-        max-width: 700px;
-        margin-bottom: 4rem;
-    }
-
-    /* Feature Cards Grid */
-    .features-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-    }
-
-    .feature-card {
-        background: var(--surface);
-        border: 1px solid var(--outline-variant);
-        border-radius: 20px;
-        padding: 2.5rem;
-        transition: all 0.4s ease;
-    }
-
-    .feature-card:hover {
-        transform: translateY(-6px);
-        border-color: var(--primary-dim);
-        box-shadow: var(--ocean-glow);
-    }
-
-    .feature-icon {
-        width: 56px;
-        height: 56px;
-        background: var(--surface-low);
-        border-radius: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 1.5rem;
-        color: var(--primary-dim);
-    }
-
-    .feature-icon svg {
-        width: 26px;
-        height: 26px;
-    }
-
-    .feature-card h3 {
-        font-family: var(--font-heading);
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: var(--on-surface);
-        margin-bottom: 0.8rem;
-    }
-
-    .feature-card p {
-        font-size: 0.95rem;
-        color: var(--on-surface-variant);
-        line-height: 1.7;
-    }
-
-    /* — Stats Section — */
-    .about-stats {
-        padding: 6rem 0;
-    }
-
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 2rem;
-    }
-
-    .stat-block {
-        text-align: center;
-        padding: 3rem 2rem;
-        background: var(--surface);
-        border-radius: 20px;
-        border: 1px solid var(--outline-variant);
-    }
-
-    .stat-block .number {
-        font-family: var(--font-heading);
-        font-size: 3rem;
-        font-weight: 800;
-        color: var(--primary);
-        line-height: 1;
-        margin-bottom: 0.75rem;
-    }
-
-    .stat-block .label {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--on-surface-variant);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    /* — CTA Section — */
-    .about-cta {
-        padding: 8rem 0;
-        text-align: center;
-    }
-
-    .about-cta h2 {
-        font-family: var(--font-heading);
-        font-size: 3rem;
-        font-weight: 800;
-        letter-spacing: -1.5px;
-        color: var(--on-surface);
-        margin-bottom: 1.5rem;
-    }
-
-    .about-cta p {
-        font-size: 1.15rem;
-        color: var(--on-surface-variant);
-        margin-bottom: 3rem;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .cta-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        background: var(--primary);
-        color: var(--background);
-        padding: 1.1rem 3rem;
-        border-radius: 50px;
-        font-family: var(--font-heading);
-        font-weight: 800;
-        font-size: 1rem;
-        text-decoration: none;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: all 0.3s ease;
-    }
-
-    .cta-btn:hover {
-        background: var(--primary-light);
-        transform: translateY(-3px);
-        box-shadow: 0 12px 30px rgba(91, 136, 178, 0.25);
-    }
-
-    .cta-btn svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    /* — About Footer — */
-    .about-footer {
-        padding: 3rem 0;
-        border-top: 1px solid var(--outline-variant);
-        text-align: center;
-        color: var(--on-surface-variant);
-        font-size: 0.85rem;
-        opacity: 0.6;
-    }
-
-    /* — Responsive — */
-    @media (max-width: 1023px) {
-        .about-hero {
-            grid-template-columns: 1fr;
-            gap: 3rem;
-            padding: 3rem 0 5rem;
-            text-align: center;
+    <style>
+        .manifesto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
         }
 
-        .about-hero-text h1 {
-            font-size: 3rem;
+        .manifesto-card {
+            background: var(--surface-card);
+            border: 3px solid var(--charcoal);
+            box-shadow: var(--brutal-shadow);
+            padding: 2rem;
+            position: relative;
         }
 
-        .about-hero-text .lead {
-            max-width: 100%;
+        .manifesto-card:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: var(--brutal-shadow-lg);
+            border-color: var(--crimson);
+        }
+
+        .manifesto-card h3 {
+            font-family: var(--font-headline);
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .manifesto-card h3 i {
+            color: var(--crimson);
+        }
+
+        .manifesto-card p {
+            font-family: var(--font-typewriter);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--charcoal-deep);
         }
 
         .social-row {
-            justify-content: center;
+            display: flex;
+            gap: 1.25rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
         }
 
-        .about-hero-visual {
-            order: -1;
+        .social-btn {
+            background: var(--paper-light);
+            border: 3px solid var(--charcoal);
+            box-shadow: var(--brutal-shadow-sm);
+            padding: 0.75rem 1.6rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--charcoal);
+            text-decoration: none;
+            font-family: var(--font-headline);
+            font-size: 1.15rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.08s steps(2);
         }
 
-        .avatar-ring {
-            width: 220px;
-            height: 220px;
+        .social-btn:hover {
+            background: var(--crimson);
+            color: var(--paper);
+            transform: translate(-3px, -3px);
+            box-shadow: 6px 6px 0px var(--charcoal);
         }
 
-        .avatar-ring i {
-            font-size: 4rem;
+        .social-btn i {
+            font-size: 1.25rem;
         }
 
-        .features-grid {
-            grid-template-columns: 1fr;
+        .stats-banner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 4rem 0;
+            border-top: 3px solid var(--charcoal);
+            border-bottom: 3px solid var(--charcoal);
+            background: var(--paper-dark);
+            margin: 4rem 0;
         }
 
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
+        .stat-item {
+            text-align: center;
+            border-right: 2px dashed var(--charcoal);
+            padding: 0 1rem;
         }
 
-        .about-project h2 {
-            font-size: 2.5rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .about-hero-text h1 {
-            font-size: 2.2rem;
-            letter-spacing: -1px;
+        .stat-item:last-child {
+            border-right: none;
         }
 
-        .stats-grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        .stat-item .num {
+            font-family: var(--font-headline);
+            font-size: 3.5rem;
+            line-height: 1;
+            color: var(--crimson);
+            margin-bottom: 0.5rem;
         }
 
-        .stat-block {
-            padding: 2rem 1rem;
+        .stat-item .desc {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--charcoal);
         }
 
-        .stat-block .number {
-            font-size: 2rem;
+        .manifesto-cta {
+            text-align: center;
+            padding: 5rem 0;
         }
-    }
-</style>
+
+        .manifesto-cta h2 {
+            font-family: var(--font-headline);
+            font-size: 3.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--charcoal);
+            margin-bottom: 1.5rem;
+        }
+    </style>
 </head>
+
 <body>
-    <!-- Header -->
+    <!-- Top Hero Banner: Marquee Jitter Stop-Motion (Component 1) -->
+    <div class="hero-marquee-banner">
+        <div class="marquee-track">
+            <span class="marquee-item"><span class="accent-star">★</span> ABOUT MOVIEQ // BUILT BY ASHAZ PATHAN</span>
+            <span class="marquee-item">/// SIMPLIFYING MOVIE NIGHTS ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> FOR MOVIE LOVERS & CINEPHILES</span>
+            <span class="marquee-item">/// LESS SCROLLING, MORE WATCHING ///</span>
+            <span class="marquee-item"><span class="accent-star">★</span> POPCORN READY</span>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
     <header class="header">
         <div class="container">
             <nav class="navbar">
                 <div class="logo">
-                    <a href="index.html"><i class="fas fa-film"></i> MovieQ</a>
+                    <a href="index.html">
+                        <i class="fas fa-compact-disc"></i> MOVIEQ
+                    </a>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Mood Search</a></li>
-                    <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Language</a></li>
+                    <li><a href="index.html"><i class="fas fa-film"></i> Movies</a></li>
+                    <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Moods</a></li>
+                    <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Languages</a></li>
                     <li><a href="aboutme.html" class="active"><i class="fas fa-user"></i> About Me</a></li>
                 </ul>
+                <div class="nav-actions">
+                    <button id="surpriseBtn" class="btn-surprise">
+                        <i class="fas fa-gift"></i> Surprise Me
+                    </button>
+                </div>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -392,117 +184,166 @@
         </div>
     </header>
 
-    <!-- About Page -->
-    <main class="about-page">
-        <div class="container">
-
-            <!-- Hero Section -->
-            <section class="about-hero">
-                <div class="about-hero-text">
-                    <h1>Hi, I'm <span>Ashaz</span>.</h1>
-                    <p class="lead">
-                        I'm a passionate developer who built <strong>MovieQ</strong> — a platform designed to make finding your next favorite movie effortless. I believe that discovering great films should be simple, intuitive, and enjoyable.
-                    </p>
-                    <p class="lead">
-                        With MovieQ, I've combined my love for cinema with my expertise in technology to create something that helps movie enthusiasts quickly find films they'll love.
-                    </p>
-                    <div class="social-row">
-                        <a href="https://github.com/Ashaz11223344" class="social-btn" target="_blank" aria-label="GitHub">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://www.instagram.com/ashaz_pathan" class="social-btn" target="_blank" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                    </div>
+    <!-- Curator Hero Section -->
+    <main class="container">
+        <section class="about-hero">
+            <div class="about-hero-text">
+                <div class="hero-tagline-badge">
+                    <span class="rec-dot"></span>
+                    <span>MEET THE CREATOR // ASHAZ PATHAN</span>
                 </div>
-                <div class="about-hero-visual">
-                    <div class="avatar-ring">
-                        <i class="fas fa-code"></i>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="section-divider">
-
-            <!-- The Project -->
-            <section class="about-project">
-                <div class="section-label">The Project</div>
-                <h2>MovieQ was born from a simple idea.</h2>
-                <p class="project-desc">
-                    With thousands of movies available across various platforms, it's easy to spend more time browsing than actually watching. MovieQ simplifies this process with intelligent recommendations, detailed information, and an intuitive interface.
+                <h1>
+                    HI, I'M ASHAZ.
+                    <span>I BUILT MOVIEQ.</span>
+                </h1>
+                <p class="lead">
+                    We've all spent 45 minutes scrolling through endless streaming menus only to end up watching
+                    nothing. I built MovieQ to fix that — a simple, fun place to find something great to watch based on
+                    how you feel right now.
                 </p>
 
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i data-lucide="sparkles"></i>
-                        </div>
-                        <h3>Smart Recommendations</h3>
-                        <p>Personalized suggestions based on your mood, preferences, and viewing taste.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i data-lucide="layout-list"></i>
-                        </div>
-                        <h3>Detailed Information</h3>
-                        <p>Comprehensive details including cast, ratings, reviews and streaming availability.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i data-lucide="palette"></i>
-                        </div>
-                        <h3>Beautiful Interface</h3>
-                        <p>Clean, premium design that makes browsing and discovering movies a visual delight.</p>
-                    </div>
+                <div class="social-row">
+                    <a href="https://github.com/Ashaz11223344" target="_blank" rel="noopener noreferrer"
+                        class="social-btn" title="GitHub - Ashaz11223344">
+                        <i class="fab fa-github"></i>
+                        <span>GITHUB</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ashaz-pathan-751317336/" target="_blank"
+                        rel="noopener noreferrer" class="social-btn" title="LinkedIn - Ashaz Pathan">
+                        <i class="fab fa-linkedin-in"></i>
+                        <span>LINKEDIN</span>
+                    </a>
+                    <a href="mailto:ashazpathan8@gmail.com" class="social-btn" title="Email Ashaz Pathan">
+                        <i class="fas fa-envelope"></i>
+                        <span>EMAIL ME</span>
+                    </a>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <hr class="section-divider">
+        <!-- What Makes MovieQ Different -->
+        <section class="about-section">
+            <div class="section-title">
+                <h2>
+                    <span class="section-tag">[WHY MOVIEQ]</span>
+                    MADE FOR <span class="highlight">MOVIE NIGHTS</span>
+                </h2>
+            </div>
 
-            <!-- Stats -->
-            <section class="about-stats">
-                <div class="stats-grid">
-                    <div class="stat-block">
-                        <div class="number">1.5M+</div>
-                        <div class="label">Movies Cataloged</div>
-                    </div>
-                    <div class="stat-block">
-                        <div class="number">50K+</div>
-                        <div class="label">Active Users</div>
-                    </div>
-                    <div class="stat-block">
-                        <div class="number">95%</div>
-                        <div class="label">Satisfaction</div>
-                    </div>
-                    <div class="stat-block">
-                        <div class="number">24/7</div>
-                        <div class="label">Availability</div>
-                    </div>
+            <div class="manifesto-grid">
+                <div class="manifesto-card">
+                    <div class="tape-strip" style="top:-8px; right:20px; width:60px;"></div>
+                    <h3><i class="fas fa-smile"></i> 1. Mood First</h3>
+                    <p>
+                        Pick how you actually feel. Whether you want a feel-good laugh, a good cry, heart-pounding
+                        action, or just a chill movie to relax with, MovieQ matches you to the right vibe instantly.
+                    </p>
                 </div>
-            </section>
 
-            <hr class="section-divider">
+                <div class="manifesto-card">
+                    <div class="tape-strip tape-red" style="top:-8px; left:20px; width:70px;">AI ASSIST</div>
+                    <h3><i class="fas fa-magic"></i> 2. AI Movie Assistant</h3>
+                    <p>
+                        Type what you feel like watching in plain English — like "a cozy 90s mystery" or "mind-bending
+                        sci-fi with great visuals" — and our assistant finds matching movie recommendations right away.
+                    </p>
+                </div>
 
-            <!-- CTA -->
-            <section class="about-cta">
-                <h2>Ready to explore?</h2>
-                <p>Dive into thousands of curated films and find your next obsession.</p>
-                <a href="index.html" class="cta-btn">
-                    <i data-lucide="arrow-right"></i>
-                    Explore MovieQ
-                </a>
-            </section>
+                <div class="manifesto-card">
+                    <div class="tape-strip" style="top:-8px; right:20px; width:60px;"></div>
+                    <h3><i class="fas fa-film"></i> 3. Less Scrolling, More Watching</h3>
+                    <p>
+                        No confusing algorithms or decision paralysis. Just great recommendations, honest ratings, and
+                        instant inspiration so you can grab some popcorn and hit play.
+                    </p>
+                </div>
+            </div>
+        </section>
 
+        <!-- Stats Counter Tape Banner -->
+        <div class="stats-banner">
+            <div class="stat-item">
+                <div class="num">1,500,000+</div>
+                <div class="desc">MOVIES TO DISCOVER</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">16 MOODS</div>
+                <div class="desc">TO MATCH YOUR VIBE</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">1-CLICK</div>
+                <div class="desc">SURPRISE RECOMMENDATIONS</div>
+            </div>
+            <div class="stat-item">
+                <div class="num">100%</div>
+                <div class="desc">FREE FOR MOVIE NIGHT</div>
+            </div>
         </div>
+
+        <!-- Call To Action -->
+        <section class="manifesto-cta">
+            <h2>READY TO WATCH SOMETHING GOOD?</h2>
+            <p style="font-family: var(--font-typewriter); font-size:1.2rem; max-width:600px; margin:0 auto 2.5rem;">
+                Find your next favorite movie in seconds and get the popcorn ready.
+            </p>
+            <a href="index.html" class="btn-surprise" style="font-size:1.4rem; padding: 0.8rem 2.5rem;">
+                <i class="fas fa-film"></i> START EXPLORING
+            </a>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="about-footer">
+    <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Ashaz SameerKhan Pathan. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html"><i class="fas fa-compact-disc"></i> MOVIEQ</a>
+                    <p>Simple, fun movie discovery for cozy nights and great watchlist picks. Built with love by Ashaz
+                        SameerKhan Pathan.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>QUICK LINKS</h4>
+                    <ul>
+                        <li><a href="index.html">Movies</a></li>
+                        <li><a href="index.html#mood-search">Mood Search</a></li>
+                        <li><a href="index.html#language-search">Languages</a></li>
+                        <li><a href="aboutme.html">About Me</a></li>
+                    </ul>
+                </div>
+                <div class="footer-cta">
+                    <h4>SURPRISE ME</h4>
+                    <p>Can't decide? Let us pick a random movie for you.</p>
+                    <button onclick="window.location.href='index.html'" class="btn-surprise">
+                        <i class="fas fa-random"></i> Surprise Me
+                    </button>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 MOVIEQ // Discover great movies & chill</p>
+                <span class="barcode-repr">||||| ||| ||||||| || |||||| MOVIEQ</span>
+            </div>
         </div>
     </footer>
 
-    <script>lucide.createIcons();</script>
+    <script src="static/js/movieLoader.js"></script>
+    <script>
+        const surpriseBtn = document.getElementById('surpriseBtn');
+        if (surpriseBtn) {
+            surpriseBtn.addEventListener('click', async () => {
+                await MovieLoader.loadMovies();
+                const rnd = MovieLoader.getRandomMovie();
+                if (rnd) window.location.href = `movie_detail.html?id=${rnd.id}`;
+            });
+        }
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const navLinks = document.querySelector('.nav-links');
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+        lucide.createIcons();
+    </script>
 </body>
+
 </html>
