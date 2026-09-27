@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieQ — Discover Great Movies & Chill</title>
-    <link rel="stylesheet" href="static/css/styles.css?v=2.5">
+    <link rel="stylesheet" href="static/css/styles.css?v=2.6">
     <link rel="icon" type="image/webp" href="favicon.webp">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -240,6 +240,41 @@
                             <i data-lucide="sparkles"></i>
                             <span>Wild & Fun</span>
                         </button>
+                    </div>
+
+                    <!-- Mood Confirmation Bar (Grunge Collage / Physical Ticket Style) -->
+                    <div class="mood-confirm-bar" id="moodConfirmBar" style="display: none;">
+                        <div class="tape-strip" style="top: -8px; left: 24px; width: 60px;"></div>
+                        <div class="tape-strip tape-red" style="top: -8px; right: 24px; width: 50px;"></div>
+                        <div class="mood-confirm-left">
+                            <span class="mood-confirm-status" id="moodConfirmStatus">[PENDING CONFIRMATION]</span>
+                            <div class="mood-confirm-info">
+                                <span class="mood-confirm-icon" id="moodConfirmIcon">
+                                    <i class="fas fa-smile"></i>
+                                </span>
+                                <div class="mood-confirm-labels">
+                                    <span class="mood-confirm-code" id="moodConfirmCode">[01]</span>
+                                    <span class="mood-confirm-title" id="moodConfirmName">Feel-Good</span>
+                                </div>
+                            </div>
+                            <p class="mood-confirm-note" id="moodConfirmNote">
+                                Click "Apply Mood Filter" to confirm your vibe selection.
+                            </p>
+                        </div>
+                        <div class="mood-confirm-actions">
+                            <button id="applyMoodBtn" class="btn-confirm-mood">
+                                <i class="fas fa-check"></i>
+                                <span>Apply Mood Filter</span>
+                            </button>
+                            <button id="cancelMoodBtn" class="btn-cancel-mood">
+                                <i class="fas fa-times"></i>
+                                <span>Cancel</span>
+                            </button>
+                            <button id="clearMoodBtn" class="btn-clear-mood" style="display: none;">
+                                <i class="fas fa-trash-alt"></i>
+                                <span>Clear Mood</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 

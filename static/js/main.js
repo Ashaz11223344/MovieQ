@@ -18,12 +18,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         if (urlParams.has('mood')) {
             initialFilters.mood = urlParams.get('mood');
-            // Activate corresponding mood button
-            document.querySelectorAll('.mood-btn').forEach(btn => {
-                if (btn.dataset.mood === initialFilters.mood) {
-                    btn.classList.add('active');
-                }
-            });
+            // Activate corresponding mood button and sync confirmation bar
+            if (window.UIManager && typeof UIManager.setAppliedMood === 'function') {
+                UIManager.setAppliedMood(initialFilters.mood);
+            } else {
+                document.querySelectorAll('.mood-btn').forEach(btn => {
+                    if (btn.dataset.mood === initialFilters.mood) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
         }
         
         if (urlParams.has('language')) {
@@ -124,6 +128,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 navLinks.classList.remove('active');
                 mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
             }
+        });
+
+        // Close mobile menu when clicking any nav link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            });
         });
     }
 

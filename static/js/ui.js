@@ -1,8 +1,10 @@
 // UI Manager - Handles all UI updates and interactions
 
 const UIManager = (function() {
-    // DOM Elements
+    // DOM Elements & State
     let elements = {};
+    let pendingMood = null;
+    let appliedMood = null;
 
     // Initialize UI
     function initialize() {
@@ -31,6 +33,17 @@ const UIManager = (function() {
             genreSelect: document.getElementById('genreSelect'),
             sortSelect: document.getElementById('sortSelect'),
             activeFilters: document.getElementById('activeFilters'),
+
+            // Mood Confirmation Bar
+            moodConfirmBar: document.getElementById('moodConfirmBar'),
+            moodConfirmStatus: document.getElementById('moodConfirmStatus'),
+            moodConfirmIcon: document.getElementById('moodConfirmIcon'),
+            moodConfirmCode: document.getElementById('moodConfirmCode'),
+            moodConfirmName: document.getElementById('moodConfirmName'),
+            moodConfirmNote: document.getElementById('moodConfirmNote'),
+            applyMoodBtn: document.getElementById('applyMoodBtn'),
+            cancelMoodBtn: document.getElementById('cancelMoodBtn'),
+            clearMoodBtn: document.getElementById('clearMoodBtn'),
             
             // Section Actions
             suggestNewBtn: document.getElementById('suggestNewBtn'),
@@ -74,10 +87,21 @@ const UIManager = (function() {
             });
         }
 
-        // Mood buttons
+        // Mood buttons - stage selection on click (requires confirmation)
         elements.moodButtons.forEach(btn => {
-            btn.addEventListener('click', () => handleMoodFilter(btn.dataset.mood));
+            btn.addEventListener('click', () => handleMoodSelection(btn.dataset.mood));
         });
+
+        // Mood Confirmation Bar Actions
+        if (elements.applyMoodBtn) {
+            elements.applyMoodBtn.addEventListener('click', confirmMoodFilter);
+        }
+        if (elements.cancelMoodBtn) {
+            elements.cancelMoodBtn.addEventListener('click', cancelMoodSelection);
+        }
+        if (elements.clearMoodBtn) {
+            elements.clearMoodBtn.addEventListener('click', clearMoodFilter);
+        }
 
         // Dropdown filters
         if (elements.languageSelect) {
@@ -351,28 +375,241 @@ function initializeFilters() {
 
         if (isVibe) {
             // Update UI to reflect detected mood
-            elements.moodButtons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.mood === filters.mood) btn.classList.add('active');
-            });
+            if (filters.mood) {
+                setAppliedMood(filters.mood);
+            } else {
+                clearMoodFilter();
+            }
             if (elements.genreSelect) elements.genreSelect.value = filters.genre;
         }
 
         return { isVibe, filters, response };
     }
 
-    // Handle mood filter
-    function handleMoodFilter(mood) {
-        const isAlreadyActive = document.querySelector(`.mood-btn.active[data-mood="${mood}"]`);
-        
-        elements.moodButtons.forEach(btn => btn.classList.remove('active'));
+    // Select mood (stage for confirmation)
+    function handleMoodSelection(mood) {
+        // If clicking the currently pending mood, toggle off / cancel
+        if (pendingMood === mood) {
+            cancelMoodSelection();
+            return;
+        }
 
-        if (isAlreadyActive) {
-            updateFilters({ mood: null });
+        // If clicking the already applied active mood without a pending change
+        if (appliedMood === mood && !pendingMood) {
+            showActiveMoodPanel(mood);
+            return;
+        }
+
+        pendingMood = mood;
+
+        // Visual update on buttons: mark selected (pending confirmation)
+        elements.moodButtons.forEach(btn => {
+            if (btn.dataset.mood === mood) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        // Update and show confirmation bar
+        showMoodConfirmationBar(mood);
+    }
+
+    // Display confirmation bar in pending state
+    function showMoodConfirmationBar(mood) {
+        if (!elements.moodConfirmBar) return;
+
+        const targetBtn = Array.from(elements.moodButtons).find(btn => btn.dataset.mood === mood);
+        if (!targetBtn) return;
+
+        const codeSpan = targetBtn.querySelector('.mood-code');
+        const codeText = codeSpan ? codeSpan.textContent : '';
+        const labelSpan = targetBtn.querySelector('span:last-of-type');
+        const labelText = labelSpan ? labelSpan.textContent.trim() : mood;
+
+        // Find icon (Lucide SVG or FontAwesome <i>)
+        const btnSvg = targetBtn.querySelector('svg');
+        const btnI = targetBtn.querySelector('i');
+
+        if (elements.moodConfirmIcon) {
+            if (btnSvg) {
+                elements.moodConfirmIcon.innerHTML = btnSvg.outerHTML;
+            } else if (btnI) {
+                elements.moodConfirmIcon.innerHTML = btnI.outerHTML;
+            }
+        }
+
+        if (elements.moodConfirmCode) elements.moodConfirmCode.textContent = codeText;
+        if (elements.moodConfirmName) elements.moodConfirmName.textContent = labelText;
+
+        if (elements.moodConfirmStatus) {
+            elements.moodConfirmStatus.textContent = '[CONFIRMATION REQUIRED]';
+            elements.moodConfirmStatus.classList.remove('applied');
+        }
+
+        if (elements.moodConfirmNote) {
+            if (appliedMood && appliedMood !== mood) {
+                const prevBtn = Array.from(elements.moodButtons).find(b => b.dataset.mood === appliedMood);
+                const prevLabel = prevBtn ? prevBtn.querySelector('span:last-of-type')?.textContent.trim() : appliedMood;
+                elements.moodConfirmNote.textContent = `Ready to switch vibe from "${prevLabel}" to "${labelText}". Click "Apply Mood Filter" to confirm.`;
+            } else {
+                elements.moodConfirmNote.textContent = `Click "Apply Mood Filter" to load movies matching your "${labelText}" vibe.`;
+            }
+        }
+
+        if (elements.applyMoodBtn) {
+            elements.applyMoodBtn.style.display = 'inline-flex';
+            elements.applyMoodBtn.innerHTML = `<i class="fas fa-check"></i> <span>Apply Mood Filter</span>`;
+        }
+
+        if (elements.cancelMoodBtn) {
+            elements.cancelMoodBtn.style.display = 'inline-flex';
+        }
+
+        if (elements.clearMoodBtn) {
+            elements.clearMoodBtn.style.display = appliedMood ? 'inline-flex' : 'none';
+            elements.clearMoodBtn.innerHTML = `<i class="fas fa-trash-alt"></i> <span>Clear Active Mood</span>`;
+        }
+
+        elements.moodConfirmBar.style.display = 'flex';
+        elements.moodConfirmBar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Display confirmation bar in active/applied state
+    function showActiveMoodPanel(mood) {
+        if (!elements.moodConfirmBar) return;
+
+        const targetBtn = Array.from(elements.moodButtons).find(btn => btn.dataset.mood === mood);
+        if (!targetBtn) return;
+
+        const codeSpan = targetBtn.querySelector('.mood-code');
+        const codeText = codeSpan ? codeSpan.textContent : '';
+        const labelSpan = targetBtn.querySelector('span:last-of-type');
+        const labelText = labelSpan ? labelSpan.textContent.trim() : mood;
+
+        const btnSvg = targetBtn.querySelector('svg');
+        const btnI = targetBtn.querySelector('i');
+
+        if (elements.moodConfirmIcon) {
+            if (btnSvg) {
+                elements.moodConfirmIcon.innerHTML = btnSvg.outerHTML;
+            } else if (btnI) {
+                elements.moodConfirmIcon.innerHTML = btnI.outerHTML;
+            }
+        }
+
+        if (elements.moodConfirmCode) elements.moodConfirmCode.textContent = codeText;
+        if (elements.moodConfirmName) elements.moodConfirmName.textContent = labelText;
+
+        if (elements.moodConfirmStatus) {
+            elements.moodConfirmStatus.textContent = '[CURRENTLY ACTIVE]';
+            elements.moodConfirmStatus.classList.add('applied');
+        }
+
+        if (elements.moodConfirmNote) {
+            elements.moodConfirmNote.textContent = `Active vibe: "${labelText}". Click "Clear Mood" to remove or pick another vibe above.`;
+        }
+
+        if (elements.applyMoodBtn) elements.applyMoodBtn.style.display = 'none';
+        if (elements.cancelMoodBtn) elements.cancelMoodBtn.style.display = 'none';
+        if (elements.clearMoodBtn) {
+            elements.clearMoodBtn.style.display = 'inline-flex';
+            elements.clearMoodBtn.innerHTML = `<i class="fas fa-trash-alt"></i> <span>Clear Mood Filter</span>`;
+        }
+
+        elements.moodConfirmBar.style.display = 'flex';
+    }
+
+    // Confirm and apply the selected pending mood filter
+    function confirmMoodFilter() {
+        if (!pendingMood) return;
+
+        appliedMood = pendingMood;
+        const confirmedMood = pendingMood;
+        pendingMood = null;
+
+        // Update button states
+        elements.moodButtons.forEach(btn => {
+            btn.classList.remove('selected');
+            if (btn.dataset.mood === confirmedMood) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Apply to filters
+        updateFilters({ mood: confirmedMood });
+
+        // Update confirmation bar to active/applied state
+        showActiveMoodPanel(confirmedMood);
+
+        const targetBtn = Array.from(elements.moodButtons).find(btn => btn.dataset.mood === confirmedMood);
+        const labelSpan = targetBtn ? targetBtn.querySelector('span:last-of-type') : null;
+        const labelText = labelSpan ? labelSpan.textContent.trim() : confirmedMood;
+
+        showToast(`Mood confirmed: Applied "${labelText}"!`);
+
+        // Smooth scroll towards movie results
+        const moviesSection = document.getElementById('all-movies') || elements.moviesGrid;
+        if (moviesSection) {
+            moviesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // Cancel pending mood selection
+    function cancelMoodSelection() {
+        pendingMood = null;
+
+        elements.moodButtons.forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        if (appliedMood) {
+            showActiveMoodPanel(appliedMood);
         } else {
-            const targetBtn = Array.from(elements.moodButtons).find(btn => btn.dataset.mood === mood);
-            if (targetBtn) targetBtn.classList.add('active');
-            updateFilters({ mood });
+            if (elements.moodConfirmBar) {
+                elements.moodConfirmBar.style.display = 'none';
+            }
+        }
+    }
+
+    // Clear active and pending mood filter
+    function clearMoodFilter() {
+        pendingMood = null;
+        appliedMood = null;
+
+        elements.moodButtons.forEach(btn => {
+            btn.classList.remove('selected');
+            btn.classList.remove('active');
+        });
+
+        if (elements.moodConfirmBar) {
+            elements.moodConfirmBar.style.display = 'none';
+        }
+
+        updateFilters({ mood: null });
+        showToast('Mood filter cleared');
+    }
+
+    // Programmatically set applied mood (for URL params, AI assistant, etc.)
+    function setAppliedMood(mood) {
+        appliedMood = mood;
+        pendingMood = null;
+
+        elements.moodButtons.forEach(btn => {
+            btn.classList.remove('selected');
+            if (btn.dataset.mood === mood) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        if (mood) {
+            showActiveMoodPanel(mood);
+        } else if (elements.moodConfirmBar) {
+            elements.moodConfirmBar.style.display = 'none';
         }
     }
 
@@ -395,6 +632,9 @@ function initializeFilters() {
         // Store current filters
         const currentFilters = getCurrentFilters();
         const filters = { ...currentFilters, ...newFilters };
+        if (newFilters.mood !== undefined) {
+            appliedMood = newFilters.mood;
+        }
         
         // Update active filters display
         updateActiveFilters(filters);
@@ -486,8 +726,8 @@ function initializeFilters() {
     function removeFilter(type) {
         switch(type) {
             case 'mood':
-                elements.moodButtons.forEach(btn => btn.classList.remove('active'));
-                break;
+                clearMoodFilter();
+                return;
             case 'language':
                 elements.languageSelect.value = '';
                 break;
@@ -788,8 +1028,16 @@ function initializeFilters() {
                 elements.sortSelect.value = 'recommended';
             }
 
-            // Clear any active mood button so the user sees the global fresh suggestions
-            elements.moodButtons.forEach(btn => btn.classList.remove('active'));
+            // Clear any active mood button and confirmation bar so the user sees the global fresh suggestions
+            pendingMood = null;
+            appliedMood = null;
+            elements.moodButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.remove('selected');
+            });
+            if (elements.moodConfirmBar) {
+                elements.moodConfirmBar.style.display = 'none';
+            }
             if (elements.genreSelect) elements.genreSelect.value = '';
             if (elements.languageSelect) elements.languageSelect.value = '';
             if (elements.searchInput) elements.searchInput.value = '';
@@ -834,6 +1082,11 @@ function initializeFilters() {
         updatePagination,
         initDailyFeaturedPick,
         handleSuggestNewMovies,
-        showToast
+        showToast,
+        setAppliedMood,
+        handleMoodSelection,
+        confirmMoodFilter,
+        cancelMoodSelection,
+        clearMoodFilter
     };
 })();

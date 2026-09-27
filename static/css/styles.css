@@ -73,6 +73,8 @@ html {
     scroll-behavior: auto; /* Sudden stop-motion feel */
     font-size: 16px;
     background-color: var(--paper);
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 body {
@@ -86,6 +88,7 @@ body {
     background-size: 24px 24px, 120px 120px, 120px 120px;
     line-height: 1.5;
     overflow-x: hidden;
+    max-width: 100vw;
     position: relative;
     -webkit-font-smoothing: antialiased;
 }
@@ -953,6 +956,252 @@ body::after {
 
 .mood-btn.active .mood-code {
     color: var(--paper);
+}
+
+/* Selected (Pending Confirmation) Mood Button */
+.mood-btn.selected {
+    clip-path: none;
+    overflow: visible;
+    background: var(--muted-gold);
+    color: var(--charcoal-deep);
+    border-color: var(--charcoal);
+    transform: translate(-3px, -3px) rotate(-1.5deg);
+    box-shadow: 6px 6px 0px var(--charcoal), 0 0 0 3px var(--crimson);
+    animation: selectedMoodJitter 1.5s steps(2) infinite alternate;
+    z-index: 5;
+}
+
+.mood-btn.selected .mood-code {
+    color: var(--charcoal-deep);
+    font-weight: 700;
+}
+
+.mood-btn.selected::after {
+    content: "CONFIRM?";
+    position: absolute;
+    bottom: -13px;
+    left: 50%;
+    transform: translateX(-50%) rotate(1deg);
+    background: var(--crimson);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    box-shadow: 2px 2px 0px var(--charcoal);
+    pointer-events: none;
+    border: 2px solid var(--charcoal);
+    white-space: nowrap;
+    z-index: 10;
+}
+
+@keyframes selectedMoodJitter {
+    0% { transform: translate(-3px, -3px) rotate(-1.5deg); }
+    100% { transform: translate(-2px, -4px) rotate(-0.5deg); }
+}
+
+/* ==========================================================================
+   MOOD CONFIRMATION BAR (Grunge Ticket Console)
+   ========================================================================== */
+.mood-confirm-bar {
+    position: relative;
+    background: var(--surface-card);
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow-lg);
+    padding: 1.25rem 1.75rem;
+    margin-top: -1rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    animation: moodConfirmPop 0.18s ease-out;
+}
+
+@keyframes moodConfirmPop {
+    0% {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.98);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.mood-confirm-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.mood-confirm-status {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    background: var(--charcoal);
+    color: var(--paper);
+    padding: 0.15rem 0.6rem;
+    display: inline-block;
+    align-self: flex-start;
+    letter-spacing: 1px;
+}
+
+.mood-confirm-status.applied {
+    background: var(--crimson);
+    color: var(--paper);
+}
+
+.mood-confirm-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.mood-confirm-icon {
+    font-size: 1.75rem;
+    color: var(--crimson);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.mood-confirm-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: var(--crimson);
+}
+
+.mood-confirm-labels {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.mood-confirm-code {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--crimson);
+    font-weight: 700;
+}
+
+.mood-confirm-title {
+    font-family: var(--font-headline);
+    font-size: 1.85rem;
+    color: var(--charcoal);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.mood-confirm-note {
+    font-family: var(--font-typewriter);
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.mood-confirm-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+.btn-confirm-mood {
+    background: var(--crimson);
+    color: var(--paper);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.75rem 1.4rem;
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
+}
+
+.btn-confirm-mood:hover {
+    background: var(--crimson-dark);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px var(--charcoal);
+}
+
+.btn-confirm-mood:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--charcoal);
+}
+
+.btn-cancel-mood {
+    background: var(--paper-dark);
+    color: var(--charcoal);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.75rem 1.1rem;
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.08s ease, background 0.08s ease;
+}
+
+.btn-cancel-mood:hover {
+    background: var(--paper-aged);
+    transform: translate(-1px, -1px);
+}
+
+.btn-clear-mood {
+    background: transparent;
+    color: var(--crimson);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.75rem 1rem;
+    border: 2px dashed var(--crimson);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.08s ease;
+}
+
+.btn-clear-mood:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    border-style: solid;
+}
+
+@media (max-width: 768px) {
+    .mood-confirm-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.15rem 1rem;
+        gap: 1rem;
+    }
+    
+    .mood-confirm-actions {
+        width: 100%;
+    }
+    
+    .btn-confirm-mood, .btn-cancel-mood, .btn-clear-mood {
+        flex: 1;
+        justify-content: center;
+    }
 }
 
 /* ==========================================================================
@@ -2076,20 +2325,67 @@ body::after {
 /* ==========================================================================
    RESPONSIVE DESIGN BREAKPOINTS
    ========================================================================== */
+/* ==========================================================================
+   RESPONSIVE DESIGN BREAKPOINTS SYSTEM
+   Breakpoints:
+   - 1600px+ (Ultrawide displays)
+   - 1025px - 1440px (Desktop / Laptops)
+   - 769px - 1024px (Tablets / Small Laptops)
+   - 576px - 768px (Phablets / Large Handhelds)
+   - 401px - 575px (Standard Mobile)
+   - <= 400px (Compact Mobile / Small Android & iPhone SE)
+   ========================================================================== */
+
+/* 1. Large Displays (1600px+) */
+@media (min-width: 1600px) {
+    .container {
+        max-width: 1540px;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2.75rem;
+    }
+    .hero-title {
+        font-size: 6.8rem;
+    }
+    .hero-grid {
+        grid-template-columns: 1.15fr 1fr;
+        gap: 4rem;
+    }
+}
+
+/* 2. Tablets & Small Laptops (769px - 1024px) */
 @media (max-width: 1024px) {
+    .navbar {
+        gap: 1.25rem;
+    }
+    .nav-links {
+        gap: 0.75rem;
+    }
+    .nav-links a {
+        font-size: 1rem;
+        padding: 0.3rem 0.55rem;
+        letter-spacing: 1px;
+    }
     .hero-grid {
         grid-template-columns: 1fr;
         gap: 3rem;
     }
     .hero-collage-graphic {
         order: -1;
+        min-height: 380px;
+        margin: 1rem auto 2rem;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 2rem;
     }
     .movie-detail-grid {
         grid-template-columns: 1fr;
         gap: 3rem;
     }
     .poster-container {
-        max-width: 380px;
+        max-width: 360px;
         margin: 0 auto;
     }
     .about-hero {
@@ -2102,37 +2398,637 @@ body::after {
     .avatar-ring {
         margin: 0 auto;
     }
+    .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+    }
+    .footer-cta {
+        grid-column: 1 / -1;
+    }
 }
 
+/* 3. Phablets & Small Tablets (576px - 768px) */
 @media (max-width: 768px) {
+    /* Container Padding */
+    .container {
+        padding: 0 1.25rem;
+    }
+
+    /* Header & Mobile Drawer Navigation */
+    .header {
+        padding: 0.6rem 0;
+    }
+    .navbar {
+        gap: 0.75rem;
+    }
+    .logo a {
+        font-size: clamp(1.6rem, 5vw, 2rem);
+        padding: 0.1rem 0.5rem;
+    }
+    .btn-surprise {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+    }
+    .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
+        border: 2.5px solid var(--charcoal);
+        background: var(--charcoal);
+        color: var(--paper);
+        cursor: pointer;
+        box-shadow: var(--brutal-shadow-sm);
+        transition: all 0.08s steps(2);
+    }
+    .mobile-menu-btn:hover {
+        background: var(--crimson);
+        border-color: var(--charcoal);
+    }
     .nav-links {
-        display: none;
+        display: none !important;
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
         background: var(--paper);
-        border-bottom: 3px solid var(--charcoal);
+        border-bottom: 4px solid var(--charcoal);
         flex-direction: column;
-        padding: 1.5rem;
-        gap: 1rem;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        padding: 1.25rem 1rem;
+        gap: 0.65rem;
+        box-shadow: 0 12px 24px rgba(26,26,26,0.3);
+        z-index: 1000;
     }
-    .mobile-menu-btn {
-        display: block;
+    .nav-links.active {
+        display: flex !important;
+        animation: navSlideDown 0.15s ease-out forwards;
     }
-    .filters-row {
-        grid-template-columns: 1fr;
+    .nav-links li {
+        width: 100%;
     }
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
+    .nav-links a {
+        width: 100%;
+        font-size: 1.15rem;
+        padding: 0.75rem 1rem;
+        background: var(--surface-card);
+        border: 2px solid var(--charcoal);
+        box-shadow: var(--brutal-shadow-sm);
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 0.75rem;
+    }
+
+    /* Hero Responsive */
+    .hero {
+        padding: 2.2rem 0 1.8rem;
+    }
+    .hero-tagline-badge {
+        font-size: 0.72rem;
+        padding: 0.25rem 0.65rem;
+        margin-bottom: 0.8rem;
+    }
+    .hero-title {
+        font-size: clamp(2.3rem, 7.5vw, 3.8rem);
+        line-height: 0.94;
+        margin-bottom: 1rem;
     }
     .hero-title .script-accent {
         position: static;
-        display: block;
-        margin-top: 0.5rem;
-        transform: rotate(-2deg);
+        display: inline-block;
+        margin: 0.6rem 0 0;
+        transform: rotate(-3deg);
+        font-size: clamp(1.4rem, 5vw, 2.2rem);
+        padding: 0.1rem 0.6rem;
+    }
+    .hero-subtitle {
+        font-size: 1.05rem;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.55;
+    }
+
+    /* Hero Collage Graphic */
+    .hero-collage-graphic {
+        min-height: 340px;
+        margin: 0.5rem auto 1.5rem;
+        max-width: 100%;
+    }
+    .collage-frame-main {
+        width: min(290px, 80vw);
+        height: min(390px, 108vw);
+        padding: 8px;
+    }
+    .collage-fragment-card {
+        width: 140px;
+        top: -12px;
+        left: -10px;
+        padding: 0.6rem;
+    }
+    .collage-fragment-card h4 {
+        font-size: 0.95rem;
+    }
+    .collage-fragment-card p {
+        font-size: 0.62rem;
+    }
+    .collage-badge-gold {
+        width: 95px;
+        height: 95px;
+        bottom: -10px;
+        right: -10px;
+    }
+    .collage-badge-gold .badge-text-main {
+        font-size: 1.45rem;
+    }
+    .collage-barcode-stamp {
+        left: -15px;
+        bottom: 15px;
+        font-size: 0.55rem;
+    }
+
+    /* AI Search Console */
+    .hero-search {
+        margin-top: 1rem;
+    }
+    .ai-assistant-wrapper {
+        padding: 1rem;
+    }
+    .btn-search {
+        padding: 0 1.4rem;
+        font-size: 1.15rem;
+    }
+
+    /* Discovery & Filter Section */
+    .discovery-section {
+        padding: 2.5rem 0 1.5rem;
+    }
+    .section-title {
+        margin-bottom: 1.5rem;
+    }
+    .section-title h2 {
+        font-size: clamp(1.5rem, 5.5vw, 2.3rem);
+        padding: 0.2rem 0.8rem;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        max-width: 100%;
+    }
+    .mood-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.85rem;
+        margin-bottom: 2rem;
+    }
+    .mood-btn {
+        padding: 0.85rem 0.5rem;
+        font-size: 1rem;
+        gap: 0.45rem;
+    }
+    .mood-btn i, .mood-btn svg {
+        width: 22px;
+        height: 22px;
+        font-size: 1.4rem;
+    }
+
+    /* Mood Confirmation Bar */
+    .mood-confirm-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.15rem 1rem;
+        gap: 1rem;
+        margin-top: -0.5rem;
+        margin-bottom: 2rem;
+    }
+    .mood-confirm-actions {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+    .btn-confirm-mood, .btn-cancel-mood, .btn-clear-mood {
+        width: 100%;
+        justify-content: center;
+        padding: 0.85rem 1rem;
+    }
+
+    /* Filters Row */
+    .filters-row {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .filter-card {
+        padding: 1rem;
+    }
+
+    /* Movies Section */
+    .movies-section {
+        padding: 2.5rem 0 3.5rem;
+    }
+    .section-header {
+        margin-bottom: 1.75rem;
+        gap: 1rem;
+    }
+    .section-header h2 {
+        font-size: clamp(1.8rem, 6vw, 2.4rem);
+        flex-wrap: wrap;
+    }
+    .section-header-actions {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0.75rem;
+    }
+    .btn-suggest-new {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        font-size: 1.05rem;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 2.5rem;
+    }
+    .movie-card {
+        transform: none !important;
+    }
+    .movie-card:hover {
+        transform: scale(1.02) !important;
+    }
+    .movie-info {
+        padding: 0.85rem;
+    }
+    .movie-title {
+        font-size: 1.15rem;
+        margin-bottom: 0.5rem;
+    }
+    .movie-overview-snippet {
+        display: none;
+    }
+
+    /* Footer */
+    .footer {
+        padding: 3rem 0 1.5rem;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
         text-align: center;
+        gap: 0.75rem;
+    }
+
+    /* Toast */
+    .suggestion-toast {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        width: calc(100% - 2rem);
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        font-size: 0.82rem;
+    }
+
+    /* Movie Detail Page */
+    .movie-detail-hero {
+        min-height: 380px;
+    }
+    .movie-detail-content {
+        padding: 2rem 0 1.5rem;
+    }
+    .movie-detail-content .hero-title {
+        font-size: clamp(2rem, 7vw, 3.5rem);
+    }
+    .movie-detail-content .hero-subtitle {
+        font-size: 1.3rem;
+    }
+    .movie-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+    }
+    .stat-card {
+        padding: 0.85rem 0.5rem;
+    }
+    .stat-value {
+        font-size: 1.75rem;
+    }
+    .stat-label {
+        font-size: 0.68rem;
+    }
+    .detail-section {
+        padding: 1.25rem 1rem;
+        margin-bottom: 1.75rem;
+    }
+    .detail-section h3 {
+        font-size: 1.4rem;
+    }
+    .overview-text {
+        font-size: 1.05rem;
+        line-height: 1.65;
+    }
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.85rem;
+    }
+    .btn-primary, .back-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        font-size: 1.1rem;
+    }
+    .share-modal {
+        padding: 1.25rem 1rem;
+    }
+    .share-platforms {
+        grid-template-columns: 1fr;
+        gap: 0.65rem;
+    }
+    .share-btn {
+        flex-direction: row;
+        justify-content: center;
+        padding: 0.7rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    /* About Me Page */
+    .about-hero {
+        padding: 2.5rem 0 2rem;
+        text-align: center;
+    }
+    .about-hero-text h1 {
+        font-size: clamp(2rem, 7vw, 3.2rem);
+    }
+    .about-hero-text .lead {
+        font-size: 1.05rem;
+        padding: 0.85rem 1rem;
+        margin: 0 auto 1.5rem;
+    }
+    .avatar-ring {
+        width: min(260px, 75vw);
+        height: min(260px, 75vw);
+        margin: 0 auto;
+    }
+    .about-section {
+        padding: 2.5rem 0;
+    }
+    .manifesto-box {
+        padding: 1.5rem 1rem;
+    }
+    .manifesto-box h2 {
+        font-size: 1.8rem;
+    }
+    .manifesto-box p {
+        font-size: 1rem;
+        line-height: 1.65;
+    }
+    .stats-banner {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1.5rem 1rem !important;
+        padding: 2.5rem 0 !important;
+        margin: 2.5rem 0 !important;
+    }
+    .stat-item {
+        border-right: none !important;
+    }
+    .stat-item .num {
+        font-size: 2.4rem !important;
+    }
+    .manifesto-cta {
+        padding: 3rem 0 !important;
+    }
+    .manifesto-cta h2 {
+        font-size: clamp(1.8rem, 6vw, 2.5rem) !important;
+    }
+    .social-row {
+        justify-content: center;
+    }
+    .social-btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 1rem;
+        padding: 0.7rem 1rem;
+    }
+}
+
+/* 4. Compact & Standard Mobile Screens (< 480px) */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 0.85rem;
+    }
+
+    /* Navbar */
+    .logo a {
+        font-size: 1.55rem;
+        padding: 0.1rem 0.35rem;
+    }
+    .btn-surprise span {
+        display: none;
+    }
+    .btn-surprise {
+        padding: 0.45rem 0.65rem;
+        min-width: 38px;
+        justify-content: center;
+    }
+    .btn-surprise i {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    /* Hero */
+    .hero {
+        padding: 1.5rem 0 1rem;
+    }
+    .hero-title {
+        font-size: clamp(1.95rem, 8.5vw, 2.75rem);
+    }
+    .hero-title .title-accent {
+        text-shadow: 1.5px 1.5px 0px var(--charcoal);
+    }
+    .hero-subtitle {
+        font-size: 0.95rem;
+        padding: 0.65rem 0.85rem;
+    }
+
+    /* Hero Graphic */
+    .hero-collage-graphic {
+        min-height: 290px;
+        transform: scale(0.92);
+        margin: 0.25rem auto 1rem;
+    }
+    .collage-frame-main {
+        width: min(260px, 78vw);
+        height: min(350px, 105vw);
+    }
+    .collage-fragment-card {
+        width: 120px;
+        top: -10px;
+        left: -5px;
+        padding: 0.5rem;
+    }
+    .collage-badge-gold {
+        width: 80px;
+        height: 80px;
+        bottom: -8px;
+        right: -5px;
+    }
+    .collage-badge-gold .badge-text-top {
+        font-size: 0.55rem;
+    }
+    .collage-badge-gold .badge-text-main {
+        font-size: 1.25rem;
+    }
+    .collage-barcode-stamp {
+        display: none;
+    }
+
+    /* Search Input Wrapper */
+    .ai-assistant-wrapper {
+        padding: 0.75rem;
+    }
+    .assistant-status {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+    .status-left {
+        font-size: 0.8rem;
+    }
+    .status-annotation {
+        font-size: 0.65rem;
+    }
+    .search-input-wrapper {
+        border-width: 2.5px;
+    }
+    .search-prefix {
+        padding: 0 0.55rem;
+        font-size: 0.95rem;
+    }
+    .search-input-wrapper input {
+        padding: 0.7rem 0.55rem;
+        font-size: 16px; /* Prevents auto-zoom in iOS Safari */
+    }
+    .btn-search {
+        padding: 0 0.9rem;
+        font-size: 1rem;
+        letter-spacing: 1px;
+    }
+
+    /* Mood Grid (2 Columns on mobile) */
+    .mood-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.65rem;
+    }
+    .mood-btn {
+        padding: 0.75rem 0.4rem;
+        font-size: 0.92rem;
+        letter-spacing: 0.5px;
+    }
+    .mood-btn .mood-code {
+        font-size: 0.58rem;
+    }
+    .mood-btn.selected::after {
+        font-size: 0.58rem;
+        padding: 2px 6px;
+        bottom: -11px;
+    }
+
+    /* Movies Grid (2 Columns on mobile) */
+    .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+    }
+    .movie-info {
+        padding: 0.65rem 0.5rem;
+    }
+    .movie-meta {
+        font-size: 0.68rem;
+        margin-bottom: 0.35rem;
+    }
+    .movie-title {
+        font-size: 0.95rem;
+        line-height: 1.2;
+        margin-bottom: 0.35rem;
+    }
+    .movie-rating-badge {
+        font-size: 0.85rem;
+        padding: 0.15rem 0.45rem;
+        bottom: 6px;
+        right: 6px;
+    }
+    .movie-catalog-num {
+        font-size: 0.55rem;
+        padding: 0.1rem 0.35rem;
+        top: 6px;
+        left: 6px;
+    }
+    .movie-card::before {
+        width: 50px;
+        height: 12px;
+        top: -6px;
+    }
+
+    /* Pagination Controls */
+    .pagination {
+        gap: 0.35rem;
+        margin-top: 2rem;
+    }
+    .pagination-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.92rem;
+    }
+    .page-btn {
+        min-width: 36px;
+        padding: 0.5rem 0.45rem;
+        font-size: 0.92rem;
+    }
+    .page-numbers {
+        gap: 0.25rem;
+    }
+
+    /* Detail Page */
+    .poster-container {
+        max-width: 260px;
+    }
+    .movie-poster-large {
+        border-width: 3px;
+    }
+
+    /* About Me Stats on compact mobile */
+    .stats-banner {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+    .stat-item {
+        border-bottom: 2px dashed var(--charcoal);
+        padding-bottom: 1rem;
+    }
+    .stat-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+}
+
+/* 5. Extra Compact Screens (< 360px - e.g., Galaxy Fold front screen, tiny screens) */
+@media (max-width: 359px) {
+    .container {
+        padding: 0 0.65rem;
+    }
+    .logo a {
+        font-size: 1.35rem;
+    }
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    .mood-grid {
+        grid-template-columns: 1fr;
+    }
+    .movies-grid {
+        grid-template-columns: 1fr;
     }
 }
