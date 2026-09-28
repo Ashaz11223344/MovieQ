@@ -6,7 +6,7 @@ const MovieLoader = (function() {
         jsonFilesCount: 301, // Total number of JSON files (movies_1.json to movies_301.json)
         moviesPerPage: 30,
         posterBaseUrl: 'https://image.tmdb.org/t/p/w780',
-        defaultPoster: 'https://via.placeholder.com/300x450?text=No+Image'
+        defaultPoster: "data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22450%22%20viewBox%3D%220%200%20300%20450%22%3E%3Crect%20fill%3D%22%231A1A1A%22%20width%3D%22300%22%20height%3D%22450%22%2F%3E%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%22284%22%20height%3D%22434%22%20fill%3D%22none%22%20stroke%3D%22%23DC143C%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%226%206%22%2F%3E%3Ccircle%20cx%3D%22150%22%20cy%3D%22180%22%20r%3D%2240%22%20fill%3D%22none%22%20stroke%3D%22%23F0EAD6%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M140%20165%20L165%20180%20L140%20195%20Z%22%20fill%3D%22%23DC143C%22%2F%3E%3Ctext%20fill%3D%22%23F0EAD6%22%20font-family%3D%22monospace%22%20font-size%3D%2214%22%20font-weight%3D%22bold%22%20x%3D%2250%25%22%20y%3D%22250%22%20text-anchor%3D%22middle%22%3E%E2%98%85%20POSTER%20ARCHIVE%20%E2%98%85%3C%2Ftext%3E%3Ctext%20fill%3D%22%23DC143C%22%20font-family%3D%22monospace%22%20font-size%3D%2211%22%20x%3D%2250%25%22%20y%3D%22275%22%20text-anchor%3D%22middle%22%3EFETCHING%20FROM%20IMDb...%3C%2Ftext%3E%3C%2Fsvg%3E"
     };
 
     // State
@@ -674,6 +674,7 @@ const MovieLoader = (function() {
     function processRawMovies(rawList, append = false) {
         const mapped = rawList.map(movie => ({
             id: movie.id || Math.random().toString(36).substr(2, 9),
+            imdb_id: movie.imdb_id || '',
             title: movie.title || 'Untitled Reel',
             original_title: movie.original_title || movie.title || '',
             overview: movie.overview || 'No synopsis logged in tape archive.',
@@ -757,10 +758,12 @@ const MovieLoader = (function() {
         };
     }
 
-    // Parse genres from your string format
-    function parseGenres(genresString) {
-        if (!genresString) return [];
-        return genresString.split(',').map(genre => genre.trim()).filter(genre => genre !== '');
+    // Parse genres safely from string or array format
+    function parseGenres(genresInput) {
+        if (!genresInput) return [];
+        if (Array.isArray(genresInput)) return genresInput.map(g => typeof g === 'object' && g ? g.name : String(g)).filter(Boolean);
+        if (typeof genresInput !== 'string') return [];
+        return genresInput.split(',').map(genre => genre.trim()).filter(genre => genre !== '');
     }
 
     // Generate sample movies for testing
@@ -898,16 +901,301 @@ const MovieLoader = (function() {
         return allMovies.find(movie => movie.id == id); // Use == for string/number comparison
     }
 
+    // ==========================================
+    // LIVE POSTER FETCHING SYSTEM (IMDb + TMDB)
+    // ==========================================
+    const POSTER_CACHE_PREFIX = 'movieq_poster_cache_';
+    const POSTER_CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 1 day auto-expiry
+
+    let tmdbApiKey = 'a5d6c8475afb8a75848e70c3a81ce995';
+    fetch('/api/env')
+        .then(r => r.ok ? r.json() : fetch('/env.json').then(r => r.json()))
+        .then(cfg => {
+            if (cfg && cfg.TMDB_API_KEY) tmdbApiKey = cfg.TMDB_API_KEY;
+        })
+        .catch(() => {
+            fetch('/env.json')
+                .then(r => r.json())
+                .then(cfg => { if (cfg && cfg.TMDB_API_KEY) tmdbApiKey = cfg.TMDB_API_KEY; })
+                .catch(() => {});
+        });
+
+    function getCachedPoster(id) {
+        if (!id) return null;
+        try {
+            const raw = localStorage.getItem(POSTER_CACHE_PREFIX + id);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (Date.now() - parsed.timestamp > POSTER_CACHE_EXPIRY_MS) {
+                localStorage.removeItem(POSTER_CACHE_PREFIX + id);
+                return null;
+            }
+            return parsed.url;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function setCachedPoster(id, url) {
+        if (!id || !url) return;
+        try {
+            localStorage.setItem(POSTER_CACHE_PREFIX + id, JSON.stringify({
+                timestamp: Date.now(),
+                url: url
+            }));
+        } catch (e) {
+            console.warn('LocalStorage unavailable for poster caching');
+        }
+    }
+
+    /**
+     * Fetch poster directly from IMDb suggestion API using IMDb ID
+     * (Matches get_poster.py logic, requires NO API key, supports browser CORS)
+     */
+    async function fetchImdbPoster(imdbId) {
+        if (!imdbId) return null;
+        let cleanId = String(imdbId).trim();
+        if (!cleanId.startsWith('tt')) {
+            cleanId = 'tt' + cleanId;
+        }
+        
+        const url = `https://v3.sg.media-imdb.com/suggestion/x/${cleanId}.json`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) return null;
+            const data = await response.json();
+            if (data && Array.isArray(data.d) && data.d.length > 0) {
+                const item = data.d.find(entry => entry.i && entry.i.imageUrl) || data.d[0];
+                if (item && item.i && item.i.imageUrl) {
+                    return item.i.imageUrl;
+                }
+            }
+            return null;
+        } catch (err) {
+            console.warn(`[MovieIQ] IMDb poster lookup failed for ${cleanId}:`, err.message);
+            return null;
+        }
+    }
+
+    /**
+     * Fetch movie details from TMDB to obtain IMDb ID or TMDB poster
+     */
+    async function fetchTmdbMovieInfo(tmdbId) {
+        if (!tmdbId) return null;
+        try {
+            const key = tmdbApiKey || 'a5d6c8475afb8a75848e70c3a81ce995';
+            const url = `https://api.themoviedb.org/3/movie/${tmdbId}?api_key=${key}`;
+            const response = await fetch(url);
+            if (!response.ok) return null;
+            return await response.json();
+        } catch (e) {
+            return null;
+        }
+    }
+
+    /**
+     * Fallback search for poster on IMDb suggestions by movie title
+     */
+    async function searchImdbPosterByTitle(title) {
+        if (!title || typeof title !== 'string') return null;
+        const cleanTitle = title.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_+|_+$/g, '');
+        if (!cleanTitle) return null;
+        const url = `https://v3.sg.media-imdb.com/suggestion/x/${cleanTitle}.json`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) return null;
+            const data = await response.json();
+            if (data && Array.isArray(data.d) && data.d.length > 0) {
+                const item = data.d.find(entry => entry.i && entry.i.imageUrl);
+                if (item && item.i && item.i.imageUrl) {
+                    return item.i.imageUrl;
+                }
+            }
+            return null;
+        } catch (err) {
+            return null;
+        }
+    }
+
+    /**
+     * Live on-the-spot poster fetcher
+     * Priority: Cache -> IMDb ID -> TMDB External ID -> IMDb Title Search
+     */
+    async function fetchLivePoster(movieOrIdentifier) {
+        if (!movieOrIdentifier) return null;
+
+        let movieId = null;
+        let imdbId = null;
+        let title = null;
+        let movieObj = null;
+
+        if (typeof movieOrIdentifier === 'object') {
+            movieObj = movieOrIdentifier;
+            movieId = movieOrIdentifier.id;
+            imdbId = movieOrIdentifier.imdb_id;
+            title = movieOrIdentifier.title || movieOrIdentifier.original_title;
+        } else if (typeof movieOrIdentifier === 'string') {
+            if (movieOrIdentifier.startsWith('tt')) {
+                imdbId = movieOrIdentifier;
+            } else {
+                movieId = movieOrIdentifier;
+            }
+        } else if (typeof movieOrIdentifier === 'number') {
+            movieId = movieOrIdentifier;
+        }
+
+        // 1. Check local cache
+        if (movieId) {
+            const cached = getCachedPoster(movieId);
+            if (cached) return cached;
+        }
+        if (imdbId) {
+            const cached = getCachedPoster(imdbId);
+            if (cached) return cached;
+        }
+
+        // 2. If we don't have imdbId but have movieId, check in loaded memory
+        if (!imdbId && movieId) {
+            const found = allMovies.find(m => String(m.id) === String(movieId));
+            if (found) {
+                if (found.imdb_id) imdbId = found.imdb_id;
+                if (!title) title = found.title;
+            }
+        }
+
+        let posterUrl = null;
+
+        // 3. Primary: Live fetch from IMDb suggestion API using IMDb ID
+        if (imdbId) {
+            posterUrl = await fetchImdbPoster(imdbId);
+        }
+
+        // 4. Secondary: TMDB lookup to retrieve IMDb ID and/or TMDB poster
+        if (!posterUrl && movieId) {
+            const tmdbData = await fetchTmdbMovieInfo(movieId);
+            if (tmdbData) {
+                if (tmdbData.imdb_id && tmdbData.imdb_id !== imdbId) {
+                    imdbId = tmdbData.imdb_id;
+                    posterUrl = await fetchImdbPoster(imdbId);
+                }
+                if (!posterUrl && tmdbData.poster_path) {
+                    posterUrl = tmdbData.poster_path.startsWith('http')
+                        ? tmdbData.poster_path
+                        : `${CONFIG.posterBaseUrl}${tmdbData.poster_path}`;
+                }
+            }
+        }
+
+        // 5. Tertiary: Fallback search on IMDb suggestions by title
+        if (!posterUrl && title) {
+            posterUrl = await searchImdbPosterByTitle(title);
+        }
+
+        // 6. Save to cache and update in-memory movie objects
+        if (posterUrl) {
+            if (movieId) setCachedPoster(movieId, posterUrl);
+            if (imdbId) setCachedPoster(imdbId, posterUrl);
+
+            if (movieObj) {
+                movieObj.poster_path = posterUrl;
+                if (!movieObj.backdrop_path) movieObj.backdrop_path = posterUrl;
+            }
+
+            if (movieId) {
+                const found = allMovies.find(m => String(m.id) === String(movieId));
+                if (found) {
+                    found.poster_path = posterUrl;
+                    if (!found.backdrop_path) found.backdrop_path = posterUrl;
+                }
+            }
+
+            return posterUrl;
+        }
+
+        return null;
+    }
+
+    /**
+     * DOM Error & missing poster handler
+     * Automatically resolves poster live on the spot from IMDb and replaces imgElement.src
+     */
+    async function handlePosterError(imgElement) {
+        if (!imgElement) return;
+        if (imgElement.dataset.posterFetchAttempted === 'true') {
+            imgElement.src = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80';
+            imgElement.classList.remove('poster-live-fetching');
+            return;
+        }
+
+        imgElement.dataset.posterFetchAttempted = 'true';
+        imgElement.classList.add('poster-live-fetching');
+
+        const movieId = imgElement.dataset.movieId;
+        const imdbId = imgElement.dataset.imdbId;
+        const title = imgElement.dataset.movieTitle ? decodeURIComponent(imgElement.dataset.movieTitle) : '';
+
+        try {
+            const liveUrl = await fetchLivePoster({
+                id: movieId,
+                imdb_id: imdbId,
+                title: title
+            });
+
+            if (liveUrl) {
+                imgElement.src = liveUrl;
+                imgElement.classList.remove('poster-live-fetching');
+                imgElement.classList.add('poster-live-loaded');
+
+                // If on movie_detail.html, update hero backdrop
+                const hero = document.querySelector('.movie-detail-hero');
+                if (hero) {
+                    const bg = hero.style.backgroundImage || '';
+                    if (!bg || bg.includes('placeholder') || bg.includes('data:') || bg.includes('unsplash')) {
+                        hero.style.backgroundImage = `url('${liveUrl}')`;
+                    }
+                }
+
+                // If on movie_detail.html, update hidden share card
+                const shareImg = document.querySelector('#actualCard .card-poster');
+                if (shareImg) {
+                    shareImg.src = liveUrl;
+                }
+
+                window.dispatchEvent(new CustomEvent('moviePosterResolved', {
+                    detail: { movieId, imdbId, posterUrl: liveUrl }
+                }));
+                return;
+            }
+        } catch (e) {
+            console.warn('[MovieIQ] Error during live poster fetch:', e);
+        }
+
+        // Final fallback if completely unresolved
+        imgElement.classList.remove('poster-live-fetching');
+        imgElement.src = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80';
+    }
+
     // Get poster URL (accepts movie object or poster path string)
     function getPosterUrl(movieOrPath) {
         if (!movieOrPath) return CONFIG.defaultPoster;
         if (typeof movieOrPath === 'string') {
-            if (movieOrPath.startsWith('http')) return movieOrPath;
+            if (movieOrPath.startsWith('http') || movieOrPath.startsWith('data:')) return movieOrPath;
             if (movieOrPath.startsWith('/')) return CONFIG.posterBaseUrl + movieOrPath;
             return CONFIG.posterBaseUrl + '/' + movieOrPath;
         }
-        if (movieOrPath.poster_path) {
-            if (movieOrPath.poster_path.startsWith('http')) return movieOrPath.poster_path;
+
+        // Check if live poster is already cached
+        if (movieOrPath.id) {
+            const cached = getCachedPoster(movieOrPath.id);
+            if (cached) return cached;
+        }
+        if (movieOrPath.imdb_id) {
+            const cached = getCachedPoster(movieOrPath.imdb_id);
+            if (cached) return cached;
+        }
+
+        if (movieOrPath.poster_path && movieOrPath.poster_path.trim().length > 0) {
+            if (movieOrPath.poster_path.startsWith('http') || movieOrPath.poster_path.startsWith('data:')) return movieOrPath.poster_path;
             if (movieOrPath.poster_path.startsWith('/')) return CONFIG.posterBaseUrl + movieOrPath.poster_path;
             return CONFIG.posterBaseUrl + '/' + movieOrPath.poster_path;
         }
@@ -919,9 +1207,14 @@ const MovieLoader = (function() {
         if (!movieOrPath) return '';
         const path = typeof movieOrPath === 'string' ? movieOrPath : (movieOrPath.backdrop_path || movieOrPath.poster_path);
         if (path && typeof path === 'string') {
-            if (path.startsWith('http')) return path;
+            if (path.startsWith('http') || path.startsWith('data:')) return path;
             const baseUrl = CONFIG.posterBaseUrl.replace('w780', 'w1280');
             return path.startsWith('/') ? (baseUrl + path) : (baseUrl + '/' + path);
+        }
+        // Check cache if object
+        if (typeof movieOrPath === 'object') {
+            const cached = (movieOrPath.id && getCachedPoster(movieOrPath.id)) || (movieOrPath.imdb_id && getCachedPoster(movieOrPath.imdb_id));
+            if (cached) return cached;
         }
         return '';
     }
@@ -1021,6 +1314,95 @@ const MovieLoader = (function() {
         return candidatePool[selectedIndex];
     }
 
+
+    // Get up to 8 highly-correlated related movies for a given movie
+    function getRelatedMovies(targetMovieOrId, limit = 8) {
+        let targetMovie = targetMovieOrId;
+        if (typeof targetMovieOrId === 'number' || typeof targetMovieOrId === 'string') {
+            targetMovie = getMovieById(targetMovieOrId);
+        }
+        if (!targetMovie) return [];
+
+        const pool = (allMovies && allMovies.length > 0) ? allMovies : CURATED_MOVIES;
+        if (!pool || pool.length === 0) return [];
+
+        const targetId = targetMovie.id;
+        const rawTargetGenres = Array.isArray(targetMovie.genres) ? targetMovie.genres : (targetMovie.genre_names || '').split(',');
+        const targetGenres = rawTargetGenres
+            .map(g => (typeof g === 'string' ? g : '').trim().toLowerCase())
+            .filter(g => g.length > 0);
+        const targetPrimaryGenre = targetGenres[0] || '';
+        const targetDirector = (targetMovie.director || '').toLowerCase().trim();
+        const targetLang = (targetMovie.original_language || '').toLowerCase().trim();
+        const targetYear = targetMovie.release_date ? parseInt(targetMovie.release_date.slice(0, 4)) : 0;
+
+        const scored = pool
+            .filter(m => m && m.id !== targetId && m.poster_path && typeof m.poster_path === 'string' && m.poster_path.trim().length > 0)
+            .map(m => {
+                let score = 0;
+                const mRawGenres = Array.isArray(m.genres) ? m.genres : (m.genre_names || '').split(',');
+                const mGenres = mRawGenres.map(g => (typeof g === 'string' ? g : '').trim().toLowerCase());
+
+                // Genre correlation
+                targetGenres.forEach(tg => {
+                    if (mGenres.includes(tg)) {
+                        score += 5;
+                    }
+                });
+
+                // Primary genre match bonus
+                if (targetPrimaryGenre && mGenres.includes(targetPrimaryGenre)) {
+                    score += 4;
+                }
+
+                // Director affinity
+                const mDirector = (m.director || '').toLowerCase().trim();
+                if (targetDirector && mDirector && targetDirector !== 'n/a' && (mDirector.includes(targetDirector) || targetDirector.includes(mDirector))) {
+                    score += 16;
+                }
+
+                // Language match
+                const mLang = (m.original_language || '').toLowerCase().trim();
+                if (targetLang && mLang === targetLang) {
+                    score += 3;
+                }
+
+                // Era / Release year proximity
+                if (targetYear && m.release_date) {
+                    const mYear = parseInt(m.release_date.slice(0, 4));
+                    if (!isNaN(mYear)) {
+                        const diff = Math.abs(targetYear - mYear);
+                        if (diff <= 3) score += 3;
+                        else if (diff <= 8) score += 2;
+                        else if (diff <= 15) score += 1;
+                    }
+                }
+
+                // Overall quality weighting
+                const rating = typeof m.vote_average === 'number' ? m.vote_average : (parseFloat(m.vote_average) || 0);
+                score += rating * 0.4;
+
+                return { movie: m, score };
+            });
+
+        // Sort descending by score
+        scored.sort((a, b) => b.score - a.score);
+
+        let top = scored.slice(0, limit).map(item => item.movie);
+
+        // Ensure exactly limit (8) movies if pool permits
+        if (top.length < limit) {
+            const existingIds = new Set([targetId, ...top.map(m => m.id)]);
+            const fallback = pool
+                .filter(m => m && !existingIds.has(m.id) && m.poster_path)
+                .sort((a, b) => (b.vote_average || 0) - (a.vote_average || 0))
+                .slice(0, limit - top.length);
+            top = top.concat(fallback);
+        }
+
+        return top.slice(0, limit);
+    }
+
     // Public API
     return {
         loadMovies,
@@ -1032,9 +1414,16 @@ const MovieLoader = (function() {
         setPage,
         getRandomMovie,
         getDailyFeaturedMovie,
+
+        getRelatedMovies,
         getMovieById,
         getPosterUrl,
         getBackdropUrl,
+        fetchLivePoster,
+        fetchImdbPoster,
+        handlePosterError,
+        getCachedPoster,
+        setCachedPoster,
         getUniqueLanguages,
         getUniqueGenres,
         getLanguageName,
@@ -1043,6 +1432,20 @@ const MovieLoader = (function() {
         suggestNewMovies,
         loadAdditionalChunk,
         getCurrentSeed: () => currentSeed,
-        setSeed: (s) => { currentSeed = s; }
+        setSeed: (s) => { currentSeed = s; },
+        getAllMovies: () => allMovies,
+        getFilteredMovies: () => filteredMovies,
+        setFilteredMovies: (movies) => {
+            filteredMovies = Array.isArray(movies) ? [...movies] : [];
+            currentPage = 1;
+            return getTotalPages();
+        },
+        addMovies: (movies) => processRawMovies(movies, true),
+        resetFilters: () => {
+            filteredMovies = [...allMovies];
+            currentPage = 1;
+            sortMovies('recommended');
+            return getTotalPages();
+        }
     };
 })();

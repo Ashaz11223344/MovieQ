@@ -171,6 +171,12 @@
                     <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Moods</a></li>
                     <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Languages</a></li>
                     <li><a href="aboutme.html" class="active"><i class="fas fa-user"></i> About Me</a></li>
+                    <li>
+                        <a href="javascript:void(0)" id="openStashNavBtn" class="nav-stash-link" title="Open Watch Later list">
+                            <i class="fas fa-bookmark"></i> Watch Later
+                            <span class="stash-badge" id="stashNavBadge" style="display: none;">0</span>
+                        </a>
+                    </li>
                 </ul>
                 <div class="nav-actions">
                     <button id="surpriseBtn" class="btn-surprise">
@@ -325,6 +331,8 @@
         </div>
     </footer>
 
+    <script src="static/js/stashService.js?v=2.8"></script>
+    <script src="static/js/stashUI.js?v=2.8"></script>
     <script src="static/js/movieLoader.js"></script>
     <script>
         const surpriseBtn = document.getElementById('surpriseBtn');
@@ -339,7 +347,9 @@
         if (mobileMenuBtn) {
             mobileMenuBtn.addEventListener('click', () => {
                 const navLinks = document.querySelector('.nav-links');
-                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+                if (navLinks) {
+                    navLinks.classList.toggle('active');
+                }
             });
         }
         lucide.createIcons();

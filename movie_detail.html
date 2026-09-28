@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Details - MovieQ</title>
-    <link rel="stylesheet" href="static/css/styles.css?v=2.6">
+    <link rel="stylesheet" href="static/css/styles.css?v=2.7">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/webp" href="favicon.webp">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -45,8 +45,11 @@
         /* Themed Movie Card for Download */
         #shareCardContainer {
             position: fixed;
-            left: -9999px;
-            top: -9999px;
+            left: 0;
+            top: 0;
+            z-index: -9999;
+            opacity: 0;
+            pointer-events: none;
         }
 
         .share-card-inner {
@@ -111,6 +114,170 @@
             font-size: 0.75rem;
             color: #DC143C;
         }
+
+        /* Card Preview Modal Styles */
+        .card-preview-modal {
+            background: var(--paper);
+            border: 4px solid var(--charcoal);
+            box-shadow: var(--brutal-shadow-lg);
+            max-width: 440px;
+            width: 100%;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1.6rem 1.8rem;
+            position: relative;
+            clip-path: var(--torn-clip);
+        }
+
+        .preview-back-btn {
+            background: var(--paper-light);
+            color: var(--charcoal);
+            border: 2px solid var(--charcoal);
+            box-shadow: 2px 2px 0px var(--charcoal);
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.08s steps(2);
+        }
+
+        .preview-back-btn:hover {
+            background: var(--crimson);
+            color: var(--paper);
+            transform: translate(-1px, -1px);
+            box-shadow: 3px 3px 0px var(--charcoal);
+        }
+
+        .card-preview-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-y: auto;
+            padding: 0.4rem 0.2rem;
+        }
+
+        .card-preview-stage {
+            width: 100%;
+            min-height: 290px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #EAE4D2;
+            border: 2px dashed var(--charcoal);
+            padding: 0.8rem;
+            margin-bottom: 1.1rem;
+            position: relative;
+        }
+
+        .preview-loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--charcoal);
+        }
+
+        .preview-loading-spinner i {
+            font-size: 2.2rem;
+            color: var(--crimson);
+        }
+
+        .card-preview-image {
+            max-width: 270px;
+            width: 100%;
+            height: auto;
+            display: block;
+            box-shadow: 6px 6px 0px var(--charcoal);
+            border: 3px solid var(--charcoal);
+            transition: transform 0.15s ease;
+        }
+
+        .card-preview-image:hover {
+            transform: scale(1.02);
+        }
+
+        .card-preview-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .btn-card-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 0.6rem;
+            font-family: var(--font-headline);
+            font-size: 1.05rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 3px solid var(--charcoal);
+            cursor: pointer;
+            transition: all 0.08s steps(2);
+            white-space: nowrap;
+        }
+
+        .btn-card-download {
+            background: var(--crimson);
+            color: var(--paper);
+            box-shadow: 4px 4px 0px var(--charcoal);
+        }
+
+        .btn-card-download:hover:not(:disabled) {
+            background: #b01030;
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--charcoal);
+        }
+
+        .btn-card-copy {
+            background: var(--paper-light);
+            color: var(--charcoal);
+            box-shadow: 4px 4px 0px var(--charcoal);
+        }
+
+        .btn-card-copy:hover:not(:disabled) {
+            background: var(--charcoal);
+            color: var(--paper);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--charcoal);
+        }
+
+        .btn-card-action:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 2px 2px 0px var(--charcoal) !important;
+        }
+
+        .card-preview-status {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            font-weight: 700;
+            min-height: 1.4rem;
+            margin-top: 0.6rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .card-preview-status.success {
+            color: #1a7830;
+        }
+
+        .card-preview-status.error {
+            color: var(--crimson);
+        }
     </style>
 </head>
 <body>
@@ -139,6 +306,12 @@
                     <li><a href="index.html#mood-search"><i class="fas fa-smile"></i> Moods</a></li>
                     <li><a href="index.html#language-search"><i class="fas fa-globe"></i> Languages</a></li>
                     <li><a href="aboutme.html"><i class="fas fa-user"></i> About Me</a></li>
+                    <li>
+                        <a href="javascript:void(0)" id="openStashNavBtn" class="nav-stash-link" title="Open Watch Later list">
+                            <i class="fas fa-bookmark"></i> Watch Later
+                            <span class="stash-badge" id="stashNavBadge" style="display: none;">0</span>
+                        </a>
+                    </li>
                 </ul>
                 <div class="nav-actions">
                     <button id="surpriseBtn" class="btn-surprise">
@@ -225,10 +398,48 @@
         </div>
     </div>
 
+    <!-- Card Preview Modal -->
+    <div class="modal-overlay" id="cardPreviewModalOverlay">
+        <div class="card-preview-modal">
+            <div class="tape-strip tape-red" style="top:-10px; right:30px;">CARD PREVIEW</div>
+            <div class="share-modal-header">
+                <div style="display:flex; align-items:center; gap:0.75rem;">
+                    <button class="preview-back-btn" id="backToShareModal" title="Back to share options">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h3 style="margin:0; font-size:1.6rem;">MOVIE CARD</h3>
+                </div>
+                <button class="close-modal" id="closeCardPreviewModal">&times;</button>
+            </div>
+            <div class="card-preview-body">
+                <div class="card-preview-stage" id="cardPreviewStage">
+                    <div class="preview-loading-spinner" id="previewLoadingSpinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>GENERATING PREVIEW...</span>
+                    </div>
+                    <img id="cardPreviewImg" alt="Movie Card Preview" class="card-preview-image" style="display:none;" />
+                </div>
+                <div class="card-preview-actions">
+                    <button class="btn-card-action btn-card-download" id="modalDownloadCardBtn">
+                        <i class="fas fa-download"></i> DOWNLOAD CARD
+                    </button>
+                    <button class="btn-card-action btn-card-copy" id="modalCopyCardBtn">
+                        <i class="fas fa-copy"></i> COPY CARD
+                    </button>
+                </div>
+                <div class="card-preview-status" id="cardPreviewStatus"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hidden Card for html2canvas Capture -->
     <div id="shareCardContainer"></div>
 
-    <script src="static/js/movieLoader.js"></script>
+    <!-- Pocket Stash Offline Vault Scripts -->
+    <script src="static/js/stashService.js?v=2.8"></script>
+    <script src="static/js/stashUI.js?v=2.8"></script>
+    <script src="static/js/movieStreamingService.js?v=2.7"></script>
+    <script src="static/js/movieLoader.js?v=2.6"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -274,13 +485,16 @@
             if (mobileMenuBtn) {
                 mobileMenuBtn.addEventListener('click', function() {
                     const navLinks = document.querySelector('.nav-links');
-                    navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+                    if (navLinks) {
+                        navLinks.classList.toggle('active');
+                    }
                 });
             }
         });
         
         function renderMovieDetails(movie) {
             const posterUrl = MovieLoader.getPosterUrl(movie);
+            const isMissingPoster = !movie.poster_path || posterUrl === MovieLoader.CONFIG.defaultPoster || posterUrl.startsWith('data:');
             const backdropUrl = MovieLoader.getBackdropUrl(movie);
             const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
             const languageName = MovieLoader.getLanguageName(movie.original_language);
@@ -292,6 +506,7 @@
             const catalogNum = String(movie.id).replace(/\D/g, '').slice(0, 4) || '9102';
             
             const genres = Array.isArray(movie.genres) ? movie.genres : (movie.genre_names ? movie.genre_names.split(',') : ['Cinema']);
+            const relatedMovies = (typeof MovieLoader.getRelatedMovies === 'function') ? MovieLoader.getRelatedMovies(movie, 8) : [];
             
             const movieDetailHTML = `
                 <div class="movie-detail-hero" style="background-image: url('${backdropUrl || posterUrl}')">
@@ -314,7 +529,15 @@
                     <div class="movie-detail-grid">
                         <div class="poster-container">
                             <div class="tape-strip tape-red" style="top:-12px; left:20px;">RECOMMENDED</div>
-                            <img src="${posterUrl}" alt="${movie.title}" class="movie-poster-large" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80'">
+                            <img src="${posterUrl}" 
+                                 alt="${movie.title}" 
+                                 class="movie-poster-large ${isMissingPoster ? 'poster-live-fetching' : ''}" 
+                                 id="detailPosterImg"
+                                 crossorigin="anonymous"
+                                 data-movie-id="${movie.id}" 
+                                 data-imdb-id="${movie.imdb_id || ''}" 
+                                 data-movie-title="${encodeURIComponent(movie.title || '')}"
+                                 onerror="MovieLoader.handlePosterError(this)">
                             <a href="index.html" class="back-btn" id="backBtn">
                                 <i class="fas fa-arrow-left"></i> BACK TO MOVIES
                             </a>
@@ -360,8 +583,32 @@
                                 ${movie.director ? `<p class="overview-text" style="font-size: 1.1rem; margin-top:0.5rem;"><strong>Director:</strong> ${movie.director}</p>` : ''}
                             </div>
                             ` : ''}
+
+                            <!-- Where to Stream Section -->
+                            <div class="detail-section streaming-section" id="streamingSection">
+                                <div class="tape-strip tape-red" style="top:-10px; right:25px; width:95px;">STREAM NOW</div>
+                                <h3>
+                                    <span><i class="fas fa-play" style="color:var(--crimson); font-size:1.1rem; margin-right:8px;"></i> WHERE TO STREAM</span>
+                                    <span class="section-index">[PLATFORMS]</span>
+                                </h3>
+                                
+                                <div id="streamingBadgesContainer">
+                                    <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
+                                        <button id="whereToWatchBtn" class="btn btn-primary" style="font-size: 1.1rem; padding: 12px 24px; display: flex; align-items: center; gap: 8px;">
+                                            <i class="fas fa-search"></i> Where to watch
+                                        </button>
+                                        <button id="watchTrailerBtn" class="btn-surprise" style="font-size: 1.1rem; padding: 12px 24px; margin-left: 5px;">
+                                            <i class="fab fa-youtube"></i> WATCH TRAILER
+                                        </button>
+                                    </div>
+                                    <div id="trailerContainer" style="margin-top: 20px; display: none; width: 100%; aspect-ratio: 16/9; background: #000; border: 2px solid #333; overflow: hidden;"></div>
+                                </div>
+                            </div>
                             
                             <div class="action-buttons">
+                                <button class="btn-primary" id="detailStashBtn">
+                                    <i class="far fa-bookmark"></i> + WATCH LATER
+                                </button>
                                 <button class="btn-primary" onclick="shareMovie()">
                                     <i class="fas fa-share-alt"></i> SHARE MOVIE
                                 </button>
@@ -369,12 +616,201 @@
                                     <i class="fas fa-random"></i> SURPRISE ME NEXT
                                 </button>
                             </div>
+                            <div id="detailStashControls" style="display: none;"></div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Reel Companions // Related Movies Carousel -->
+                ${relatedMovies && relatedMovies.length > 0 ? `
+                <section class="related-movies-section">
+                    <div class="container">
+                        <div class="related-section-header">
+                            <div class="related-title-block">
+                                <div class="tape-strip" style="top:-10px; left:20px; width:75px;">CURATED</div>
+                                <div class="related-tag-badge">
+                                    <span class="rec-dot"></span>
+                                    <span>DOUBLE FEATURE // 8 CURATED PAIRINGS</span>
+                                </div>
+                                <h2 class="related-title">REEL COMPANIONS // MORE MOVIES LIKE THIS</h2>
+                                <p class="related-subtitle">If you resonated with <em>"${movie.title}"</em>, explore these 8 companion films sharing atmospheric resonance, narrative craft, and spirit.</p>
+                            </div>
+                            <div class="related-slider-nav">
+                                <button class="slider-nav-btn prev-btn" id="relatedPrevBtn" aria-label="Previous 4 movies" title="Previous 4 movies">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                                <button class="slider-nav-btn next-btn" id="relatedNextBtn" aria-label="Next 4 movies" title="Next 4 movies">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="related-slider-container">
+                            <div class="related-slider-track" id="relatedSliderTrack">
+                                ${relatedMovies.map((rel, idx) => {
+                                    const relPoster = MovieLoader.getPosterUrl(rel);
+                                    const isRelMissing = !rel.poster_path || relPoster === MovieLoader.CONFIG.defaultPoster || relPoster.startsWith('data:');
+                                    const relYear = rel.release_date ? new Date(rel.release_date).getFullYear() : 'N/A';
+                                    const relRating = typeof rel.vote_average === 'number' ? rel.vote_average.toFixed(1) : parseFloat(rel.vote_average || 0).toFixed(1);
+                                    const relGenres = Array.isArray(rel.genres) ? rel.genres : (rel.genre_names ? rel.genre_names.split(',') : ['Cinema']);
+                                    const isRelStashed = typeof StashService !== 'undefined' && StashService.isStashed(rel.id);
+
+                                    return `
+                                        <div class="related-movie-card" data-movie-id="${rel.id}" role="button" tabindex="0" title="View ${rel.title}">
+                                            <div class="related-poster-wrapper">
+                                                <span class="related-card-num">#${idx + 1}</span>
+                                                <button class="card-stash-btn ${isRelStashed ? 'stashed' : ''}" 
+                                                        data-movie-id="${rel.id}" 
+                                                        title="${isRelStashed ? 'In Watch Later (Click to remove)' : 'Save to Watch Later'}" 
+                                                        aria-label="Save to Watch Later">
+                                                    <i class="${isRelStashed ? 'fas' : 'far'} fa-bookmark"></i>
+                                                </button>
+                                                <span class="related-rating-badge">★ ${relRating}</span>
+                                                <img src="${relPoster}" 
+                                                     alt="${rel.title}" 
+                                                     class="related-poster-img ${isRelMissing ? 'poster-live-fetching' : ''}" 
+                                                     loading="lazy" 
+                                                     data-movie-id="${rel.id}" 
+                                                     data-imdb-id="${rel.imdb_id || ''}" 
+                                                     data-movie-title="${encodeURIComponent(rel.title || '')}"
+                                                     onerror="MovieLoader.handlePosterError(this)">
+                                                <div class="related-hover-overlay">
+                                                    <span class="related-view-btn"><i class="fas fa-film"></i> VIEW MOVIE</span>
+                                                </div>
+                                            </div>
+                                            <div class="related-card-info">
+                                                <div class="related-card-meta">
+                                                    <span class="related-year">${relYear}</span>
+                                                    <span class="related-lang">${(rel.original_language || 'EN').toUpperCase()}</span>
+                                                </div>
+                                                <h3 class="related-card-title" title="${rel.title}">${rel.title}</h3>
+                                                <div class="related-card-genres">
+                                                    ${relGenres.slice(0, 2).map(g => `<span class="genre-tag">${g.trim()}</span>`).join('')}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ` : ''}
             `;
             
             document.getElementById('movieDetail').innerHTML = movieDetailHTML;
+            document.title = `${movie.title} - MovieQ`;
+            
+            // Auto-fetch missing poster for main movie live on the spot
+            const detailImg = document.getElementById('detailPosterImg');
+            if (detailImg && (!movie.poster_path || detailImg.src.startsWith('data:') || detailImg.classList.contains('poster-live-fetching'))) {
+                MovieLoader.handlePosterError(detailImg);
+            }
+
+            // Auto-fetch missing posters for related movies carousel
+            document.querySelectorAll('.related-poster-img').forEach(img => {
+                if (!img.src || img.src.startsWith('data:') || img.classList.contains('poster-live-fetching')) {
+                    MovieLoader.handlePosterError(img);
+                }
+            });
+            
+            // Handle "Where to watch" button click
+            const watchBtn = document.getElementById('whereToWatchBtn');
+            if (watchBtn) {
+                watchBtn.addEventListener('click', async () => {
+                    const container = document.getElementById('streamingBadgesContainer');
+                    watchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+                    watchBtn.disabled = true;
+                    
+                    const providers = await MovieStreamingService.getProviders(movie);
+                    
+                    if (providers && providers.length > 0) {
+                        container.innerHTML = `
+                            <p class="streaming-section-intro" style="margin-bottom: 15px;">
+                                Available directly on subscription or digital on-demand. Click any platform to start watching:
+                            </p>
+                            <div class="streaming-badges-grid">
+                                ${providers.map(p => `
+                                    <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="streaming-badge-card ${p.badgeClass}" title="Watch ${movie.title} on ${p.name}">
+                                        <div class="streaming-badge-top">
+                                            <div class="streaming-badge-logo">${p.iconSvg}</div>
+                                            <span class="streaming-badge-type">${p.type}</span>
+                                        </div>
+                                        <div class="streaming-badge-meta">
+                                            <span class="streaming-badge-name">${p.name}</span>
+                                            <span class="streaming-badge-action">
+                                                <span>WATCH</span>
+                                                <i class="fas fa-arrow-up-right-from-square"></i>
+                                            </span>
+                                        </div>
+                                    </a>
+                                `).join('')}
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = `
+                            <p style="margin-top: 15px; color: #888;">No streaming providers found for this title in your region.</p>
+                        `;
+                    }
+                });
+            }
+
+            // Handle "Watch Trailer" button click
+            const trailerBtn = document.getElementById('watchTrailerBtn');
+            const trailerContainer = document.getElementById('trailerContainer');
+            
+            if (trailerBtn && trailerContainer) {
+                trailerBtn.addEventListener('click', async () => {
+                    const originalText = trailerBtn.innerHTML;
+                    trailerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                    trailerBtn.disabled = true;
+                    
+                    const trailer = await MovieStreamingService.getTrailer(movie);
+                    
+                    if (trailer && trailer.key) {
+                        trailerContainer.style.display = 'block';
+                        trailerContainer.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                        
+                        // Scroll to video
+                        trailerContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        trailerBtn.innerHTML = '<i class="fas fa-check"></i> Playing';
+                    } else {
+                        trailerBtn.innerHTML = '<i class="fas fa-times"></i> Trailer Unavailable';
+                        setTimeout(() => {
+                            trailerBtn.innerHTML = originalText;
+                            trailerBtn.disabled = false;
+                        }, 3000);
+                    }
+                });
+            }
+
+            // Wire Pocket Stash detail button and controls
+            const detailStashBtn = document.getElementById('detailStashBtn');
+            if (detailStashBtn) {
+                detailStashBtn.onclick = () => {
+                    if (typeof StashService !== 'undefined') {
+                        StashService.toggleStash(movie);
+                    }
+                };
+            }
+            if (typeof StashUI !== 'undefined') {
+                StashUI.updateDetailButton();
+            }
+
+            // Initialize Related Slider controls and card clicks
+            initRelatedSlider();
+
+            // Wire pocket stash buttons on related cards
+            document.querySelectorAll('#relatedSliderTrack .card-stash-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const relId = btn.dataset.movieId;
+                    const relMovie = MovieLoader.getMovieById(relId);
+                    if (relMovie && typeof StashService !== 'undefined') {
+                        StashService.toggleStash(relMovie);
+                    }
+                });
+            });
 
             const detailSurpriseBtn = document.getElementById('detailSurpriseBtn');
             if (detailSurpriseBtn) {
@@ -383,6 +819,54 @@
                     if (rnd) window.location.href = `movie_detail.html?id=${rnd.id}`;
                 });
             }
+        }
+
+        function initRelatedSlider() {
+            const track = document.getElementById('relatedSliderTrack');
+            const prevBtn = document.getElementById('relatedPrevBtn');
+            const nextBtn = document.getElementById('relatedNextBtn');
+            if (!track) return;
+
+            // Make cards clickable
+            track.querySelectorAll('.related-movie-card').forEach(card => {
+                const movieId = card.getAttribute('data-movie-id');
+                if (movieId) {
+                    card.addEventListener('click', () => {
+                        window.location.href = `movie_detail.html?id=${movieId}`;
+                    });
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            window.location.href = `movie_detail.html?id=${movieId}`;
+                        }
+                    });
+                }
+            });
+
+            if (!prevBtn || !nextBtn) return;
+
+            function updateArrowStates() {
+                const tolerance = 8;
+                const isAtStart = track.scrollLeft <= tolerance;
+                const isAtEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - tolerance;
+                
+                prevBtn.disabled = isAtStart;
+                prevBtn.classList.toggle('disabled', isAtStart);
+                nextBtn.disabled = isAtEnd;
+                nextBtn.classList.toggle('disabled', isAtEnd);
+            }
+
+            prevBtn.addEventListener('click', () => {
+                track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+            });
+
+            track.addEventListener('scroll', updateArrowStates, { passive: true });
+            setTimeout(updateArrowStates, 150);
+            window.addEventListener('resize', updateArrowStates);
         }
         
         function showError(message) {
@@ -410,11 +894,45 @@
             const closeModal = document.getElementById('closeShareModal');
             const modal = document.getElementById('shareModalOverlay');
             const copyBtn = document.getElementById('copyURLBtn');
-            const downloadBtn = document.getElementById('downloadCard');
+            const cardTriggerBtn = document.getElementById('downloadCard');
+
+            // Card Preview Modal Elements
+            const cardPreviewModal = document.getElementById('cardPreviewModalOverlay');
+            const closeCardPreviewModal = document.getElementById('closeCardPreviewModal');
+            const backToShareModal = document.getElementById('backToShareModal');
+            const previewImg = document.getElementById('cardPreviewImg');
+            const previewSpinner = document.getElementById('previewLoadingSpinner');
+            const modalDownloadBtn = document.getElementById('modalDownloadCardBtn');
+            const modalCopyBtn = document.getElementById('modalCopyCardBtn');
+            const previewStatus = document.getElementById('cardPreviewStatus');
+
+            let cachedCanvas = null;
+
+            function showPreviewStatus(message, type = 'success') {
+                if (!previewStatus) return;
+                previewStatus.className = `card-preview-status ${type}`;
+                previewStatus.innerHTML = message;
+            }
+
+            function clearPreviewStatus() {
+                if (!previewStatus) return;
+                previewStatus.className = 'card-preview-status';
+                previewStatus.innerHTML = '';
+            }
             
             closeModal.onclick = () => modal.classList.remove('active');
+            if (closeCardPreviewModal) {
+                closeCardPreviewModal.onclick = () => cardPreviewModal.classList.remove('active');
+            }
+            if (backToShareModal) {
+                backToShareModal.onclick = () => {
+                    cardPreviewModal.classList.remove('active');
+                    modal.classList.add('active');
+                };
+            }
             window.onclick = (e) => {
                 if (e.target === modal) modal.classList.remove('active');
+                if (e.target === cardPreviewModal) cardPreviewModal.classList.remove('active');
             };
 
             copyBtn.onclick = () => {
@@ -460,6 +978,91 @@
                 </div>
             `;
 
+            // Robust converter from URL/Image to local Base64 Data URL
+            async function toDataURL(url) {
+                if (!url) return '';
+                if (url.startsWith('data:image/')) return url;
+
+                // 1. Try direct fetch with cache-busting query param (prevents browser non-CORS cache hit)
+                try {
+                    const cacheBuster = (url.includes('?') ? '&' : '?') + 'cors_cb=' + Date.now();
+                    const directUrl = url.startsWith('http') ? (url + cacheBuster) : url;
+                    const response = await fetch(directUrl, { mode: 'cors' });
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        const dataUri = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.onerror = () => resolve(null);
+                            reader.readAsDataURL(blob);
+                        });
+                        if (dataUri && dataUri.startsWith('data:image/')) return dataUri;
+                    }
+                } catch (e) {
+                    console.info('[MovieIQ] Direct fetch CORS error, trying CORS proxy fallback...');
+                }
+
+                // 2. High-speed CORS proxy (Cloudflare-backed, universal Access-Control-Allow-Origin: *)
+                try {
+                    const cleanUrl = url.split('?')[0];
+                    const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(cleanUrl)}&output=jpg&q=85`;
+                    const response = await fetch(proxyUrl, { mode: 'cors' });
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        const dataUri = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.onerror = () => resolve(null);
+                            reader.readAsDataURL(blob);
+                        });
+                        if (dataUri && dataUri.startsWith('data:image/')) return dataUri;
+                    }
+                } catch (e) {
+                    console.info('[MovieIQ] Proxy fetch error, trying canvas fallback:', e.message);
+                }
+
+                // 3. Fallback: load through proxy in-memory Image and draw to canvas
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => {
+                        try {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.naturalWidth || 500;
+                            canvas.height = img.naturalHeight || 750;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            resolve(canvas.toDataURL('image/jpeg', 0.92));
+                        } catch (err) {
+                            console.warn('[MovieIQ] Canvas export fallback error:', err);
+                            resolve('');
+                        }
+                    };
+                    img.onerror = () => resolve('');
+                    img.src = `https://images.weserv.nl/?url=${encodeURIComponent(url.split('?')[0])}&output=jpg`;
+                });
+            }
+
+            // Pre-load poster as Base64 so it's instantly ready when user views preview
+            toDataURL(posterUrl).then(dataUrl => {
+                if (dataUrl) {
+                    const cardPoster = document.querySelector('#actualCard .card-poster');
+                    if (cardPoster) cardPoster.src = dataUrl;
+                }
+            });
+
+            // Keep share card updated if poster resolves live
+            window.addEventListener('moviePosterResolved', async (e) => {
+                if (e.detail && String(e.detail.movieId) === String(movie.id) && e.detail.posterUrl) {
+                    cachedCanvas = null; // Invalidate cache so preview regenerates with fresh live poster
+                    const cardImg = document.querySelector('#actualCard .card-poster');
+                    if (cardImg) {
+                        const base64Data = await toDataURL(e.detail.posterUrl);
+                        cardImg.src = base64Data || e.detail.posterUrl;
+                    }
+                }
+            });
+
             // Generate QR Code
             try {
                 new QRCode(document.getElementById("cardQR"), {
@@ -474,28 +1077,173 @@
                 console.warn('QR code generation notice:', err);
             }
 
-            // Download handler
-            downloadBtn.onclick = () => {
+            // Generate high-resolution card canvas with guaranteed poster overlay
+            async function generateCardCanvas() {
                 const card = document.getElementById('actualCard');
-                if (!card) return;
-                downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CREATING CARD...';
-                
-                html2canvas(card, {
+                if (!card) return null;
+                const container = document.getElementById('shareCardContainer');
+
+                // 1. Get best active poster URL
+                const detailPoster = document.getElementById('detailPosterImg');
+                const targetPosterUrl = (detailPoster && detailPoster.src && !detailPoster.src.startsWith('data:image/svg'))
+                    ? detailPoster.src
+                    : MovieLoader.getPosterUrl(movie);
+
+                const cardPoster = card.querySelector('.card-poster');
+                let base64Url = '';
+                if (cardPoster && targetPosterUrl) {
+                    if (cardPoster.src && cardPoster.src.startsWith('data:image/')) {
+                        base64Url = cardPoster.src;
+                    } else {
+                        base64Url = await toDataURL(targetPosterUrl);
+                        if (base64Url) cardPoster.src = base64Url;
+                    }
+
+                    if (cardPoster.decode) {
+                        await cardPoster.decode().catch(() => {});
+                    } else if (!cardPoster.complete) {
+                        await new Promise(r => {
+                            cardPoster.onload = r;
+                            cardPoster.onerror = r;
+                            setTimeout(r, 600);
+                        });
+                    }
+                }
+
+                // 2. Measure geometry
+                if (container) container.style.opacity = '1';
+                await new Promise(r => setTimeout(r, 60));
+
+                const cardRect = card.getBoundingClientRect();
+                const posterRect = cardPoster ? cardPoster.getBoundingClientRect() : null;
+
+                // 3. Render card using html2canvas
+                const scale = 2;
+                const canvas = await html2canvas(card, {
                     useCORS: true,
-                    scale: 2,
-                    backgroundColor: '#F0EAD6'
-                }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = `MOVIEQ_${movie.title.replace(/\s+/g, '_')}_CARD.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                    downloadBtn.innerHTML = '<i class="fas fa-check"></i> DOWNLOADED!';
-                    setTimeout(() => downloadBtn.innerHTML = '<i class="fas fa-file-image"></i> Movie Card', 2500);
-                }).catch(() => {
-                    downloadBtn.innerHTML = '<i class="fas fa-times"></i> FAILED';
-                    setTimeout(() => downloadBtn.innerHTML = '<i class="fas fa-file-image"></i> Movie Card', 2000);
+                    allowTaint: false,
+                    scale: scale,
+                    backgroundColor: '#F0EAD6',
+                    logging: false
                 });
-            };
+
+                if (container) container.style.opacity = '0';
+                return canvas;
+            }
+
+            // Open Preview Modal Handler
+            async function openCardPreview() {
+                modal.classList.remove('active');
+                cardPreviewModal.classList.add('active');
+                clearPreviewStatus();
+
+                if (cachedCanvas) {
+                    previewImg.src = cachedCanvas.toDataURL('image/png');
+                    previewImg.style.display = 'block';
+                    previewSpinner.style.display = 'none';
+                    if (modalDownloadBtn) modalDownloadBtn.disabled = false;
+                    if (modalCopyBtn) modalCopyBtn.disabled = false;
+                    return;
+                }
+
+                if (previewImg) previewImg.style.display = 'none';
+                if (previewSpinner) {
+                    previewSpinner.style.display = 'flex';
+                    previewSpinner.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>GENERATING PREVIEW...</span>';
+                }
+                if (modalDownloadBtn) modalDownloadBtn.disabled = true;
+                if (modalCopyBtn) modalCopyBtn.disabled = true;
+
+                try {
+                    cachedCanvas = await generateCardCanvas();
+                    if (cachedCanvas && previewImg) {
+                        previewImg.src = cachedCanvas.toDataURL('image/png');
+                        previewImg.style.display = 'block';
+                        if (previewSpinner) previewSpinner.style.display = 'none';
+                        if (modalDownloadBtn) modalDownloadBtn.disabled = false;
+                        if (modalCopyBtn) modalCopyBtn.disabled = false;
+                    } else {
+                        throw new Error('Canvas generation returned null');
+                    }
+                } catch (err) {
+                    console.error('[MovieIQ] Preview generation failed:', err);
+                    if (previewSpinner) {
+                        previewSpinner.innerHTML = '<i class="fas fa-times" style="color:var(--crimson); font-size:2rem;"></i><span style="color:var(--crimson);">Failed to generate preview.</span>';
+                    }
+                    showPreviewStatus('Failed to generate card preview. Please try again.', 'error');
+                }
+            }
+
+            // Hook up "Movie Card" button in share modal to open preview
+            if (cardTriggerBtn) {
+                cardTriggerBtn.onclick = openCardPreview;
+            }
+
+            // Hook up Download Card button
+            if (modalDownloadBtn) {
+                modalDownloadBtn.onclick = async () => {
+                    if (!cachedCanvas) {
+                        cachedCanvas = await generateCardCanvas();
+                    }
+                    if (!cachedCanvas) return;
+
+                    const origHtml = modalDownloadBtn.innerHTML;
+                    modalDownloadBtn.innerHTML = '<i class="fas fa-check"></i> DOWNLOADED!';
+                    modalDownloadBtn.disabled = true;
+
+                    const link = document.createElement('a');
+                    const safeTitle = (movie.title || 'MOVIE').replace(/[^a-zA-Z0-9]/g, '_');
+                    link.download = `MOVIEQ_${safeTitle}_CARD.png`;
+                    link.href = cachedCanvas.toDataURL('image/png');
+                    link.click();
+
+                    showPreviewStatus('<i class="fas fa-check-circle"></i> Card downloaded as PNG image!', 'success');
+
+                    setTimeout(() => {
+                        modalDownloadBtn.innerHTML = origHtml;
+                        modalDownloadBtn.disabled = false;
+                    }, 2000);
+                };
+            }
+
+            // Hook up Copy Card button
+            if (modalCopyBtn) {
+                modalCopyBtn.onclick = async () => {
+                    if (!cachedCanvas) {
+                        cachedCanvas = await generateCardCanvas();
+                    }
+                    if (!cachedCanvas) return;
+
+                    const origHtml = modalCopyBtn.innerHTML;
+                    modalCopyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> COPYING...';
+                    modalCopyBtn.disabled = true;
+
+                    try {
+                        const blob = await new Promise(resolve => cachedCanvas.toBlob(resolve, 'image/png'));
+                        if (navigator.clipboard && window.ClipboardItem && blob) {
+                            await navigator.clipboard.write([
+                                new ClipboardItem({ 'image/png': blob })
+                            ]);
+                            modalCopyBtn.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+                            showPreviewStatus('<i class="fas fa-check-circle"></i> Card copied! You can now paste (Ctrl+V) anywhere.', 'success');
+                        } else {
+                            // Fallback: copy as data URL
+                            await navigator.clipboard.writeText(cachedCanvas.toDataURL('image/png'));
+                            modalCopyBtn.innerHTML = '<i class="fas fa-check"></i> COPIED!';
+                            showPreviewStatus('<i class="fas fa-info-circle"></i> Card image data copied to clipboard.', 'success');
+                        }
+                    } catch (err) {
+                        console.warn('[MovieIQ] Copy to clipboard notice:', err);
+                        modalCopyBtn.innerHTML = '<i class="fas fa-times"></i> FAILED';
+                        showPreviewStatus('<i class="fas fa-exclamation-circle"></i> Direct image copy not supported by browser. Use Download instead.', 'error');
+                    }
+
+                    setTimeout(() => {
+                        modalCopyBtn.innerHTML = origHtml;
+                        modalCopyBtn.disabled = false;
+                    }, 2500);
+                };
+            }
         }
     </script>
 </body>

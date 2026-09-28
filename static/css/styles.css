@@ -794,10 +794,19 @@ body::after {
 }
 
 .ai-response-bubble::before {
-    content: '🍿 AI MOVIE MATCH: ';
+    content: '[AI CINEMA MATCH] ';
     font-family: var(--font-mono);
     font-weight: 700;
     color: var(--crimson);
+}
+
+.fluent-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    fill: currentColor;
 }
 
 .search-input-wrapper {
@@ -854,6 +863,171 @@ body::after {
 .btn-search:hover {
     background: var(--crimson);
     color: var(--paper);
+}
+
+/* AI Extracted Insight Tags */
+.ai-extracted-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+}
+
+.ai-insight-chip {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: var(--paper-dark);
+    color: var(--charcoal);
+    border: 1.5px solid var(--charcoal);
+    padding: 0.25rem 0.6rem;
+    box-shadow: 2px 2px 0px var(--charcoal);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.ai-insight-chip i {
+    color: var(--crimson);
+    font-size: 0.75rem;
+}
+
+/* Clear Button */
+.btn-search-clear {
+    background: transparent;
+    border: none;
+    color: #777267;
+    font-size: 1.15rem;
+    padding: 0 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.1s ease;
+}
+
+.btn-search-clear:hover {
+    color: var(--crimson);
+}
+
+/* Prompt Starters */
+.ai-prompt-starters {
+    margin-top: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.starters-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #555047;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.starters-label i {
+    color: var(--crimson);
+}
+
+.starters-scroll {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.ai-starter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--paper);
+    color: var(--charcoal);
+    border: 1.5px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    padding: 0.3rem 0.65rem;
+    cursor: pointer;
+    transition: transform 0.08s steps(2), box-shadow 0.08s steps(2), background 0.08s ease;
+    white-space: nowrap;
+}
+
+.ai-starter-chip:hover {
+    background: var(--charcoal);
+    color: #FAF6EA;
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--crimson);
+}
+
+.ai-starter-chip:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px var(--charcoal);
+}
+
+/* AI Starter Chip Icons - Distinct intuitive colors */
+.ai-starter-chip .fluent-icon {
+    width: 15px;
+    height: 15px;
+    display: inline-block;
+    flex-shrink: 0;
+    vertical-align: -2px;
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ai-starter-chip:hover .fluent-icon {
+    transform: scale(1.22);
+}
+
+/* Semantic icon color mapping to make each concept immediately recognizable */
+.ai-starter-chip .icon-twist {
+    color: #d97706; /* Electric Amber Gold - Sudden shock / lightning plot twist */
+}
+
+.ai-starter-chip .icon-cozy {
+    color: #9a3412; /* Warm Roasted Espresso - Steaming coffee mug / rainy day comfort */
+}
+
+.ai-starter-chip .icon-heist {
+    color: #ea580c; /* Blazing Action Orange - High octane fire / adrenaline heist */
+}
+
+.ai-starter-chip .icon-noir {
+    color: #4f46e5; /* Sleuth Mystery Indigo - Detective eye / noir shadows */
+}
+
+.ai-starter-chip .icon-scifi {
+    color: #2563eb; /* Cyber Sci-Fi Cobalt - Cinema clapperboard / big-budget vision */
+}
+
+.ai-starter-chip .icon-gem {
+    color: #059669; /* Emerald Jewel Green - Rare faceted diamond / underrated gem */
+}
+
+.ai-starter-chip .icon-ghibli {
+    color: #db2777; /* Whimsical Fairy Rose - Magic wand & stardust / anime fantasy */
+}
+
+.ai-starter-chip .icon-thriller {
+    color: #0891b2; /* Pacific Ocean Teal - East Asian world cinema / international thriller */
+}
+
+/* Luminous neon icon accents on charcoal hover */
+.ai-starter-chip:hover .icon-twist { color: #facc15; }
+.ai-starter-chip:hover .icon-cozy { color: #fb923c; }
+.ai-starter-chip:hover .icon-heist { color: #ff6b4a; }
+.ai-starter-chip:hover .icon-noir { color: #a5b4fc; }
+.ai-starter-chip:hover .icon-scifi { color: #60a5fa; }
+.ai-starter-chip:hover .icon-gem { color: #34d399; }
+.ai-starter-chip:hover .icon-ghibli { color: #f472b6; }
+.ai-starter-chip:hover .icon-thriller { color: #38bdf8; }
+
+.starters-label .fluent-icon {
+    color: var(--crimson);
 }
 
 /* ==========================================================================
@@ -1576,6 +1750,30 @@ body::after {
     transform: scale(1.04);
 }
 
+/* Live Poster Fetching Animations */
+.movie-poster.poster-live-fetching,
+.movie-poster-large.poster-live-fetching,
+.related-poster-img.poster-live-fetching {
+    filter: brightness(0.7) contrast(115%);
+    animation: poster-live-pulse 1.2s steps(4) infinite;
+}
+
+@keyframes poster-live-pulse {
+    0%, 100% { opacity: 0.65; }
+    50% { opacity: 0.95; }
+}
+
+.movie-poster.poster-live-loaded,
+.movie-poster-large.poster-live-loaded,
+.related-poster-img.poster-live-loaded {
+    animation: poster-live-fade-in 0.25s steps(3) forwards;
+}
+
+@keyframes poster-live-fade-in {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+}
+
 /* Halftone scan pattern over poster on hover */
 .movie-poster-wrap::after {
     content: '';
@@ -2068,6 +2266,541 @@ body::after {
 }
 
 /* ==========================================================================
+   STREAMING AVAILABILITY BADGES (WHERE TO STREAM)
+   ========================================================================== */
+/* Catalog Card Streaming Row */
+.card-streaming-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.65rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed rgba(26, 26, 26, 0.3);
+}
+
+.card-streaming-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    letter-spacing: 0.5px;
+}
+
+.card-streaming-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.stream-card-pill {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 0.15rem 0.45rem;
+    border: 1.5px solid var(--charcoal);
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.1;
+    box-shadow: 1px 1px 0px var(--charcoal);
+}
+
+.stream-card-pill.pill-netflix {
+    background: #E50914;
+    color: #FFFFFF;
+}
+
+.stream-card-pill.pill-prime {
+    background: #00A8E1;
+    color: #0F172A;
+}
+
+.stream-card-pill.pill-disney {
+    background: #113CCF;
+    color: #FFFFFF;
+}
+
+.stream-card-pill.pill-apple {
+    background: #1A1A1A;
+    color: #FFFFFF;
+}
+
+.stream-card-pill.pill-max {
+    background: #002BE7;
+    color: #FFFFFF;
+}
+
+/* Movie Detail: Where to Stream Section */
+.streaming-section {
+    background: var(--surface-card);
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.streaming-section-intro {
+    font-family: var(--font-typewriter);
+    font-size: 1.05rem;
+    color: var(--charcoal-deep);
+    margin: 0 0 1.25rem 0;
+    line-height: 1.6;
+}
+
+.streaming-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.streaming-badge-card {
+    background: var(--paper-light);
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow);
+    padding: 1.1rem;
+    text-decoration: none;
+    color: var(--charcoal);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 110px;
+    transition: transform 0.1s steps(2), box-shadow 0.1s steps(2), border-color 0.15s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.streaming-badge-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: var(--charcoal);
+    transition: background 0.15s ease;
+}
+
+.streaming-badge-card.provider-netflix::before { background: #E50914; }
+.streaming-badge-card.provider-prime::before { background: #00A8E1; }
+.streaming-badge-card.provider-disney::before { background: #113CCF; }
+.streaming-badge-card.provider-apple::before { background: #1A1A1A; }
+.streaming-badge-card.provider-max::before { background: #002BE7; }
+
+.streaming-badge-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0px var(--charcoal);
+    background: #FFFFFF;
+}
+
+.streaming-badge-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.streaming-badge-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.streaming-badge-type {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--paper-dark);
+    border: 1px solid var(--charcoal);
+    padding: 2px 6px;
+    color: var(--charcoal);
+}
+
+.streaming-badge-meta {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.streaming-badge-name {
+    font-family: var(--font-headline);
+    font-size: 1.35rem;
+    line-height: 1;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+}
+
+.streaming-badge-action {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--crimson);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    text-transform: uppercase;
+    transition: transform 0.15s ease;
+}
+
+.streaming-badge-card:hover .streaming-badge-action {
+    transform: translateX(2px);
+}
+
+/* ==========================================================================
+   RELATED MOVIES CAROUSEL (REEL COMPANIONS // MORE MOVIES LIKE THIS)
+   ========================================================================== */
+.related-movies-section {
+    background: var(--paper);
+    border-top: 4px solid var(--charcoal);
+    border-bottom: 4px solid var(--charcoal);
+    padding: 3.5rem 0 4.5rem;
+    margin-top: 3.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.related-title-block {
+    position: relative;
+    max-width: 820px;
+}
+
+.related-tag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--crimson);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.related-title {
+    font-family: var(--font-headline);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.05;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    margin: 0 0 0.6rem 0;
+}
+
+.related-subtitle {
+    font-family: var(--font-typewriter);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--charcoal-deep);
+    margin: 0;
+}
+
+.related-subtitle em {
+    font-style: normal;
+    font-weight: 700;
+    color: var(--crimson);
+}
+
+.related-slider-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.slider-nav-btn {
+    width: 50px;
+    height: 50px;
+    background: var(--charcoal);
+    color: var(--paper);
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow-sm);
+    font-size: 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.08s steps(2);
+}
+
+.slider-nav-btn:hover:not(:disabled) {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-3px, -3px);
+    box-shadow: 5px 5px 0px var(--charcoal);
+}
+
+.slider-nav-btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px var(--charcoal);
+}
+
+.slider-nav-btn:disabled,
+.slider-nav-btn.disabled {
+    opacity: 0.28;
+    cursor: not-allowed;
+    pointer-events: none;
+    background: var(--charcoal-light);
+    box-shadow: none;
+}
+
+.related-slider-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    padding: 0.5rem 0 1rem;
+}
+
+.related-slider-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 0.75rem;
+}
+
+.related-slider-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* EXACTLY 4 cards horizontally on desktop */
+.related-movie-card {
+    flex: 0 0 calc((100% - 3 * 1.5rem) / 4);
+    max-width: calc((100% - 3 * 1.5rem) / 4);
+    box-sizing: border-box;
+    scroll-snap-align: start;
+    background: var(--surface-card);
+    border: 3px solid var(--charcoal);
+    box-shadow: var(--brutal-shadow);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    user-select: none;
+}
+
+.related-movie-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 6px 10px 0px var(--charcoal);
+}
+
+.related-poster-wrapper {
+    position: relative;
+    width: 100%;
+    height: 310px;
+    background: #000;
+    overflow: hidden;
+    border-bottom: 3px solid var(--charcoal);
+}
+
+.related-poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.related-movie-card:hover .related-poster-img {
+    transform: scale(1.05);
+}
+
+.related-card-num {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--charcoal);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border: 1px solid var(--charcoal);
+    z-index: 2;
+}
+
+.related-rating-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--crimson);
+    color: var(--paper);
+    font-family: var(--font-headline);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    z-index: 2;
+}
+
+.related-hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(26, 26, 26, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 3;
+}
+
+.related-movie-card:hover .related-hover-overlay {
+    opacity: 1;
+}
+
+.related-view-btn {
+    font-family: var(--font-headline);
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--paper);
+    color: var(--charcoal);
+    border: 2px solid var(--charcoal);
+    box-shadow: 3px 3px 0px var(--charcoal);
+    padding: 0.45rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.related-card-info {
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.related-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+}
+
+.related-year {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--crimson);
+}
+
+.related-lang {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    background: var(--paper-dark);
+    border: 1px solid var(--charcoal);
+    padding: 1px 5px;
+}
+
+.related-card-title {
+    font-family: var(--font-headline);
+    font-size: 1.35rem;
+    line-height: 1.15;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    margin: 0 0 0.5rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.related-card-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 0.65rem;
+}
+
+.related-card-stream {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    border-top: 1px dashed rgba(26, 26, 26, 0.35);
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.related-card-stream .stream-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--charcoal);
+}
+
+.related-card-stream .stream-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+/* Responsive Rules for Related Carousel */
+@media (max-width: 1199px) {
+    .related-movie-card {
+        flex: 0 0 calc((100% - 2 * 1.25rem) / 3);
+        max-width: calc((100% - 2 * 1.25rem) / 3);
+    }
+    .related-slider-track {
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 868px) {
+    .related-movie-card {
+        flex: 0 0 calc((100% - 1rem) / 2);
+        max-width: calc((100% - 1rem) / 2);
+    }
+    .related-slider-track {
+        gap: 1rem;
+    }
+    .related-poster-wrapper {
+        height: 270px;
+    }
+}
+
+@media (max-width: 540px) {
+    .related-movies-section {
+        padding: 2.5rem 0 3.5rem;
+    }
+    .related-section-header {
+        align-items: flex-start;
+    }
+    .related-movie-card {
+        flex: 0 0 84%;
+        max-width: 84%;
+    }
+    .related-poster-wrapper {
+        height: 290px;
+    }
+}
+
+/* ==========================================================================
    SHARE MODAL & THEMED TICKET CARD
    ========================================================================== */
 .modal-overlay {
@@ -2189,6 +2922,679 @@ body::after {
 
 .copy-btn:hover {
     background: var(--crimson);
+}
+
+/* ==========================================================================
+   WATCH LATER // ZERO-LOGIN OFFLINE VAULT & QUEUE
+   ========================================================================== */
+.nav-stash-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    position: relative;
+    white-space: nowrap;
+}
+
+.stash-badge {
+    background: var(--crimson);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1;
+    padding: 2px 6px;
+    border: 1.5px solid var(--charcoal);
+    box-shadow: 1px 1px 0px var(--charcoal);
+    border-radius: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Card Bookmark Button (Catalog & Carousels) */
+.card-stash-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+    width: 34px;
+    height: 34px;
+    background: var(--paper);
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    color: var(--charcoal);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.08s steps(2);
+    padding: 0;
+}
+
+.card-stash-btn:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--charcoal);
+}
+
+.card-stash-btn.stashed {
+    background: #FFE600;
+    color: var(--charcoal);
+    border-color: var(--charcoal);
+}
+
+.card-stash-btn.stashed:hover {
+    background: var(--crimson);
+    color: var(--paper);
+}
+
+/* Watch Later Modal */
+.watch-later-modal,
+.pocket-stash-modal {
+    background: var(--paper);
+    border: 4px solid var(--charcoal);
+    box-shadow: 10px 10px 0px var(--charcoal);
+    max-width: 680px;
+    width: 94vw;
+    max-height: 86vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Header */
+.watch-later-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #FAF6EA;
+    border-bottom: 3px solid var(--charcoal);
+    padding: 1.1rem 1.5rem;
+    position: relative;
+}
+
+.watch-later-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.watch-later-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    background: var(--charcoal);
+    color: #FFE600;
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.watch-later-title {
+    font-family: var(--font-headline);
+    font-size: 1.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    margin: 0;
+    line-height: 1;
+}
+
+.watch-later-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+    background: var(--crimson);
+    color: var(--paper);
+    padding: 1px 6px;
+    letter-spacing: 1px;
+    border: 1.5px solid var(--charcoal);
+    box-shadow: 1px 1px 0px var(--charcoal);
+    text-transform: uppercase;
+}
+
+.watch-later-header-sub {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--crimson);
+    letter-spacing: 1px;
+    margin-top: 0.2rem;
+    display: block;
+}
+
+.watch-later-close-btn {
+    width: 38px;
+    height: 38px;
+    background: var(--charcoal);
+    color: var(--paper);
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.08s steps(2);
+}
+
+.watch-later-close-btn:hover {
+    background: var(--crimson);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--charcoal);
+}
+
+/* Toolbar */
+.watch-later-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--paper-dark);
+    border-bottom: 3px solid var(--charcoal);
+    flex-wrap: wrap;
+}
+
+.watch-later-tabs {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.stash-tab-btn {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: var(--paper);
+    color: var(--charcoal);
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    padding: 0.35rem 0.65rem;
+    cursor: pointer;
+    transition: all 0.08s steps(2);
+}
+
+.stash-tab-btn:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--charcoal);
+}
+
+.stash-tab-btn.active {
+    background: var(--charcoal);
+    color: var(--paper);
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+.stash-export-btn {
+    font-family: var(--font-headline);
+    font-size: 0.95rem;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    background: #FFE600;
+    color: var(--charcoal);
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    padding: 0.38rem 0.85rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.08s steps(2);
+    margin-left: auto;
+}
+
+.stash-export-btn:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--charcoal);
+}
+
+/* Modal Body */
+.watch-later-body,
+.pocket-stash-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: calc(86vh - 145px);
+}
+
+/* Empty State */
+.stash-empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--charcoal-deep);
+}
+
+.empty-icon-box {
+    width: 60px;
+    height: 60px;
+    background: var(--paper-dark);
+    border: 3px solid var(--charcoal);
+    box-shadow: 3px 3px 0px var(--charcoal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--crimson);
+    margin-bottom: 1.2rem;
+}
+
+.stash-empty-state h4 {
+    font-family: var(--font-headline);
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    color: var(--charcoal);
+}
+
+.stash-empty-state p {
+    font-family: var(--font-typewriter);
+    font-size: 0.95rem;
+    color: var(--charcoal-muted);
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+/* Watch Later Item Card */
+.watch-later-card,
+.stash-item-card {
+    display: flex;
+    gap: 1.15rem;
+    background: #FFFFFF;
+    border: 3px solid var(--charcoal);
+    box-shadow: 4px 4px 0px var(--charcoal);
+    padding: 1rem;
+    position: relative;
+    transition: all 0.1s ease;
+}
+
+.watch-later-card.is-want,
+.stash-item-card:not(.is-watched) {
+    border-left: 6px solid #FFE600;
+}
+
+.watch-later-card.is-watched,
+.stash-item-card.is-watched {
+    border-left: 6px solid #166534;
+    background: #FAF8F2;
+}
+
+.watch-later-poster-wrap,
+.stash-poster-wrap {
+    width: 90px;
+    min-width: 90px;
+    height: 130px;
+    background: #000;
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    overflow: hidden;
+    flex-shrink: 0;
+    display: block;
+    position: relative;
+}
+
+.watch-later-poster-img,
+.stash-poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.watch-later-rating-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: var(--charcoal);
+    color: #FFE600;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 1px 4px;
+    border: 1px solid var(--charcoal);
+    line-height: 1.1;
+}
+
+.watch-later-card-body,
+.stash-item-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.watch-later-card-top,
+.stash-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.watch-later-title-group,
+.stash-title-group {
+    min-width: 0;
+}
+
+.watch-later-card-title,
+.stash-item-title {
+    font-family: var(--font-headline);
+    font-size: 1.45rem;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 0.45rem;
+}
+
+.watch-later-card-title:hover,
+.stash-item-title:hover {
+    color: var(--crimson);
+}
+
+.watch-later-chips,
+.stash-item-meta {
+    display: flex;
+    gap: 0.35rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.wl-chip {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border: 1px solid var(--charcoal);
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.wl-chip-year {
+    background: var(--paper-dark);
+    color: var(--charcoal);
+}
+
+.wl-chip-genre {
+    background: var(--paper);
+    color: var(--charcoal-deep);
+}
+
+/* Cross button to remove from Watch Later */
+.watch-later-remove-btn,
+.stash-remove-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    background: #FFF0F0;
+    color: var(--crimson);
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.08s steps(2);
+    padding: 0;
+}
+
+.watch-later-remove-btn:hover,
+.stash-remove-btn:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--charcoal);
+}
+
+/* Action row */
+.watch-later-action-row,
+.stash-item-controls {
+    margin-top: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.stash-status-toggle {
+    display: inline-flex;
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+}
+
+.status-toggle-btn {
+    background: var(--paper);
+    color: var(--charcoal);
+    border: none;
+    border-right: 2px solid var(--charcoal);
+    padding: 0.35rem 0.65rem;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.08s steps(2);
+}
+
+.status-toggle-btn:last-child {
+    border-right: none;
+}
+
+.status-toggle-btn.active {
+    background: var(--charcoal);
+    color: var(--paper);
+}
+
+.status-toggle-btn:hover:not(.active) {
+    background: #EAE6DA;
+}
+
+.watch-later-detail-btn {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--charcoal);
+    background: var(--paper-dark);
+    border: 1.5px solid var(--charcoal);
+    box-shadow: 1.5px 1.5px 0px var(--charcoal);
+    padding: 0.35rem 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.08s steps(2);
+}
+
+.watch-later-detail-btn:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 2.5px 2.5px 0px var(--charcoal);
+}
+
+/* Review Bar: Rubber Stamp + Stars */
+.watch-later-review-wrap,
+.stash-review-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: #FAF6EA;
+    border: 2px dashed var(--charcoal);
+    padding: 0.4rem 0.75rem;
+}
+
+.rubber-stamp-selector {
+    display: inline-flex;
+    gap: 0.5rem;
+}
+
+.stamp-btn {
+    font-family: 'Special Elite', var(--font-headline), monospace;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.22rem 0.6rem;
+    border: 2px dashed var(--charcoal);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stamp-btn.stamp-rec {
+    color: #166534;
+    border-color: #166534;
+    background: rgba(22, 101, 52, 0.06);
+}
+
+.stamp-btn.stamp-rec.stamped {
+    background: #166534;
+    color: #FFFFFF;
+    border-style: solid;
+    transform: rotate(-3deg);
+    box-shadow: 2px 2px 0px var(--charcoal);
+}
+
+.stamp-btn.stamp-skip {
+    color: var(--crimson);
+    border-color: var(--crimson);
+    background: rgba(220, 20, 60, 0.06);
+}
+
+.stamp-btn.stamp-skip.stamped {
+    background: var(--crimson);
+    color: #FFFFFF;
+    border-style: solid;
+    transform: rotate(3deg);
+    box-shadow: 2px 2px 0px var(--charcoal);
+}
+
+.watch-later-star-rating,
+.stash-star-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 1.15rem;
+    color: #AAA69A;
+    cursor: pointer;
+}
+
+.watch-later-star-rating i.active,
+.stash-star-rating i.active {
+    color: #FFB800;
+    text-shadow: 1px 1px 0px var(--charcoal);
+}
+
+.watch-later-star-rating i:hover,
+.stash-star-rating i:hover {
+    color: #FFB800;
+}
+
+/* Detail Page Watch Later Integration */
+#detailStashBtn.is-stashed {
+    background: #FFE600;
+    color: var(--charcoal);
+    border-color: var(--charcoal);
+}
+
+#detailStashBtn.is-stashed:hover {
+    background: var(--crimson);
+    color: var(--paper);
+}
+
+.detail-stash-panel {
+    background: var(--paper);
+    border: 3px solid var(--charcoal);
+    box-shadow: 6px 6px 0px var(--charcoal);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.5rem;
+    position: relative;
+}
+
+.detail-stash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px dashed var(--charcoal);
+    padding-bottom: 0.65rem;
+    margin-bottom: 1rem;
+}
+
+.detail-stash-badge {
+    font-family: var(--font-headline);
+    font-size: 1.2rem;
+    color: var(--charcoal);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.detail-stash-remove-btn {
+    background: #FFEBEB;
+    color: var(--crimson);
+    border: 2px solid var(--charcoal);
+    box-shadow: 2px 2px 0px var(--charcoal);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.3rem 0.65rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.08s steps(2);
+}
+
+.detail-stash-remove-btn:hover {
+    background: var(--crimson);
+    color: var(--paper);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0px var(--charcoal);
+}
+
+.detail-review-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgba(26,26,26,0.3);
 }
 
 /* ==========================================================================
@@ -2354,19 +3760,38 @@ body::after {
     }
 }
 
-/* 2. Tablets & Small Laptops (769px - 1024px) */
-@media (max-width: 1024px) {
+/* Standard Laptops & Desktops (981px - 1280px) */
+@media (max-width: 1280px) and (min-width: 981px) {
     .navbar {
-        gap: 1.25rem;
-    }
-    .nav-links {
         gap: 0.75rem;
     }
-    .nav-links a {
-        font-size: 1rem;
-        padding: 0.3rem 0.55rem;
-        letter-spacing: 1px;
+    .logo a {
+        font-size: 1.75rem;
+        padding: 0.1rem 0.4rem;
+        white-space: nowrap;
     }
+    .nav-links {
+        gap: 0.45rem;
+    }
+    .nav-links a {
+        font-size: 0.88rem;
+        padding: 0.28rem 0.45rem;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+    }
+    .nav-links a i {
+        font-size: 0.85rem;
+        margin-right: 0.25rem;
+    }
+    .btn-surprise {
+        padding: 0.38rem 0.75rem;
+        font-size: 0.92rem;
+        white-space: nowrap;
+    }
+}
+
+/* 2. Tablets & Small Laptops (max-width: 1024px) */
+@media (max-width: 1024px) {
     .hero-grid {
         grid-template-columns: 1fr;
         gap: 3rem;
@@ -2407,8 +3832,8 @@ body::after {
     }
 }
 
-/* 3. Phablets & Small Tablets (576px - 768px) */
-@media (max-width: 768px) {
+/* 3. Tablets, Phablets & Mobile Screens (<= 980px) */
+@media (max-width: 980px) {
     /* Container Padding */
     .container {
         padding: 0 1.25rem;
@@ -2667,6 +4092,83 @@ body::after {
         display: none;
     }
 
+    /* Watch Later Modal Responsive */
+    .watch-later-modal,
+    .pocket-stash-modal {
+        max-height: 92vh;
+        width: 95vw;
+    }
+    .watch-later-header {
+        padding: 0.85rem 1rem;
+    }
+    .watch-later-title {
+        font-size: 1.35rem;
+    }
+    .watch-later-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 1.1rem;
+    }
+    .watch-later-toolbar {
+        padding: 0.65rem 1rem;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+    .watch-later-tabs {
+        width: 100%;
+        gap: 0.35rem;
+    }
+    .stash-tab-btn {
+        flex: 1;
+        text-align: center;
+        padding: 0.35rem 0.35rem;
+        font-size: 0.7rem;
+        white-space: nowrap;
+    }
+    .stash-export-btn {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        font-size: 0.88rem;
+    }
+    .watch-later-body,
+    .pocket-stash-body {
+        padding: 0.85rem 1rem;
+        gap: 0.75rem;
+    }
+    .watch-later-card,
+    .stash-item-card {
+        padding: 0.75rem;
+        gap: 0.75rem;
+    }
+    .watch-later-poster-wrap,
+    .stash-poster-wrap {
+        width: 70px;
+        min-width: 70px;
+        height: 105px;
+    }
+    .watch-later-card-title,
+    .stash-item-title {
+        font-size: 1.15rem;
+    }
+    .watch-later-action-row,
+    .stash-item-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    .watch-later-detail-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .watch-later-review-wrap,
+    .stash-review-bar {
+        width: 100%;
+        justify-content: space-between;
+    }
+
     /* Footer */
     .footer {
         padding: 3rem 0 1.5rem;
@@ -2916,6 +4418,10 @@ body::after {
         padding: 0 0.9rem;
         font-size: 1rem;
         letter-spacing: 1px;
+    }
+    .ai-starter-chip {
+        font-size: 0.68rem;
+        padding: 0.22rem 0.45rem;
     }
 
     /* Mood Grid (2 Columns on mobile) */

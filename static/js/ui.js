@@ -64,11 +64,6 @@ const UIManager = (function() {
 
     // Setup event listeners
     function setupEventListeners() {
-        // Mobile menu
-        if (elements.mobileMenuBtn) {
-            elements.mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-        }
-
         // Surprise buttons
         if (elements.surpriseBtn) {
             elements.surpriseBtn.addEventListener('click', handleSurpriseMe);
@@ -175,16 +170,35 @@ function initializeFilters() {
     // Toggle mobile menu
     function toggleMobileMenu() {
         const navLinks = document.querySelector('.nav-links');
-        navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        if (navLinks) {
+            navLinks.classList.toggle('active');
+        }
     }
 
     // Handle search
-    function handleSearch() {
-        const searchText = elements.searchInput.value.trim();
+    async function handleSearch() {
+        const searchText = elements.searchInput ? elements.searchInput.value.trim() : '';
         
-        // Check if it's a "Vibe" search
+        if (!searchText) {
+            if (typeof AIMovieAssistant !== 'undefined' && typeof AIMovieAssistant.resetSearch === 'function') {
+                AIMovieAssistant.resetSearch();
+            } else {
+                updateFilters({ searchText: '' });
+            }
+            return;
+        }
+
+        // Delegate to advanced AIMovieAssistant
+        if (typeof AIMovieAssistant !== 'undefined' && typeof AIMovieAssistant.searchWithAI === 'function') {
+            await AIMovieAssistant.searchWithAI(searchText);
+            updateMoviesDisplay();
+            const totalPages = MovieLoader.getTotalPages ? MovieLoader.getTotalPages() : 1;
+            updatePagination(totalPages);
+            return;
+        }
+        
+        // Fallback if assistant not loaded
         const interpreted = interpretVibe(searchText);
-        
         if (interpreted.isVibe) {
             showAssistantMessage(interpreted.response);
             updateFilters(interpreted.filters);
@@ -762,11 +776,30 @@ function initializeFilters() {
         
         moviesGrid.innerHTML = movies.map(movie => createMovieCard(movie)).join('');
         
+        // Auto-fetch missing posters live on the spot
+        moviesGrid.querySelectorAll('.movie-poster').forEach(img => {
+            if (!img.src || img.src.startsWith('data:') || img.classList.contains('poster-live-fetching')) {
+                MovieLoader.handlePosterError(img);
+            }
+        });
+
         // Add click handlers to movie cards
         document.querySelectorAll('.movie-card').forEach(card => {
             card.addEventListener('click', () => {
                 const movieId = card.dataset.movieId;
                 viewMovieDetails(movieId);
+            });
+        });
+
+        // Wire up pocket stash buttons on movie cards
+        moviesGrid.querySelectorAll('.card-stash-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const movieId = btn.dataset.movieId;
+                const movie = MovieLoader.getMovieById(movieId);
+                if (movie && typeof StashService !== 'undefined') {
+                    StashService.toggleStash(movie);
+                }
             });
         });
     }
@@ -777,13 +810,28 @@ function initializeFilters() {
         const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : 'N/A';
         const rating = typeof movie.vote_average === 'number' ? movie.vote_average.toFixed(1) : parseFloat(movie.vote_average || 0).toFixed(1);
         const catalogNum = String(movie.id).replace(/\D/g, '').slice(0, 4) || '8012';
+        const isMissingPoster = !movie.poster_path || posterUrl === MovieLoader.CONFIG.defaultPoster || posterUrl.startsWith('data:');
+        const isStashed = (typeof StashService !== 'undefined') && StashService.isStashed(movie.id);
         
         return `
             <div class="movie-card" data-movie-id="${movie.id}">
                 <div class="movie-poster-wrap">
                     <span class="movie-catalog-num">★ MOVIE</span>
+                    <button class="card-stash-btn ${isStashed ? 'stashed' : ''}" 
+                            data-movie-id="${movie.id}" 
+                            title="${isStashed ? 'In Watch Later (Click to remove)' : 'Save to Watch Later'}" 
+                            aria-label="Save to Watch Later">
+                        <i class="${isStashed ? 'fas' : 'far'} fa-bookmark"></i>
+                    </button>
                     <span class="movie-rating-badge">★ ${rating}</span>
-                    <img src="${posterUrl}" alt="${movie.title}" class="movie-poster" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&auto=format&fit=crop&q=80'">
+                    <img src="${posterUrl}" 
+                         alt="${movie.title}" 
+                         class="movie-poster ${isMissingPoster ? 'poster-live-fetching' : ''}" 
+                         loading="lazy" 
+                         data-movie-id="${movie.id}" 
+                         data-imdb-id="${movie.imdb_id || ''}" 
+                         data-movie-title="${encodeURIComponent(movie.title || '')}"
+                         onerror="MovieLoader.handlePosterError(this)">
                 </div>
                 <div class="movie-info">
                     <div class="movie-meta">
@@ -914,7 +962,7 @@ function initializeFilters() {
         const movie = MovieLoader.getDailyFeaturedMovie();
         if (!movie) return;
 
-        const posterUrl = MovieLoader.getPosterUrl(movie.poster_path);
+        const posterUrl = MovieLoader.getPosterUrl(movie);
         const releaseYear = movie.release_date ? new Date(movie.release_date).getFullYear() : (movie.year || 'CLASSIC');
         const rating = (typeof movie.vote_average === 'number' ? movie.vote_average : parseFloat(movie.vote_average) || 8.0).toFixed(1);
         const imdb = (typeof movie.imdb_rating === 'number' && movie.imdb_rating > 0 ? movie.imdb_rating : parseFloat(movie.imdb_rating) || rating).toFixed(1);
@@ -928,6 +976,13 @@ function initializeFilters() {
         const innerImg = collageGraphic.querySelector('.collage-inner-img');
         if (innerImg) {
             innerImg.style.backgroundImage = `url('${posterUrl}')`;
+            if (!movie.poster_path || posterUrl === MovieLoader.CONFIG.defaultPoster || posterUrl.startsWith('data:')) {
+                MovieLoader.fetchLivePoster(movie).then(liveUrl => {
+                    if (liveUrl && innerImg) {
+                        innerImg.style.backgroundImage = `url('${liveUrl}')`;
+                    }
+                });
+            }
         }
 
         // 2. Fragment card
@@ -1090,3 +1145,7 @@ function initializeFilters() {
         clearMoodFilter
     };
 })();
+
+// Expose globally
+window.UIManager = UIManager;
+window.UI = UIManager;
